@@ -1,0 +1,282 @@
+/* Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
+/* Paleta */
+:root {
+    --green-dark: #1B4227;
+    --green-light: #B9CE5D;
+    --beige: #FFF1D4;
+
+    --container: clamp(320px, 92vw, 1160px);
+    --panel-width: 460px;
+}
+
+/* Base */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Header */
+header.lg__header > .container.lg__headerGrid{
+  width: 100% !important;     /* ignora width do .container global */
+  margin-top: 20px !important;       /* remove centralização automática */
+  padding-left: 16px;         /* respiro da borda esquerda */
+  padding-right: 0;
+  justify-content: flex-start;/* conteúdo alinhado à esquerda */
+  align-items: center;         /* centralizado verticalmente */
+  height: 85px;
+}
+
+header.lg__header .lg__brandmark{
+  height: 100px;
+  width: 100px;
+  margin: 2px;                   /* sem recuo extra */
+  transform-origin: left center;
+  /* se quiser um pouco menor, ajuste o scale: */
+  /* transform: scale(1.05); */
+}
+.lg__homeLink:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+
+/* Fundo/painel */
+.lg {
+    background: var(--green-dark);
+    min-height: calc(100vh - 60px);
+    padding: 9px 0px 48px;
+}
+
+.lg__panel {
+    width: min(var(--panel-width), 92vw);
+    margin: 0px auto;
+    background: var(--beige);
+    border-radius: 12px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
+    padding: 22px 26px 24px;
+    text-align: left;
+}
+
+/* Títulos */
+.lg__brand {
+    margin: 0 0 2px 0;
+    text-align: center;
+    font-family: 'Alex Brush', cursive;
+    font-weight: 400;
+    font-size: 56px;
+    line-height: 1;
+    color: #0d0d0d;
+}
+
+.lg__subtitle {
+    margin: 0 0 12px 0;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #161616;
+}
+
+/* Form */
+.lg__form {
+    margin-top: 6px;
+}
+
+.field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F9EAD0;
+    border: 2px solid rgba(27, 66, 39, .65);
+    border-radius: 7px;
+    padding: 7px 12px;
+    height: 36px;
+    margin: 10px 0;
+}
+
+.field__icon {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+}
+
+.field__label {
+    font-size: 13px;
+    color: #1B4227;
+    font-weight: 600;
+    margin-right: 6px;
+    white-space: nowrap;
+}
+
+.field input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #1a1a1a;
+    width: 100%;
+}
+
+/* Toggle senha */
+.field--pwd {
+    padding-right: 42px;
+}
+
+.field__toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0;
+    cursor: pointer ;
+}
+
+.field__toggle img {
+    width: 20px;
+    height: 20px;
+    opacity: .9;
+}
+
+.field__toggle:hover img {
+    opacity: 1;
+}
+
+/* Esqueci / Cadastre-se */
+.lg__forgot {
+    display: inline-block;
+    margin: -2px 0 8px 4px;
+    font-size: 11px;
+    color: #1B4227;
+    text-decoration: none;
+}
+
+.lg__forgot:hover {
+    text-decoration: underline;
+}
+
+.lg__signup {
+    display: inline-block;
+    margin: 2px 0 8px 4px;
+    font-size: 12px;
+    color: #1B4227;
+    text-decoration: none;
+}
+
+.lg__signup:hover {
+    text-decoration: underline;
+}
+
+/* Select tipo de login */
+.selectField{
+  position: relative;
+  background: #F9EAD0;
+  border: 2px solid rgba(27,66,39,.65);
+  border-radius: 7px;
+  height: 36px;
+  margin: 6px 0 8px;
+  display: flex;
+  align-items: center;
+  padding: 0;                     /* sem padding aqui */
+}
+
+.selectField__select{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  color: #1a1a1a;
+  outline: none;
+  cursor: pointer;
+
+   /* seta como background do select */
+  background-repeat: no-repeat;
+  background-position: right 10px center;  /* posição da seta */
+  background-size: 18px 18px;
+  padding: 0 36px 0 12px;                  /* espaço à direita p/ a seta */
+}
+
+
+.selectField__arrow {
+    position: absolute;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    opacity: .95;
+}
+
+/* Botão */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 1;
+    transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+.btn--submit {
+    display: flex;
+    margin: 8px auto 0;
+    min-width: 160px;
+    padding: 11px 16px;
+    background: var(--green-dark);
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .25) inset, 0 2px 10px rgba(0, 0, 0, .12);
+}
+
+.btn--submit:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+
+/* Status */
+.lg__status {
+    min-height: 20px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.lg__status--success {
+    color: #0b7c3e;
+}
+
+.lg__status--error {
+    color: #9b1c1c;
+}
+
+/* Responsivo */
+@media (max-width: 560px) {
+    .lg__panel {
+        padding: 20px;
+    }
+}
