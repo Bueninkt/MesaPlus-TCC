@@ -7,9 +7,8 @@
     --green-dark: #1B4227;
     --green-light: #B9CE5D;
     --beige: #FFF1D4;
+    
 
-    --container: clamp(320px, 92vw, 1160px);
-    --panel-width: 460px;
 }
 
 /* Base */

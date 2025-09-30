@@ -8,7 +8,7 @@
   --green-light: #B9CE5D;
   --beige: #FFF1D4;
 
-  --container: clamp(320px, 92vw, 1160px);
+  --container: clamp(320px, 92vw, 1900px);
   --panel-width: 460px;
   --header-h: 85px;              /* novo: controla a altura do header */
 }

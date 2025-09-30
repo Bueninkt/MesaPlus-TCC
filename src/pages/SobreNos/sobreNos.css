@@ -1,166 +1,200 @@
-/* === FONTES ===
-  Alex Brush (apenas 400) */
+/* === FONTES (fixas, iguais ao print) === */
 @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-
-/* Poppins (pesos + itálico) */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-/* === VARIÁVEIS DO TEMA === */
-:root{
-  /* Preto do enunciado veio como #0000 (transparente).
-    Não usaremos preto aqui; manteremos a paleta do layout. */
+/* === VARIÁVEIS === */
+:root {
+  --white: #FFF;
   --green-dark: #1B4227;
+  --green-dark-2: #12341F;
+  /* tom da faixa */
   --green-light: #B9CE5D;
-  --beige: #FFF1D4;
-
-  /* Para 1920px, 80–84vw dá um container confortável (~1536px) */
-  --container: clamp(320px, 82vw, 1600px);
-
-  /* escala de espaçamento pensada pra 1080p */
-  --space-1: 8px;
-  --space-2: 12px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 32px;
-  --space-6: 48px;
-  --space-7: 64px;
-  --space-8: 96px;
-  --space-9: 120px;
+  --beige-2: #FFF1D4;
+  --container: min(1765px, 92vw);
 }
 
-/* base */
-html, body, #root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-body {
+/* === BASE DA PÁGINA === */
+.sobre {
   background: var(--green-dark);
-  color: var(--beige);
-  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden; /* evita barras horizontais em 1920 */
+  color: var(--white);
+  min-height: 0vh;
 }
 
-/* Reset mínimo local */
-.sobre * { box-sizing: border-box; }
-
-/* Plano de fundo geral do layout */
-.sobre{
-  background: var(--green-dark);
-  color: var(--beige);
-  min-height: 100vh;
-}
-
-/* Contêiner central */
-.container{
+.container {
   width: var(--container);
-  margin: 0 auto;
-  padding-inline: var(--space-4);
+  margin-inline: auto;
+  padding-inline: 20px;
+  /* alinha exatamente com a navbar */
 }
 
-/* ===== HERO ===== */
-.hero{
-  padding: var(--space-8) 0; /* ~96px top/bottom em FHD */
-  text-align: left;
-  display: grid;
-  align-items: center;
-  min-height: 36vh; /* presença visual no topo */
+
+.hero .container {
+  /* espaço vertical igual ao print (grande respiro) */
+  padding-top: 96px;
+  /* distância da navbar até “Mesa+” */
+  padding-bottom: 78px;
+  /* distância até a faixa */
 }
 
-.brand-title{
-  margin: 0 0 var(--space-2) 0;
-  font-family: 'Alex Brush', cursive;
-  font-weight: 400;
-  /* Em 1920px, 7vw ≈ 134px (cap confortável em 156px) */
-  font-size: clamp(64px, 7vw, 156px);
-  line-height: 1;
-  color: var(--beige);
-}
-
-.brand-subtitle{
+.brand-title {
   margin: 0;
-  /* Em 1920px, 1.5vw ≈ 28.8px */
-  font-size: clamp(16px, 1.5vw, 30px);
-  font-weight: 400;
-  letter-spacing: 0.3px;
-  color: var(--beige);
-  opacity: .95;
+  font-family: 'Alex Brush', cursive;
+  font-size: 132px;
+  font-weight: 500;
+  /* tamanho travado como no print */
+  line-height: 0.9;
+  letter-spacing: 0.5px;
+  color: var(--beige-2);
+  /* levemente bege como na imagem */
+  text-rendering: optimizeLegibility;
 }
 
-/* Faixa divisória escurecida (como a barra do print) */
-.faixa{
+.brand-subtitle {
+  margin: 10px 0 0;
+  /* espaço entre o título e o subtítulo */
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* =========================
+   FAIXA DIVISÓRIA (linha)
+   ========================= */
+.faixa {
   width: 100%;
-  height: 12px; /* um pouco mais espessa para 1080p */
-  background: rgba(0,0,0,.14);
+  height: 6px;
+  /* espessura vista no print */
+  background: var(--green-dark-2);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.20);
+  /* leve relevo como na captura */
 }
 
-/* ===== SOBRE NÓS ===== */
-.about{
-  padding: var(--space-6) 0 var(--space-8);
+.about .container {
+  padding-top: 24px;
+  /* distância da faixa até o título “SOBRE NÓS:” */
+  padding-bottom: 120px;
+  /* respiro inferior do bloco */
 }
 
-.about__grid{
+.about__grid {
   display: grid;
-  grid-template-columns: 1.25fr .75fr; /* texto dá mais peso visual */
-  gap: var(--space-6);
-  align-items: center;
+  grid-template-columns: 1fr 380px;
+  /* texto à esquerda / logo à direita */
+  align-items: start;
+  column-gap: 48px;
+  /* espaço entre texto e logo (print) */
 }
 
-.about__heading{
-  margin: 0 0 var(--space-3) 0;
-  /* Em 1920px, 2.2vw ≈ 42px (cap em 48px) */
-  font-size: clamp(22px, 2.2vw, 48px);
+
+.about__heading {
+  margin: 0;
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 44px;
+  /* “SOBRE NÓS:” robusto como no print */
   font-weight: 800;
   letter-spacing: 0.8px;
-  color: var(--beige);
+  color: var(--white);
+  text-transform: uppercase;
 }
 
-.about__text{
-  margin: 0;
-  /* Em 1920px, 1.05vw ≈ 20px (cap em 22px) */
-  font-size: clamp(15px, 1.05vw, 22px);
-  line-height: 1.85;
-  color: var(--beige);
-  opacity: .98;
+.about__text {
+  margin-top: 10px;
+  /* distância do título ao parágrafo */
+  max-width: 980px;
+  /* largura de leitura confortável */
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.about__right{
-  display: grid;
-  place-items: center;
+.about__right {
+  justify-self: end;
+  /* encosta o logo na borda direita do container */
+  align-self: start;
+  padding-right: 4px;
+  /* microajuste para “colar” como no print */
 }
 
-.about__logo{
-  /* Em FHD pode ficar maior sem estourar */
-  width: min(520px, 90%);
+.about__logo {
+  width: 300px;
+  /* proporção do logo vista na captura */
   height: auto;
   display: block;
-  filter: drop-shadow(0 6px 24px rgba(0,0,0,.22));
+  filter:
+    drop-shadow(0 18px 38px rgba(0, 0, 0, 0.35)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  /* brilho/sombra sob o brasão */
+  image-rendering: auto;
 }
 
-/* ===== AJUSTES PARA TELAS GRANDES (≥ 1600px) ===== */
-@media (min-width: 1600px){
-  .hero{ padding: var(--space-9) 0; } /* ~120px */
-  .faixa{ height: 14px; }
-  .about{ padding: var(--space-7) 0 var(--space-9); }
-  .about__grid{ gap: var(--space-7); }
-  .about__logo{ width: min(560px, 95%); }
-}
-
-/* ===== RESPONSIVO (≤ 900px) ===== */
-@media (max-width: 900px){
-  .container{ padding-inline: var(--space-3); }
-
-  .hero{ padding: var(--space-6) 0; }
-
-  .about{
-    padding: var(--space-5) 0 var(--space-6);
+/* =========================
+   AJUSTES RESPONSIVOS
+   (sem alterar tipografia principal,
+   apenas respiros para não quebrar)
+   ========================= */
+@media (max-width: 1200px) {
+  .brand-title {
+    font-size: 120px;
   }
-  .about__grid{
+
+  /* leve ajuste para caber melhor */
+  .brand-subtitle {
+    font-size: 26px;
+  }
+
+  .about__grid {
+    grid-template-columns: 1fr 340px;
+    column-gap: 40px;
+  }
+
+  .about__logo {
+    width: 280px;
+  }
+}
+
+@media (max-width: 980px) {
+  .hero .container {
+    padding-top: 80px;
+    padding-bottom: 96px;
+  }
+
+  .about .container {
+    padding-top: 56px;
+    padding-bottom: 96px;
+  }
+
+  .about__grid {
     grid-template-columns: 1fr;
-    gap: var(--space-4);
+    row-gap: 40px;
   }
-  .about__right{ order: -1; } /* logo acima do texto no mobile */
-  .about__logo{ width: min(360px, 80%); }
+
+  .about__right {
+    justify-self: start;
+  }
+
+  .about__logo {
+    width: 240px;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-title {
+    font-size: 96px;
+  }
+
+  .brand-subtitle {
+    font-size: 22px;
+    margin-top: 22px;
+  }
+
+  .about__heading {
+    font-size: 36px;
+  }
+
+  .about__text {
+    font-size: 18px;
+    line-height: 1.7;
+  }
 }
