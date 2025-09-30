@@ -102,7 +102,7 @@ function CadastroEmpresaPage() {
           <Link to="/" className="ce__homeLink" aria-label="Ir para Sobre Nós">
             <img className="ce__brandmark" src={logo} alt="Mesa+ logotipo" />
           </Link>
-          <Link to="/login" className="btn btn--login">Entrar</Link>
+          <Link to="/login" className="btnCe btn--login">Entrar</Link>
         </div>
       </header>
 
@@ -121,7 +121,7 @@ function CadastroEmpresaPage() {
 
           <form className="ce__form" onSubmit={onSubmit} noValidate>
             {/* Nome */}
-            <label className="field">
+            <label className="fieldCe">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
               <span className="field__label">Nome:</span>
               <input
@@ -135,7 +135,7 @@ function CadastroEmpresaPage() {
             </label>
 
             {/* Email */}
-            <label className="field">
+            <label className="fieldCe">
               <img className="field__icon" src={email} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
               <input
@@ -149,7 +149,7 @@ function CadastroEmpresaPage() {
             </label>
 
             {/* Senha (toggle) */}
-            <label className="field field--pwd">
+            <label className="fieldCe field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
               <input
@@ -173,7 +173,7 @@ function CadastroEmpresaPage() {
             </label>
 
             {/* Telefone */}
-            <label className="field">
+            <label className="fieldCe">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
               <input
@@ -188,7 +188,7 @@ function CadastroEmpresaPage() {
             </label>
 
             {/* CNPJ/MEI */}
-            <label className="field">
+            <label className="fieldCe">
               <img className="field__icon" src={postCard} alt="" aria-hidden="true" />
               <span className="field__label">CNPJ/MEI:</span>
               <input
@@ -202,7 +202,7 @@ function CadastroEmpresaPage() {
               />
             </label>
 
-            <button className="btn btn--submit" type="submit" disabled={status.loading}>
+            <button className="btnCe btn--submitCe" type="submit" disabled={status.loading}>
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 

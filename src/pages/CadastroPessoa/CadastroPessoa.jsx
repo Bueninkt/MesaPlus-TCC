@@ -93,7 +93,7 @@ function CadastroPessoaPage() {
           <Link to="/" className="cp__homeLink" aria-label="Ir para Sobre Nós">
             <img className="cp__brandmark" src={logo} alt="Mesa+ logotipo" />
           </Link>
-          <Link to="/login" className="btn btn--login">Entrar</Link>
+          <Link to="/login" className="btnCp btn--login">Entrar</Link>
         </div>
       </header>
 
@@ -109,7 +109,7 @@ function CadastroPessoaPage() {
           {/* sem noValidate -> habilita mensagens padrão */}
           <form className="cp__form" onSubmit={onSubmit}>
             {/* Nome */}
-            <label className="field">
+            <label className="fieldCp">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
               <span className="field__label">Nome:</span>
               <input
@@ -125,7 +125,7 @@ function CadastroPessoaPage() {
             </label>
 
             {/* Email */}
-            <label className="field">
+            <label className="fieldCp">
               <img className="field__icon" src={email} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
               <input
@@ -141,7 +141,7 @@ function CadastroPessoaPage() {
             </label>
 
             {/* Senha */}
-            <label className="field field--pwd">
+            <label className="fieldCp field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
               <input
@@ -167,7 +167,7 @@ function CadastroPessoaPage() {
             </label>
 
             {/* Telefone */}
-            <label className="field">
+            <label className="fieldCp">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
               <input
@@ -186,7 +186,7 @@ function CadastroPessoaPage() {
             </label>
 
             {/* CPF */}
-            <label className="field">
+            <label className="fieldCp">
               <img className="field__icon" src={postCard} alt="" aria-hidden="true" />
               <span className="field__label">CPF:</span>
               <input
@@ -204,7 +204,7 @@ function CadastroPessoaPage() {
               />
             </label>
 
-            <button className="btn btn--submit" type="submit" disabled={status.loading}>
+            <button className="btnCp btn--submitCp" type="submit" disabled={status.loading}>
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 

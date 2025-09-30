@@ -20,27 +20,27 @@ body {
 }
 
 .container {
-    width: var(--container);
     margin: 0 auto;
 }
 
 /* Header */
 .ce__header {
     background: var(--green-dark);
-    padding: 25px 0 8px;
+    padding: 39px 0 8px;
 }
 
 .ce__headerGrid {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 65px;
+    height: 90px;
 }
 
 .ce__homeLink {
     display: inline-block;
-    line-height: 0;
+    line-height: 1px;
     text-decoration: none;
 }
 
@@ -50,35 +50,38 @@ body {
 }
 
 .ce__brandmark {
-    width: 57px;
-    height: 59px;
+    width: 91px;
+    height: 90px;
     display: block;
     transform: scale(1.35);
-    transform-origin: left center;
+    transform-origin: left center;  
 }
 
-.btn {
+.btnCe {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    height: 43px;
+    padding-inline: 45px;
     border: 0;
     border-radius: 999px;
+    font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
     cursor: pointer;
     text-decoration: none;
-    font-weight: 600;
-    line-height: 1;
-    transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .08);  
 }
 
-.btn--login {
-    justify-self: end;
-    width: auto !important;
-    max-width: none !important;
-    white-space: nowrap;
-    display: inline-flex;
+.btn--submit{
+    display: flex;
+    margin: 12px auto 0;
+    min-width: 160px;
+    padding: 11px 16px;
+    background: var(--green-dark);
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .25) inset, 0 2px 10px rgba(0, 0, 0, .12);
 }
 
-.btn--login:hover {
+.btn--submit:hover {
     filter: brightness(.96);
     transform: translateY(-1px);
 }
@@ -87,8 +90,7 @@ body {
 .ce {
     position: relative;
     background: var(--green-dark);
-    min-height: calc(100vh - 72px);
-    padding: 28px 0 48px;
+    padding-top: 51px;
 }
 
 .ce__bg {
@@ -104,7 +106,8 @@ body {
 
 /* Painel */
 .ce__panel {
-    width: min(var(--panel-width), 92vw);
+    width: min(560px, 92vw);
+    height: 519px;
     margin: 0 auto;
     background: var(--beige);
     border-radius: 14px;
@@ -117,7 +120,7 @@ body {
     text-align: center;
     font-family: 'Alex Brush', cursive;
     font-weight: 400;
-    font-size: 56px;
+    font-size: 86px;
     line-height: 1;
     color: #0d0d0d;
 }
@@ -135,7 +138,7 @@ body {
     margin-top: 6px;
 }
 
-.field {
+.fieldCe {
     position: relative;
     display: flex;
     align-items: center;
@@ -144,8 +147,8 @@ body {
     border: 2px solid rgba(27, 66, 39, .65);
     border-radius: 7px;
     padding: 7px 12px;
-    height: 36px;
-    margin: 10px 0;
+    height: 42px;
+    margin: 16px 0;
 }
 
 .field__icon {
@@ -162,7 +165,7 @@ body {
     white-space: nowrap;
 }
 
-.field input {
+.fieldCe input {
     border: 0;
     background: transparent;
     outline: none;
@@ -191,8 +194,8 @@ body {
     padding: 0;
 }
 
-.field input[type="password"]::-ms-reveal,
-.field input[type="password"]::-ms-clear{
+.fieldCe input[type="password"]::-ms-reveal,
+.fieldCe input[type="password"]::-ms-clear{
   display: none;
   width: 0;
   height: 0;
@@ -210,11 +213,13 @@ body {
 }
 
 /* Botão enviar */
-.btn--submit {
+.btn--submitCe {
     display: flex;
-    margin: 12px auto 0;
+    margin: 27px auto 0;
     min-width: 160px;
-    padding: 11px 16px;
+    font-size: 15px;
+    font-weight: 600;   
+     padding: 11px 16px;
     background: var(--green-dark);
     color: #fff;
     box-shadow: 0 1px 0 rgba(0, 0, 0, .25) inset, 0 2px 10px rgba(0, 0, 0, .12);

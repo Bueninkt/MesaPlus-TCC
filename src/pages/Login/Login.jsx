@@ -8,6 +8,9 @@ import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import seta from "../../assets/icons/seta.png";
+import backimage from "../../assets/icons/backimage.png";
+
+
 
 function LoginPage() {
   const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
@@ -74,6 +77,8 @@ function LoginPage() {
         </div>
       </header>
 
+      <div className="lg__bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
+
       <main className="lg" aria-labelledby="lg-title">
         <section className="lg__panel" role="region" aria-label="Entrar">
           <h1 id="lg-title" className="lg__brand">Mesa+</h1>
@@ -82,7 +87,7 @@ function LoginPage() {
           {/* sem noValidate -> habilita mensagens padrão do navegador */}
           <form className="lg__form" onSubmit={onSubmit}>
             {/* Email: validação nativa de e-mail */}
-            <label className="field">
+            <label className="fieldLogin">
               <img className="field__icon" src={emailIcon} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
               <input
@@ -98,7 +103,7 @@ function LoginPage() {
             </label>
 
             {/* Senha: required + minLength -> mensagem nativa */}
-            <label className="field field--pwd">
+            <label className="fieldLogin field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
               <input

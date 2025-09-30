@@ -88,7 +88,7 @@ function CadastroOngPage() {
           <Link to="/" className="co__homeLink" aria-label="Ir para Sobre Nós">
             <img className="co__brandmark" src={logo} alt="Mesa+ logotipo" />
           </Link>
-          <Link to="/login" className="btn btn--login">Entrar</Link>
+          <Link to="/login" className="btnCo btn--login">Entrar</Link>
         </div>
       </header>
 
@@ -107,7 +107,7 @@ function CadastroOngPage() {
 
           <form className="co__form" onSubmit={onSubmit} noValidate>
             {/* Nome */}
-            <label className="field">
+            <label className="fieldCo">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
               <span className="field__label">Nome:</span>
               <input
@@ -121,7 +121,7 @@ function CadastroOngPage() {
             </label>
 
             {/* Email */}
-            <label className="field">
+            <label className="fieldCo">
               <img className="field__icon" src={email} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
               <input
@@ -135,7 +135,7 @@ function CadastroOngPage() {
             </label>
 
             {/* Senha (toggle) */}
-            <label className="field field--pwd">
+            <label className="fieldCo field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
               <input
@@ -159,7 +159,7 @@ function CadastroOngPage() {
             </label>
 
             {/* Telefone */}
-            <label className="field">
+            <label className="fieldCo">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
               <input
@@ -174,7 +174,7 @@ function CadastroOngPage() {
             </label>
 
         
-            <button className="btn btn--submit" type="submit" disabled={status.loading}>
+            <button className="btnCo btn--submitCo" type="submit" disabled={status.loading}>
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 

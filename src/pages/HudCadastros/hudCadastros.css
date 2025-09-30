@@ -2,18 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-/* === VARIÁVEIS GERAIS === */
-:root {
-  --white: #FFF;
-  --black: #000;
-  --green-dark: #1B4227;
-  --green-light: #B9CE5D;
-  --beige-2: #FFF1D4;
-  --container: min(1765px, 92vw);
-  --radius-card: 16px;
-  --radius-pill: 999px;
-}
-
 /* ===== UTIL ===== */
 * {
   box-sizing: border-box;
@@ -63,7 +51,7 @@
 .hud__brandmark {
   width: 88px;
   /* proporção do print */
-  height: auto;
+  height: 89px;
   display: block;
 }
 
@@ -81,21 +69,21 @@
 }
 
 /* botão “Entrar” (mesmo estilo do site) */
-.btn {
+.btn--Hud {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  padding-inline: 18px;
-  border: 0;
-  border-radius: var(--radius-pill);
-  font: 700 13px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .08);
+        align-items: center;
+        justify-content: center;
+        height: 43px;
+        padding-inline: 29px;
+        border: 0;
+        border-radius: 999px;
+        font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .08);
 }
 
-.btn--login {
+.btn--Hud {
   background: var(--green-light);
   color: var(--green-dark);
 }
@@ -128,7 +116,7 @@
 /* ===== CARTÃO ===== */
 .card {
   background: var(--beige-2);
-  border-radius: var(--radius-card);
+  border-radius: 15px;
   box-shadow:
     0 7px 0 rgba(0, 0, 0, .17),
     /* “borda” de sombra dura */
@@ -186,7 +174,7 @@
   height: 56px;
   background: var(--green-dark);
   color: var(--white);
-  border-radius: var(--radius-pill);
+  border-radius: 99px;
   font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   box-shadow:
     0 3px 0 rgba(0, 0, 0, .20),

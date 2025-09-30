@@ -18,7 +18,7 @@ function HudCadastrosPage() {
           </Link>
 
           <h1 className="hud__title">Hud de Cadastro</h1>
-          <Link to="/login" className="btn btn--login">Entrar</Link>
+          <Link to="/login" className="btn btn--Hud">Entrar</Link>
         </div>
       </header>
 
