@@ -107,7 +107,7 @@ body {
 /* Painel */
 .ce__panel {
     width: min(560px, 92vw);
-    height: 519px;
+    height: 528px;
     margin: 0 auto;
     background: var(--beige);
     border-radius: 14px;
