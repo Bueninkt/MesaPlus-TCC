@@ -23,7 +23,7 @@ function CadastroPessoaPage() {
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
 
-  // ================== Máscaras rápidas ==================
+  // ===== Máscaras =====
   const maskPhone = (v) => {
     const n = v.replace(/\D/g, "").slice(0, 11);
     if (n.length <= 10) {
@@ -44,23 +44,21 @@ function CadastroPessoaPage() {
     setForm((s) => ({ ...s, [name]: v }));
   };
 
-  // ================== Submit ==================
+  // ===== Submit =====
   async function onSubmit(e) {
     e.preventDefault();
+
+    // usa APENAS a validação nativa do navegador
+    const formEl = e.currentTarget;
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity(); // mostra o balão nativo
+      return;
+    }
+
     setStatus({ type: "", msg: "", loading: true });
 
-    if (!form.nome || !form.email || !form.senha || !form.telefone || !form.cpf) {
-      setStatus({ type: "error", msg: "Preencha todos os campos.", loading: false });
-      return;
-    }
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!emailOk) {
-      setStatus({ type: "error", msg: "E-mail inválido.", loading: false });
-      return;
-    }
-
     const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
-    const url = `${API_BASE}/usuario`; // ajuste se necessário
+    const url = `${API_BASE}/usuario`;
 
     try {
       const res = await fetch(url, {
@@ -71,8 +69,7 @@ function CadastroPessoaPage() {
           email: form.email.trim(),
           senha: form.senha,
           cpf: form.cpf.replace(/\D/g, ""),
-          telefone: form.telefone.replace(/\D/g, ""),
-          
+          telefone: form.telefone.replace(/\D/g, "")
         })
       });
 
@@ -90,7 +87,7 @@ function CadastroPessoaPage() {
 
   return (
     <>
-      {/* Cabeçalho com logo (link para /) e botão Entrar */}
+      {/* Cabeçalho */}
       <header className="cp__header" aria-label="Cabeçalho">
         <div className="container cp__headerGrid">
           <Link to="/" className="cp__homeLink" aria-label="Ir para Sobre Nós">
@@ -100,20 +97,17 @@ function CadastroPessoaPage() {
         </div>
       </header>
 
-      {/* Fundo com imagem (padrão sutil) */}
-      <div
-        className="cp__bg"
-        style={{ backgroundImage: `url(${backimage})` }}
-        aria-hidden="true"
-      />
+      {/* Fundo com imagem */}
+      <div className="cp__bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
 
-      {/* Painel central */}
+      {/* Painel */}
       <main className="cp" aria-labelledby="cp-title">
         <section className="cp__panel" role="region" aria-label="Formulário de cadastro">
           <h1 id="cp-title" className="cp__brand">Mesa+</h1>
           <p className="cp__subtitle">Cadastrar Pessoa</p>
 
-          <form className="cp__form" onSubmit={onSubmit} noValidate>
+          {/* sem noValidate -> habilita mensagens padrão */}
+          <form className="cp__form" onSubmit={onSubmit}>
             {/* Nome */}
             <label className="field">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
@@ -125,6 +119,8 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Nome"
                 required
+                minLength={3}
+                autoComplete="name"
               />
             </label>
 
@@ -139,10 +135,12 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Email"
                 required
+                autoComplete="email"
+                inputMode="email"
               />
             </label>
 
-            {/* Senha (toggle) */}
+            {/* Senha */}
             <label className="field field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -153,6 +151,8 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Senha"
                 required
+                minLength={6}
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -162,10 +162,8 @@ function CadastroPessoaPage() {
                 aria-pressed={showPwd}
                 title={showPwd ? "Ocultar senha" : "Mostrar senha"}
               >
-    
                 <img src={showPwd ? eye : eyeclosed} alt="" aria-hidden="true" />
               </button>
-
             </label>
 
             {/* Telefone */}
@@ -180,6 +178,10 @@ function CadastroPessoaPage() {
                 aria-label="Telefone"
                 required
                 inputMode="numeric"
+                autoComplete="tel-national"
+                pattern="^\(\d{2}\) \d{4,5}-\d{4}$"
+                minLength={14}
+                maxLength={15}
               />
             </label>
 
@@ -195,6 +197,10 @@ function CadastroPessoaPage() {
                 aria-label="CPF"
                 required
                 inputMode="numeric"
+                pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$"
+                minLength={14}
+                maxLength={14}
+                autoComplete="off"
               />
             </label>
 

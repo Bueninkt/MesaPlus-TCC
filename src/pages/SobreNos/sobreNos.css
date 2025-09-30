@@ -1,130 +1,166 @@
-    /* === FONTES ===
-      Alex Brush (apenas 400) */
-    @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
+/* === FONTES ===
+  Alex Brush (apenas 400) */
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
 
-    /* Poppins (pesos + itálico) */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+/* Poppins (pesos + itálico) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-    /* === VARIÁVEIS DO TEMA === */
-    :root{
-      /* Preto do enunciado veio como #0000 (transparente).
-        Não usaremos preto aqui; manteremos a paleta do layout. */
-      --green-dark: #1B4227;
-      --green-light: #B9CE5D;
-      --beige: #FFF1D4;
+/* === VARIÁVEIS DO TEMA === */
+:root{
+  /* Preto do enunciado veio como #0000 (transparente).
+    Não usaremos preto aqui; manteremos a paleta do layout. */
+  --green-dark: #1B4227;
+  --green-light: #B9CE5D;
+  --beige: #FFF1D4;
 
-      --container: clamp(320px, 92vw, 1200px);
-    }
+  /* Para 1920px, 80–84vw dá um container confortável (~1536px) */
+  --container: clamp(320px, 82vw, 1600px);
 
-    /* zera a margem padrão e garante o fundo verde ocupando toda a tela */
-    html, body, #root {
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background: var(--green-dark); /* mesmo verde do layout */
-    
-    }
+  /* escala de espaçamento pensada pra 1080p */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 96px;
+  --space-9: 120px;
+}
 
+/* base */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  background: var(--green-dark);
+  color: var(--beige);
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* evita barras horizontais em 1920 */
+}
 
-    /* Reset mínimo local */
-    .sobre * { 
-        box-sizing: border-box; 
-    }
+/* Reset mínimo local */
+.sobre * { box-sizing: border-box; }
 
-    /* Plano de fundo geral do layout */
-    .sobre{
-      background: var(--green-dark);
-      color: var(--beige);                /* textos claros como no print */
-      min-height: 100vh;
-      font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
+/* Plano de fundo geral do layout */
+.sobre{
+  background: var(--green-dark);
+  color: var(--beige);
+  min-height: 100vh;
+}
 
-    /* Contêiner central */
-    .container{
-      width: var(--container);
-      margin: 0 auto;
-      padding: 0px;
-    }
+/* Contêiner central */
+.container{
+  width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
 
-    /* ===== HERO ===== */
-    .hero{
-      padding: 60px 1px;              /* altura semelhante ao print */
-      text-align: left;
-    }
+/* ===== HERO ===== */
+.hero{
+  padding: var(--space-8) 0; /* ~96px top/bottom em FHD */
+  text-align: left;
+  display: grid;
+  align-items: center;
+  min-height: 36vh; /* presença visual no topo */
+}
 
-    .brand-title{
-      margin: 0 0 8px 0;
-      font-family: 'Alex Brush', cursive;
-      font-weight: 400;
-      font-size: clamp(107px, 8vw, 84px); /* título grande e fluido */
-      line-height: 1;
-      color: var(--beige);
-    }
+.brand-title{
+  margin: 0 0 var(--space-2) 0;
+  font-family: 'Alex Brush', cursive;
+  font-weight: 400;
+  /* Em 1920px, 7vw ≈ 134px (cap confortável em 156px) */
+  font-size: clamp(64px, 7vw, 156px);
+  line-height: 1;
+  color: var(--beige);
+}
 
-    .brand-subtitle{
-      margin: 0;
-      font-size: clamp(14px, 2vw, 25px);
-      font-weight: 400;
-      letter-spacing: 0.3px;
-      color: var(--beige);
-      opacity: .95;
-    }
+.brand-subtitle{
+  margin: 0;
+  /* Em 1920px, 1.5vw ≈ 28.8px */
+  font-size: clamp(16px, 1.5vw, 30px);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  color: var(--beige);
+  opacity: .95;
+}
 
-    /* Faixa divisória escurecida (como a barra do print) */
-    .faixa{
-      width: 100%;
-      height: 10px;
-      background: rgba(0,0,0,.12); /* sutil escurecimento sobre o verde */
-    }
+/* Faixa divisória escurecida (como a barra do print) */
+.faixa{
+  width: 100%;
+  height: 12px; /* um pouco mais espessa para 1080p */
+  background: rgba(0,0,0,.14);
+}
 
-    /* ===== SOBRE NÓS ===== */
-    .about{
-      padding: 34px 0 56px;
-    }
+/* ===== SOBRE NÓS ===== */
+.about{
+  padding: var(--space-6) 0 var(--space-8);
+}
 
-    .about__grid{
-      display: grid;
-      grid-template-columns: 1.2fr .8fr; /* texto à esquerda, logo à direita */
-      gap: 24px;
-      align-items: center;
-    }
+.about__grid{
+  display: grid;
+  grid-template-columns: 1.25fr .75fr; /* texto dá mais peso visual */
+  gap: var(--space-6);
+  align-items: center;
+}
 
-    .about__heading{
-      margin: 0 0 14px 0;
-      font-size: clamp(20px, 3.2vw, 32px);
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--beige);
-    }
+.about__heading{
+  margin: 0 0 var(--space-3) 0;
+  /* Em 1920px, 2.2vw ≈ 42px (cap em 48px) */
+  font-size: clamp(22px, 2.2vw, 48px);
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--beige);
+}
 
-    .about__text{
-      margin: 0;
-      font-size: clamp(15px, 2.2vw, 18px);
-      line-height: 1.8;
-      color: var(--beige);
-      opacity: .98;
-    }
+.about__text{
+  margin: 0;
+  /* Em 1920px, 1.05vw ≈ 20px (cap em 22px) */
+  font-size: clamp(15px, 1.05vw, 22px);
+  line-height: 1.85;
+  color: var(--beige);
+  opacity: .98;
+}
 
-    .about__right{
-      display: grid;
-      place-items: center;
-    }
+.about__right{
+  display: grid;
+  place-items: center;
+}
 
-    .about__logo{
-      width: min(320px, 85%);
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 2px 14px rgba(0,0,0,.15));
-    }
+.about__logo{
+  /* Em FHD pode ficar maior sem estourar */
+  width: min(520px, 90%);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 24px rgba(0,0,0,.22));
+}
 
-    /* ===== RESPONSIVO ===== */
-    @media (max-width: 900px){
-      .about__grid{
-        grid-template-columns: 1fr;
-        gap: 18px;
-      }
-      .about__right{
-        order: -1; /* coloca o logo acima do texto em telas menores se desejar */
-      }
-    }
+/* ===== AJUSTES PARA TELAS GRANDES (≥ 1600px) ===== */
+@media (min-width: 1600px){
+  .hero{ padding: var(--space-9) 0; } /* ~120px */
+  .faixa{ height: 14px; }
+  .about{ padding: var(--space-7) 0 var(--space-9); }
+  .about__grid{ gap: var(--space-7); }
+  .about__logo{ width: min(560px, 95%); }
+}
+
+/* ===== RESPONSIVO (≤ 900px) ===== */
+@media (max-width: 900px){
+  .container{ padding-inline: var(--space-3); }
+
+  .hero{ padding: var(--space-6) 0; }
+
+  .about{
+    padding: var(--space-5) 0 var(--space-6);
+  }
+  .about__grid{
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .about__right{ order: -1; } /* logo acima do texto no mobile */
+  .about__logo{ width: min(360px, 80%); }
+}

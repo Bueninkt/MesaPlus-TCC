@@ -10,11 +10,7 @@ import lockIcon from "../../assets/icons/lock.png";
 import seta from "../../assets/icons/seta.png";
 
 function LoginPage() {
-  const [form, setForm] = useState({
-    email: "",
-    senha: "",
-    tipo: "" // 'pessoa' | 'empresa' | 'ong'
-  });
+  const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
 
@@ -25,24 +21,18 @@ function LoginPage() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    setStatus({ type: "", msg: "", loading: true });
 
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!emailOk || !form.senha || !form.tipo) {
-      setStatus({
-        type: "error",
-        msg: !form.tipo
-          ? "Escolha o tipo de login."
-          : !emailOk
-            ? "E-mail inválido."
-            : "Informe a senha.",
-        loading: false
-      });
+    // usa SOMENTE validação nativa (HTML5)
+    const formEl = e.currentTarget; // <form>
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity(); // mostra os balões padrões
       return;
     }
 
+    setStatus({ type: "", msg: "", loading: true });
+
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
-    const url = `${API_BASE}/login`; // endpoint único que aceita os 3 tipos
+    const url = `${API_BASE}/login`;
 
     try {
       const res = await fetch(url, {
@@ -51,7 +41,7 @@ function LoginPage() {
         body: JSON.stringify({
           email: String(form.email).trim(),
           senha: String(form.senha),
-          tipo: String(form.tipo) // pessoa | empresa | ong
+          tipo: String(form.tipo)
         })
       });
 
@@ -67,13 +57,8 @@ function LoginPage() {
         setStatus({ type: "success", msg: "Login efetuado!", loading: false });
         // navigate("/");
       } else {
-        setStatus({
-          type: "error",
-          msg: data.message || "Falha no login.",
-          loading: false
-        });
+        setStatus({ type: "error", msg: data.message || "Falha no login.", loading: false });
       }
-
     } catch (err) {
       setStatus({ type: "error", msg: err.message || "Erro ao conectar.", loading: false });
     }
@@ -81,7 +66,6 @@ function LoginPage() {
 
   return (
     <>
-      {/* topo com logo (sem botão Entrar) */}
       <header className="lg__header">
         <div className="container lg__headerGrid">
           <Link to="/" className="lg__homeLink" aria-label="Ir para Sobre Nós">
@@ -95,8 +79,9 @@ function LoginPage() {
           <h1 id="lg-title" className="lg__brand">Mesa+</h1>
           <p className="lg__subtitle">Login</p>
 
-          <form className="lg__form" onSubmit={onSubmit} noValidate>
-            {/* Email */}
+          {/* sem noValidate -> habilita mensagens padrão do navegador */}
+          <form className="lg__form" onSubmit={onSubmit}>
+            {/* Email: validação nativa de e-mail */}
             <label className="field">
               <img className="field__icon" src={emailIcon} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
@@ -106,11 +91,13 @@ function LoginPage() {
                 value={form.email}
                 onChange={onChange}
                 aria-label="Email"
+                autoComplete="email"
+                inputMode="email"
                 required
               />
             </label>
 
-            {/* Senha */}
+            {/* Senha: required + minLength -> mensagem nativa */}
             <label className="field field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -120,7 +107,9 @@ function LoginPage() {
                 value={form.senha}
                 onChange={onChange}
                 aria-label="Senha"
+                autoComplete="current-password"
                 required
+                minLength={6}
               />
               <button
                 type="button"
@@ -135,7 +124,7 @@ function LoginPage() {
 
             <Link to="#" className="lg__forgot">Esqueci minha senha :(</Link>
 
-            {/* Tipo de login */}
+            {/* Tipo de login: required nativo */}
             <div className="selectField">
               <select
                 name="tipo"
@@ -144,7 +133,7 @@ function LoginPage() {
                 aria-label="Escolha o tipo de login"
                 required
                 className="selectField__select"
-                style={{ backgroundImage: `url(${seta})` }}   // seta no próprio select
+                style={{ backgroundImage: `url(${seta})` }}
               >
                 <option value="" disabled>Escolha o Login</option>
                 <option value="pessoa">Pessoa</option>

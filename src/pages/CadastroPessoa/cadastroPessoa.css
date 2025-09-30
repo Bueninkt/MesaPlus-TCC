@@ -39,6 +39,7 @@ body {
     background: var(--green-dark);
     padding: 25px 0 8px;
     
+    
 }
 
 .cp__headerGrid{
@@ -46,12 +47,12 @@ body {
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 65px;
+  height: 100px;
 }
 
 .cp__brandmark{
-  width: 57px;                /* mantém a largura “de layout” */
-  height: 59px;
+  width: 90px;                /* mantém a largura “de layout” */
+  height: 89px;
   display: block;
   transform: scale(1.35);     /* ↑ aumente/diminua aqui (ex.: 1.25 ~ 1.5) */
   transform-origin: left center; /* cresce para a direita, sem empurrar o título */

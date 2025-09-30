@@ -44,7 +44,7 @@ body {
     justify-content: space-between;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 65px;
+    height: 90px;
 }
 
 .co__homeLink {
@@ -59,8 +59,8 @@ body {
 }
 
 .co__brandmark {
-    width: 57px;
-    height: 59px;
+    width: 91px;
+    height: 90px;
     display: block;
     transform: scale(1.35);
     transform-origin: left center;

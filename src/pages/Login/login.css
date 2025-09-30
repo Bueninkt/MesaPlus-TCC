@@ -2,189 +2,174 @@
 @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-/* Paleta */
+/* Paleta e variáveis */
 :root {
-    --green-dark: #1B4227;
-    --green-light: #B9CE5D;
-    --beige: #FFF1D4;
+  --green-dark: #1B4227;
+  --green-light: #B9CE5D;
+  --beige: #FFF1D4;
 
-    --container: clamp(320px, 92vw, 1160px);
-    --panel-width: 460px;
+  --container: clamp(320px, 92vw, 1160px);
+  --panel-width: 460px;
+  --header-h: 85px;              /* novo: controla a altura do header */
 }
 
 /* Base */
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body,
-#root {
-    margin: 0;
-    padding: 0;
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 body {
-    font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--green-dark);   /* garante fundo contínuo no topo */
+  color: #0d0d0d;
 }
 
 /* Header */
+header.lg__header {
+  background: var(--green-dark);   /* header sem “faixa” clara */
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+}
+
 header.lg__header > .container.lg__headerGrid{
-  width: 100% !important;     /* ignora width do .container global */
-  margin-top: 20px !important;       /* remove centralização automática */
-  padding-left: 16px;         /* respiro da borda esquerda */
-  padding-right: 0;
-  justify-content: flex-start;/* conteúdo alinhado à esquerda */
-  align-items: center;         /* centralizado verticalmente */
-  height: 85px;
+  width: 100% !important;
+  margin-top: 0 !important;
+  padding-left: 16px;
+  padding-right: 16px;
+  justify-content: flex-start;
+  align-items: center;
+  height: var(--header-h);
 }
 
 header.lg__header .lg__brandmark{
   height: 100px;
   width: 100px;
-  margin: 2px;                   /* sem recuo extra */
+  margin: 2px;
   transform-origin: left center;
-  /* se quiser um pouco menor, ajuste o scale: */
-  /* transform: scale(1.05); */
 }
 .lg__homeLink:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
-
-/* Fundo/painel */
+/* Fundo / painel */
 .lg {
-    background: var(--green-dark);
-    min-height: calc(100vh - 60px);
-    padding: 9px 0px 48px;
+  background: var(--green-dark);
+  min-height: calc(100vh - var(--header-h)); /* alinhado ao header real */
+  padding: 9px 0 48px;
+}
+
+/* Centralização vertical em telas grandes */
+@media (min-width: 1200px) and (min-height: 800px) {
+  .lg {
+    display: grid;
+    align-content: center;     /* centraliza verticalmente o painel */
+    padding: 24px 0;           /* respiro mínimo */
+  }
 }
 
 .lg__panel {
-    width: min(var(--panel-width), 92vw);
-    margin: 0px auto;
-    background: var(--beige);
-    border-radius: 12px;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
-    padding: 22px 26px 24px;
-    text-align: left;
+  width: min(var(--panel-width), 92vw);
+  margin: 0 auto;
+  background: var(--beige);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
+  padding: 22px 26px 24px;
+  text-align: left;
 }
 
 /* Títulos */
 .lg__brand {
-    margin: 0 0 2px 0;
-    text-align: center;
-    font-family: 'Alex Brush', cursive;
-    font-weight: 400;
-    font-size: 56px;
-    line-height: 1;
-    color: #0d0d0d;
+  margin: 0 0 2px 0;
+  text-align: center;
+  font-family: 'Alex Brush', cursive;
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1;
+  color: #0d0d0d;
 }
 
 .lg__subtitle {
-    margin: 0 0 12px 0;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: #161616;
+  margin: 0 0 12px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #161616;
 }
 
 /* Form */
-.lg__form {
-    margin-top: 6px;
-}
+.lg__form { margin-top: 6px; }
 
 .field {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #F9EAD0;
-    border: 2px solid rgba(27, 66, 39, .65);
-    border-radius: 7px;
-    padding: 7px 12px;
-    height: 36px;
-    margin: 10px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F9EAD0;
+  border: 2px solid rgba(27, 66, 39, .65);
+  border-radius: 7px;
+  padding: 7px 12px;
+  height: 36px;
+  margin: 10px 0;
 }
 
-.field__icon {
-    width: 16px;
-    height: 16px;
-    flex: 0 0 auto;
-}
+.field__icon { width: 16px; height: 16px; flex: 0 0 auto; }
 
 .field__label {
-    font-size: 13px;
-    color: #1B4227;
-    font-weight: 600;
-    margin-right: 6px;
-    white-space: nowrap;
+  font-size: 13px;
+  color: #1B4227;
+  font-weight: 600;
+  margin-right: 6px;
+  white-space: nowrap;
 }
 
 .field input {
-    border: 0;
-    background: transparent;
-    outline: none;
-    font-size: 14px;
-    color: #1a1a1a;
-    width: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #1a1a1a;
+  width: 100%;
 }
 
 /* Toggle senha */
-.field--pwd {
-    padding-right: 42px;
-}
+.field--pwd { padding-right: 42px; }
 
 .field__toggle {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    display: grid;
-    place-items: center;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    padding: 0;
-    cursor: pointer ;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0;
+  cursor: pointer;
 }
 
-.field__toggle img {
-    width: 20px;
-    height: 20px;
-    opacity: .9;
-}
+.field__toggle img { width: 20px; height: 20px; opacity: .9; }
+.field__toggle:hover img { opacity: 1; }
 
-.field__toggle:hover img {
-    opacity: 1;
-}
-
-/* Esqueci / Cadastre-se */
-.lg__forgot {
-    display: inline-block;
-    margin: -2px 0 8px 4px;
-    font-size: 11px;
-    color: #1B4227;
-    text-decoration: none;
-}
-
-.lg__forgot:hover {
-    text-decoration: underline;
-}
-
+/* Links auxiliares */
+.lg__forgot,
 .lg__signup {
-    display: inline-block;
-    margin: 2px 0 8px 4px;
-    font-size: 12px;
-    color: #1B4227;
-    text-decoration: none;
+  display: inline-block;
+  margin: 2px 0 8px 4px;
+  font-size: 12px;
+  color: #1B4227;
+  text-decoration: none;
 }
-
-.lg__signup:hover {
-    text-decoration: underline;
-}
+.lg__forgot:hover,
+.lg__signup:hover { text-decoration: underline; }
 
 /* Select tipo de login */
 .selectField{
@@ -196,9 +181,8 @@ header.lg__header .lg__brandmark{
   margin: 6px 0 8px;
   display: flex;
   align-items: center;
-  padding: 0;                     /* sem padding aqui */
+  padding: 0;
 }
-
 .selectField__select{
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -211,72 +195,98 @@ header.lg__header .lg__brandmark{
   color: #1a1a1a;
   outline: none;
   cursor: pointer;
-
-   /* seta como background do select */
   background-repeat: no-repeat;
-  background-position: right 10px center;  /* posição da seta */
+  background-position: right 10px center;
   background-size: 18px 18px;
-  padding: 0 36px 0 12px;                  /* espaço à direita p/ a seta */
+  padding: 0 36px 0 12px;
 }
-
-
 .selectField__arrow {
-    position: absolute;
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    pointer-events: none;
-    opacity: .95;
+  position: absolute;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: .95;
 }
 
 /* Botão */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    border-radius: 999px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 600;
-    line-height: 1;
-    transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
 }
-
 .btn--submit {
-    display: flex;
-    margin: 8px auto 0;
-    min-width: 160px;
-    padding: 11px 16px;
-    background: var(--green-dark);
-    color: #fff;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .25) inset, 0 2px 10px rgba(0, 0, 0, .12);
+  display: flex;
+  margin: 8px auto 0;
+  min-width: 160px;
+  padding: 11px 16px;
+  background: var(--green-dark);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .25) inset, 0 2px 10px rgba(0, 0, 0, .12);
 }
-
 .btn--submit:hover {
-    filter: brightness(1.06);
-    transform: translateY(-1px);
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }
 
 /* Status */
 .lg__status {
-    min-height: 20px;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 13px;
+  min-height: 20px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+}
+.lg__status--success { color: #0b7c3e; }
+.lg__status--error { color: #9b1c1c; }
+
+/* ========= MODO 1920×1080 =========
+   Ajustes específicos para monitores Full HD */
+@media (min-width: 1900px) and (min-height: 1000px) {
+  :root {
+    --panel-width: 560px;       /* painel um pouco mais largo */
+  }
+
+  header.lg__header .lg__brandmark { width: 120px; height: 120px; }
+
+  .lg { padding: 32px 0 48px; }
+
+  .lg__panel {
+    padding: 28px 32px 30px;
+  }
+
+  .lg__brand { font-size: 72px; }    /* título maior */
+  .lg__subtitle { font-size: 20px; }
+
+  .field { height: 44px; padding: 9px 14px; gap: 10px; }
+  .field__icon { width: 18px; height: 18px; }
+  .field__label { font-size: 14px; }
+  .field input { font-size: 16px; }
+
+  .field--pwd { padding-right: 48px; }
+  .field__toggle { width: 34px; height: 34px; right: 10px; }
+  .field__toggle img { width: 22px; height: 22px; }
+
+  .selectField { height: 44px; }
+  .selectField__select {
+    font-size: 16px;
+    background-size: 22px 22px;
+    padding-right: 42px;
+  }
+  .selectField__arrow { width: 22px; height: 22px; }
+
+  .btn--submit { min-width: 200px; padding: 14px 18px; font-size: 16px; }
+
+  .lg__status { font-size: 14px; }
 }
 
-.lg__status--success {
-    color: #0b7c3e;
-}
-
-.lg__status--error {
-    color: #9b1c1c;
-}
-
-/* Responsivo */
+/* Responsivo geral */
 @media (max-width: 560px) {
-    .lg__panel {
-        padding: 20px;
-    }
+  .lg__panel { padding: 20px; }
 }
