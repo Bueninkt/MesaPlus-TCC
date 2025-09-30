@@ -47,11 +47,13 @@ function CadastroOngPage() {
       setStatus({ type: "error", msg: "Preencha todos os campos.", loading: false });
       return;
     }
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!emailOk) {
-      setStatus({ type: "error", msg: "E-mail inválido.", loading: false });
+    
+    const formEl = e.currentTarget;
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity(); // mostra o balão nativo
       return;
     }
+
 
     const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
     const url = `${API_BASE}/ong`; // ajuste conforme seu back-end

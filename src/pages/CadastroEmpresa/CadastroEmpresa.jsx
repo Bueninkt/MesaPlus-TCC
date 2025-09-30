@@ -55,14 +55,16 @@ function CadastroEmpresaPage() {
       setStatus({ type: "error", msg: "Preencha todos os campos.", loading: false });
       return;
     }
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
-    if (!emailOk) {
-      setStatus({ type: "error", msg: "E-mail inválido.", loading: false });
-      return;
-    }
+
     const cnpjDigits = form.cnpj.replace(/\D/g, "");
     if (cnpjDigits.length !== 14) {
       setStatus({ type: "error", msg: "CNPJ/MEI deve ter 14 dígitos.", loading: false });
+      return;
+    }
+
+    const formEl = e.currentTarget;
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity(); // mostra o balão nativo
       return;
     }
 
