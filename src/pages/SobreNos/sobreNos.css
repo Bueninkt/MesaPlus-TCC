@@ -4,7 +4,7 @@
 
 /* === VARIÁVEIS === */
 :root {
-  --white: #FFF;
+  --white: #ffffff;
   --green-dark: #1B4227;
   --green-dark-2: #12341F;
   /* tom da faixa */
@@ -56,7 +56,7 @@
   font-size: 28px;
   font-weight: 600;
   letter-spacing: 0.2px;
-  color: rgba(255, 255, 255, 0.92);
+  color: #fff6e3ef;
 }
 
 /* =========================
@@ -72,10 +72,8 @@
 }
 
 .about .container {
-  padding-top: 24px;
+  padding-top: 75px;
   /* distância da faixa até o título “SOBRE NÓS:” */
-  padding-bottom: 120px;
-  /* respiro inferior do bloco */
 }
 
 .about__grid {
@@ -83,7 +81,7 @@
   grid-template-columns: 1fr 380px;
   /* texto à esquerda / logo à direita */
   align-items: start;
-  column-gap: 48px;
+  column-gap: 129px;
   /* espaço entre texto e logo (print) */
 }
 
@@ -95,7 +93,7 @@
   /* “SOBRE NÓS:” robusto como no print */
   font-weight: 800;
   letter-spacing: 0.8px;
-  color: var(--white);
+  color: #fdf5e5;
   text-transform: uppercase;
 }
 
@@ -105,9 +103,9 @@
   max-width: 980px;
   /* largura de leitura confortável */
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  font-size: 20px;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: 25px;
+  line-height: 1.79;
+  color: rgb(255, 255, 255);
 }
 
 .about__right {
@@ -120,6 +118,7 @@
 
 .about__logo {
   width: 300px;
+  margin-top: -28px;
   /* proporção do logo vista na captura */
   height: auto;
   display: block;
