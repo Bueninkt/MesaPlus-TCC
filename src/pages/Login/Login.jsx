@@ -58,7 +58,7 @@ function LoginPage() {
         localStorage.setItem("userType", form.tipo);
         localStorage.setItem("user", JSON.stringify(data.usuario));
         setStatus({ type: "success", msg: "Login efetuado!", loading: false });
-        // navigate("/");
+  
       } else {
         setStatus({ type: "error", msg: data.message || "Falha no login.", loading: false });
       }

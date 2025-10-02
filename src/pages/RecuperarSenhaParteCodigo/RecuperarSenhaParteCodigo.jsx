@@ -1,15 +1,14 @@
 
 import React, { useState } from "react";
-import emailIcon from "../../assets/icons/email.png";
 
 import { Link } from "react-router-dom";
 import backimage from "../../assets/icons/backimage.png";
-import "./recuperarSenhaParteEmail.css";
+import "./recuperarSenhaParteCodigo.css";
 
 import navbarRegister from "../../components/navbar/navbarRegister";
 
 const Navbar = navbarRegister
-function RecuperarSenhaParteEmail() {
+function RecuperarSenhaParteCodigo() {
      const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
       const [showPwd, setShowPwd] = useState(false);
       const [status, setStatus] = useState({ type: "", msg: "", loading: false });
@@ -67,38 +66,33 @@ function RecuperarSenhaParteEmail() {
         <>
             <Navbar />
 
-            <div className="imagemFundo" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
+            <div className="imagemFundoRsc" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
 
 
-            <main className="container-Recuperar">
+            <main className="container-RecuperarSenhaParteCodigo">
                 <div className="h1">
                     Mesa+
                 </div>
                 
                 <p>Recuperação Senha</p>
 
-                <form onSubmit={onSubmit}>
+                <form>
                     <label >
-                        <img className="iconeEmail" src={emailIcon} alt="email" aria-hidden="true" />
-                        <span>Email:</span>
                         <input
-                            type="email"
-                            name="email"
-                            value={form.email}
-                            onChange={onChange}
-                            aria-label="Email"
-                            autoComplete="email"
-                            inputMode="email"
+                            type="text"
+                            name="codigo"
+                            aria-label="Codigo"
+                            inputMode="numeric"
+                            placeholder="Insira o código: "
                             required
                         />
                     </label>
 
                     <h2>Codigo enviado pelo email</h2>
 
-
-                    <Link to='/recuperarSenhaParteCodigo'>
-                    <button className="btnRecuperar btn--submitRecuperar" type="submit" disabled={status.loading}>
-                    {status.loading ? "enviado" : "Enviar"} </button>
+                    <Link to= '/recuperarNovaSenha'>
+                    <button className="btnRecuperarSenhaParteCodigo btn--submitRecuperarSenhaParteCodigo" type="submit" disabled={status.loading}>
+                    {status.loading ? "Codigo Verificado!" : "Verificar Codigo"} </button>
                     </Link>
                 </form>
                 
@@ -110,7 +104,7 @@ function RecuperarSenhaParteEmail() {
 
 
 
-export default RecuperarSenhaParteEmail
+export default RecuperarSenhaParteCodigo
 
 
 

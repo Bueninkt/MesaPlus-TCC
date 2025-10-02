@@ -8,6 +8,8 @@ import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/cadastroEmpresa.jsx'
 import CadastroOngPage from './pages/CadastroOng/CadastroOng.jsx'
 import RecuperarSenhaParteEmailPage from'./pages/RecuperarSenhaParteEmail/RecuperarSenhaParteEmail.jsx'
+import RecuperarSenhaParteCodigoPage from'./pages/RecuperarSenhaParteCodigo/RecuperarSenhaParteCodigo.jsx'
+import RecuperarNovaSenhaPage from'./pages/RecuperarNovaSenha/RecuperarNovaSenha.jsx'
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -22,6 +24,8 @@ function AppRoutes() {
             <Route path="/cadastroEmpresa" element={< CadastroEmpresaPage/>}></Route>
             <Route path="/cadastroOng" element={<CadastroOngPage />}></Route>
             <Route path="/recuperarSenhaParteEmail" element={<RecuperarSenhaParteEmailPage />}></Route>
+            <Route path="/recuperarSenhaParteCodigo" element={<RecuperarSenhaParteCodigoPage/>}></Route>
+            <Route path="/recuperarNovaSenha" element={<RecuperarNovaSenhaPage/>}></Route>
         </Routes>
       </>
     )

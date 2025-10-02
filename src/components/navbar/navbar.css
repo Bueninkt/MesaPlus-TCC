@@ -77,7 +77,7 @@
   background: var(--green-light); /* #B9CE5D */
   transform: scaleX(0);        /* começa zerado */
   transform-origin: left;      /* cresce da esquerda para a direita */
-  transition: transform .60s cubic-bezier(.62,1,.62,1); /* animação suave */
+  transition: transform .190s cubic-bezier(.62,1,.62,1); /* animação suave */
   will-change: transform;
 }
 

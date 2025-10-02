@@ -112,7 +112,7 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Nome"
                 required
-                minLength={3}
+                minLength={10}
                 autoComplete="name"
               />
             </label>
@@ -144,7 +144,8 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Senha"
                 required
-                minLength={6}
+                minLength={8}
+                maxLength={10}
                 autoComplete="new-password"
               />
               <button

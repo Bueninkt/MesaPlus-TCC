@@ -15,6 +15,19 @@
 }
 
 
+.imagemFundo{
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: .3;
+  /* intensidade sutil como no print */
+  pointer-events: none;
+  z-index: 1;
+}
+
+
 
 .container-Recuperar .h1 {
   position: absolute;

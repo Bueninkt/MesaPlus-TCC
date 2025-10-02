@@ -154,6 +154,8 @@ function CadastroEmpresaPage() {
                 value={form.senha}
                 onChange={onChange}
                 aria-label="Senha"
+                minLength={8}
+                maxLength={10}
                 required
               />
               <button
