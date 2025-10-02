@@ -70,7 +70,7 @@ function CadastroEmpresaPage() {
       return;
     }
 
-    const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
+    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
     const url = `${API_BASE}/empresa`; // ajuste conforme seu back-end
 
     try {
