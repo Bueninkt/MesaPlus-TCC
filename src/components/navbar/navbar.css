@@ -109,7 +109,7 @@
   flex-shrink: 0;
 }
 
-.btn {
+.btnNav {
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -41,8 +41,9 @@ function Navbar() {
         </ul>
 
         <div className="nav__actions">
-          <Link to="/login" className="btn btn--login">Entrar</Link>
-          <Link to="/hudCadastros" className="btn btn--signup">Cadastrar-se</Link>
+          <Link to="/login" className="btnNav btn--login">Entrar</Link>
+          <Link to="/hudCadastros" className="btnNav
+          btn--signup">Cadastrar-se</Link>
         </div>
       </div>
     </nav>
