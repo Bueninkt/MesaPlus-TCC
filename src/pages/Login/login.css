@@ -36,7 +36,6 @@ header.lg__header .lg__brandmark {
 /* Fundo / painel */
 .lg {
   margin-top: 0px;
-  min-height: calc(100vh - var(--header-h));
   /* alinhado ao header real */
   padding: 0px;
 }
@@ -191,7 +190,7 @@ header.lg__header .lg__brandmark {
   border: 2px solid rgba(27, 66, 39, .65);
   border-radius: 7px;
   height: 41px;
-  margin: 6px 0 8px;
+  margin: 6px 0 8px;    
   display: flex;
   align-items: center;
   padding: 0;

@@ -34,7 +34,7 @@ function LoginPage() {
 
     setStatus({ type: "", msg: "", loading: true });
 
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
     const url = `${API_BASE}/login`;
 
     try {
@@ -84,9 +84,10 @@ function LoginPage() {
           <h1 id="lg-title" className="lg__brand">Mesa+</h1>
           <p className="lg__subtitle">Login</p>
 
-          {/* sem noValidate -> habilita mensagens padrão do navegador */}
+
           <form className="lg__form" onSubmit={onSubmit}>
-            {/* Email: validação nativa de e-mail */}
+        
+        
             <label className="fieldLogin">
               <img className="field__icon" src={emailIcon} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>

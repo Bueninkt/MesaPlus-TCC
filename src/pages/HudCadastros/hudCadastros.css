@@ -161,6 +161,9 @@
 
 /* botão “Ir para” dentro do cartão */
 .btn--go {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 272px;
   /* largura igual à imagem */
   height: 56px;

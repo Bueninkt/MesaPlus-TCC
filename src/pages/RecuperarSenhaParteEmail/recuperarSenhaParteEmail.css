@@ -1,0 +1,106 @@
+.container-Recuperar {
+    background-color: var(--beige);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: min(580px, 92vw);
+    height: min(400px, 92vw);
+    margin: 0px auto;
+    background: var(--beige);
+    border-radius: 12px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
+    padding: 22px 26px 24px;
+    
+}
+
+
+
+.container-Recuperar .h1{
+    position: absolute;
+    text-align: center;
+    font-family: "Alex Brush", cursive;
+    font-weight: 500;
+    font-size: 99px;
+    top: 36%;
+    
+}
+
+.container-Recuperar p{
+    position: absolute;
+    top: 53%;
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 20px;
+}
+.container-Recuperar label{
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--beige);
+  border: 2px solid rgba(27, 66, 39, .65);
+  border-radius: 7px;
+  padding: 7px;
+  width: min(450px, 92vw);
+  height: 43px;
+  margin-top: 133px;
+  margin-bottom: 15px;
+}
+
+.container-Recuperar h2 {
+    font-family: 'Poppins';
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    margin: 2px 10px 38px 4px;
+    color: #000000a8;
+
+}
+
+.container-Recuperar span{
+    font-family: "Poppins";
+}
+
+
+
+.container-Recuperar .iconeEmail{
+  width: 24px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+
+.container-Recuperar input {
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #1a1a1a;
+  width: 100%;
+}
+
+.btnRecuperar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+.btn--submitRecuperar{
+  display: flex;
+  margin: 1px auto;
+  min-width: 160px;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 14px 16px;
+  background: var(--green-dark);
+  color: #fff;
+  text-decoration: none;
+}

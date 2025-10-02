@@ -7,7 +7,7 @@ import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/cadastroEmpresa.jsx'
 import CadastroOngPage from './pages/CadastroOng/CadastroOng.jsx'
-import RecuperarSenhaParteEmailPage from './pages/RecuperarSenhaParteEmail/RecuperarSenhaParteEmail.jsx'
+import RecuperarSenhaParteEmailPage from'./pages/RecuperarSenhaParteEmail/RecuperarSenhaParteEmail.jsx'
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
