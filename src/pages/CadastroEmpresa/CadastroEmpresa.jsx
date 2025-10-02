@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./cadastroEmpresa.css";
 
-import logo from "../../assets/icons/mesaLogo.png";
+import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from  "../../assets/icons/phone.png";
 import postCard from "../../assets/icons/postCard.png"; // ícone do doc (CNPJ/MEI)
@@ -11,6 +11,8 @@ import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
+
+const Navbar = navbarRegister
 
 function CadastroEmpresaPage() {
   const [form, setForm] = useState({
@@ -98,15 +100,7 @@ function CadastroEmpresaPage() {
 
   return (
     <>
-      {/* Cabeçalho com logo e Entrar */}
-      <header className="ce__header" aria-label="Cabeçalho">
-        <div className="container ce__headerGrid">
-          <Link to="/" className="ce__homeLink" aria-label="Ir para Sobre Nós">
-            <img className="ce__brandmark" src={logo} alt="Mesa+ logotipo" />
-          </Link>
-          <Link to="/login" className="btnCe btn--login">Entrar</Link>
-        </div>
-      </header>
+      <Navbar/>
 
       {/* Fundo com imagem */}
       <div

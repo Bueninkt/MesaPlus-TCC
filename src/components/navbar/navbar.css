@@ -33,7 +33,7 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-.nav__menu::-webkit-scrollbar { display: none; }
+
 
 .nav__item {
   position: relative;
@@ -72,12 +72,12 @@
   position: absolute;
   left: 0;
   bottom: 0;                   /* dentro da caixa do link */
-  height: 2px;                 /* espessura do traço */
+  height: 3px;                 /* espessura do traço */
   width: 100%;
   background: var(--green-light); /* #B9CE5D */
   transform: scaleX(0);        /* começa zerado */
   transform-origin: left;      /* cresce da esquerda para a direita */
-  transition: transform .60s cubic-bezier(.22,1,.36,1); /* animação suave */
+  transition: transform .60s cubic-bezier(.62,1,.62,1); /* animação suave */
   will-change: transform;
 }
 

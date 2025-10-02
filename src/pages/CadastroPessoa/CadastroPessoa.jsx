@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./cadastroPessoa.css";
 
-import logo from "../../assets/icons/mesaLogo.png";
+
+import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
 import postCard from "../../assets/icons/postCard.png";
@@ -12,6 +13,7 @@ import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
 
+const Navbar = navbarRegister
 function CadastroPessoaPage() {
   const [form, setForm] = useState({
     nome: "",
@@ -87,16 +89,7 @@ function CadastroPessoaPage() {
 
   return (
     <>
-      {/* Cabeçalho */}
-      <header className="cp__header" aria-label="Cabeçalho">
-        <div className="container cp__headerGrid">
-          <Link to="/" className="cp__homeLink" aria-label="Ir para Sobre Nós">
-            <img className="cp__brandmark" src={logo} alt="Mesa+ logotipo" />
-          </Link>
-          <Link to="/login" className="btnCp btn--login">Entrar</Link>
-        </div>
-      </header>
-
+    <Navbar/>
       {/* Fundo com imagem */}
       <div className="cp__bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
 

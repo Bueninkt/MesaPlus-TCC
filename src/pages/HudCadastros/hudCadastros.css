@@ -1,11 +1,3 @@
-/* === FONTES (iguais ao print) === */
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
-
-/* ===== UTIL ===== */
-* {
-  box-sizing: border-box;
-}
 
 .container {
   width: var(--container);

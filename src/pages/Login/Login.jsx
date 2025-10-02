@@ -127,7 +127,7 @@ function LoginPage() {
               </button>
             </label>
 
-            <Link to="#" className="lg__forgot">Esqueci minha senha :(</Link>
+            <Link to="/recuperarSenhaParteEmail" className="lg__forgot">Esqueci minha senha :(</Link>
 
             {/* Tipo de login: required nativo */}
             <div className="selectField">

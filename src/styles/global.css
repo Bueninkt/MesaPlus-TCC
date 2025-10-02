@@ -1,0 +1,25 @@
+     /* ===== Fontes ===== */
+     @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
+     @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
+
+
+     /* ===== Paleta ===== */
+     :root {
+         --white: #ffffff;
+         --green-dark: #1B4227;
+         --green-dark-2: #12341F;
+        --beige: #FFF1D4;
+         --green-light: #B9CE5D;
+         --beige-2: #FFF1D4;
+     }
+
+     /* ===== Base ===== */
+     * {
+         margin: 0%;
+         padding: 0%;
+         box-sizing: border-box;
+     }
+     body{
+        position: relative;
+     }

@@ -1,21 +1,5 @@
-/* Fontes */
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-/* Paleta e variáveis */
 
-/* Base */
-* {
-  box-sizing: border-box;
-}
-
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
 
 body {
   font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./cadastroOng.css";
 
-import logo from "../../assets/icons/mesaLogo.png";
+import navbarRegister from "../../components/navbar/navbarRegister";
+
 import profile from "../../assets/icons/profile.png";
 import phone from  "../../assets/icons/phone.png";
 import email from "../../assets/icons/email.png";
@@ -10,6 +11,8 @@ import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
+
+const Navbar = navbarRegister
 
 function CadastroOngPage() {
   const [form, setForm] = useState({
@@ -84,16 +87,8 @@ function CadastroOngPage() {
 
   return (
     <>
-      {/* Cabeçalho com logo e Entrar */}
-      <header className="co__header" aria-label="Cabeçalho">
-        <div className="container co__headerGrid">
-          <Link to="/" className="co__homeLink" aria-label="Ir para Sobre Nós">
-            <img className="co__brandmark" src={logo} alt="Mesa+ logotipo" />
-          </Link>
-          <Link to="/login" className="btnCo btn--login">Entrar</Link>
-        </div>
-      </header>
-
+    <Navbar/>
+  
       {/* Fundo com backimage */}
       <div
         className="co__bg"
