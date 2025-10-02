@@ -35,10 +35,10 @@ header.lg__header .lg__brandmark {
 
 /* Fundo / painel */
 .lg {
-  margin-top: 11px;
+  margin-top: 0px;
   min-height: calc(100vh - var(--header-h));
   /* alinhado ao header real */
-  padding: 9px 0 48px;
+  padding: 0px;
 }
 
 .lg__bg {
@@ -66,7 +66,7 @@ header.lg__header .lg__brandmark {
 
 .lg__panel {
   width: min(560px, 92vw);
-  height: 454px;
+  height: 95%;
   margin: 0px auto;
   background: var(--beige);
   border-radius: 12px;
@@ -225,7 +225,7 @@ header.lg__header .lg__brandmark {
 }
 
 /* Botão */
-.btn {
+.btnLogin {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -240,7 +240,7 @@ header.lg__header .lg__brandmark {
 
 .btn--submit {
   display: flex;
-  margin: 3px auto;
+  margin: 1px auto;
   min-width: 160px;
   font-size: 17px;
   font-weight: 600;

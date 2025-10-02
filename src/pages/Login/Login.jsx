@@ -149,7 +149,7 @@ function LoginPage() {
 
             <Link to="/hudCadastros" className="lg__signup">Cadastre-se</Link>
 
-            <button className="btn btn--submit" type="submit" disabled={status.loading}>
+            <button className="btnLogin btn--submit" type="submit" disabled={status.loading}>
               {status.loading ? "Entrando..." : "Entrar"}
             </button>
 
