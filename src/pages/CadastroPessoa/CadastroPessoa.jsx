@@ -59,7 +59,7 @@ function CadastroPessoaPage() {
 
     setStatus({ type: "", msg: "", loading: true });
 
-    const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
+    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
     const url = `${API_BASE}/usuario`;
 
     try {
@@ -112,7 +112,7 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Nome"
                 required
-                minLength={10}
+              
                 autoComplete="name"
               />
             </label>
