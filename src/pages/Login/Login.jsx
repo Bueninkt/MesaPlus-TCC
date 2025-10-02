@@ -34,7 +34,7 @@ function LoginPage() {
 
     setStatus({ type: "", msg: "", loading: true });
 
-    const API_BASE = import.meta.env.VITE_API_URL || "http://10.107.144.13:8080/v1/mesa-plus";
+    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
     const url = `${API_BASE}/login`;
 
     try {
@@ -150,13 +150,16 @@ function LoginPage() {
 
             <Link to="/hudCadastros" className="lg__signup">Cadastre-se</Link>
 
+
+            
             <button className="btnLogin btn--submit" type="submit" disabled={status.loading}>
               {status.loading ? "Entrando..." : "Entrar"}
             </button>
+          
 
             <div className={`lg__status ${status.type ? `lg__status--${status.type}` : ""}`} aria-live="polite">
               {status.msg}
-            </div>
+            </div>  
           </form>
         </section>
       </main>
