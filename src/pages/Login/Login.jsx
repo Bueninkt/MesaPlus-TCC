@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ⬅️ useNavigate adicionado
 import "./login.css";
 
 import logo from "../../assets/icons/mesaLogo.png";
@@ -10,12 +10,11 @@ import lockIcon from "../../assets/icons/lock.png";
 import seta from "../../assets/icons/seta.png";
 import backimage from "../../assets/icons/backimage.png";
 
-
-
 function LoginPage() {
   const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
+  const navigate = useNavigate(); // ⬅️ instância do navigate
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -57,8 +56,17 @@ function LoginPage() {
       if (data.status && data.usuario) {
         localStorage.setItem("userType", form.tipo);
         localStorage.setItem("user", JSON.stringify(data.usuario));
-        setStatus({ type: "success", msg: "Login efetuado!", loading: false });
-  
+        setStatus({
+          type: "success",
+          msg: "Login Realizado",
+          loading: false
+        });
+
+        // ⬇️ redireciona para /home após 2s
+        setTimeout(() => {
+          navigate("/home", { replace: true });
+        }, 2470);
+
       } else {
         setStatus({ type: "error", msg: data.message || "Falha no login.", loading: false });
       }
@@ -84,10 +92,7 @@ function LoginPage() {
           <h1 id="lg-title" className="lg__brand">Mesa+</h1>
           <p className="lg__subtitle">Login</p>
 
-
           <form className="lg__form" onSubmit={onSubmit}>
-        
-        
             <label className="fieldLogin">
               <img className="field__icon" src={emailIcon} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
@@ -150,16 +155,13 @@ function LoginPage() {
 
             <Link to="/hudCadastros" className="lg__signup">Cadastre-se</Link>
 
-
-            
             <button className="btnLogin btn--submit" type="submit" disabled={status.loading}>
               {status.loading ? "Entrando..." : "Entrar"}
             </button>
-          
 
             <div className={`lg__status ${status.type ? `lg__status--${status.type}` : ""}`} aria-live="polite">
               {status.msg}
-            </div>  
+            </div>
           </form>
         </section>
       </main>

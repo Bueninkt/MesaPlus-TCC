@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./cadastroEmpresa.css";
 
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
-import phone from  "../../assets/icons/phone.png";
+import phone from "../../assets/icons/phone.png";
 import postCard from "../../assets/icons/postCard.png"; // ícone do doc (CNPJ/MEI)
 import email from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
@@ -15,6 +15,8 @@ import backimage from "../../assets/icons/backimage.png";
 const Navbar = navbarRegister
 
 function CadastroEmpresaPage() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     nome: "",
     email: "",
@@ -82,7 +84,7 @@ function CadastroEmpresaPage() {
           email: form.email.trim(),
           senha: form.senha,
           telefone: form.telefone.replace(/\D/g, ""),
-          cnpj_mei: cnpjDigits 
+          cnpj_mei: cnpjDigits
         })
       });
 
@@ -91,8 +93,18 @@ function CadastroEmpresaPage() {
         throw new Error(msg || "Falha ao cadastrar.");
       }
 
-      setStatus({ type: "success", msg: "Cadastro realizado com sucesso!", loading: false });
+      // sucesso: mostra mensagem e agenda redirecionamento em 10s
+      setStatus({
+        type: "success",
+        msg: "Cadastro feito com sucesso!",
+        loading: false
+      });
       setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "" });
+
+      setTimeout(() => {
+        navigate("/login", { replace: true, state: { justRegistered: true } });
+      }, 2470);
+
     } catch (err) {
       setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
     }
@@ -100,7 +112,7 @@ function CadastroEmpresaPage() {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
 
       {/* Fundo com imagem */}
       <div

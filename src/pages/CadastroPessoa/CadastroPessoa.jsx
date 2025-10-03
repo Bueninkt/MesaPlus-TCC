@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./cadastroPessoa.css";
-
 
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
@@ -13,8 +12,12 @@ import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
 
-const Navbar = navbarRegister
+const Navbar = navbarRegister;
+
 function CadastroPessoaPage() {
+  const navigate = useNavigate();
+  const redirectTimer = useRef(null); // ⬅️ armazena o setTimeout p/ limpar depois
+
   const [form, setForm] = useState({
     nome: "",
     email: "",
@@ -24,6 +27,13 @@ function CadastroPessoaPage() {
   });
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
+
+  useEffect(() => {
+    // cleanup: se o componente desmontar antes do timeout, evita navegação
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, []);
 
   // ===== Máscaras =====
   const maskPhone = (v) => {
@@ -50,10 +60,9 @@ function CadastroPessoaPage() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    // usa APENAS a validação nativa do navegador
     const formEl = e.currentTarget;
     if (!formEl.checkValidity()) {
-      formEl.reportValidity(); // mostra o balão nativo
+      formEl.reportValidity();
       return;
     }
 
@@ -80,8 +89,19 @@ function CadastroPessoaPage() {
         throw new Error(msg || "Falha ao cadastrar.");
       }
 
-      setStatus({ type: "success", msg: "Cadastro realizado com sucesso!", loading: false });
+      setStatus({
+        type: "success",
+        msg: "Cadastro feito com sucesso!",
+        loading: false
+      });
       setForm({ nome: "", email: "", senha: "", telefone: "", cpf: "" });
+
+      // ⬅️ espera 2.5s e navega
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+      redirectTimer.current = setTimeout(() => {
+        navigate("/login", { replace: true, state: { justRegistered: true } });
+      }, 2470);
+
     } catch (err) {
       setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
     }
@@ -89,17 +109,13 @@ function CadastroPessoaPage() {
 
   return (
     <>
-    <Navbar/>
-      {/* Fundo com imagem */}
+      <Navbar/>
       <div className="cp__bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
-
-      {/* Painel */}
       <main className="cp" aria-labelledby="cp-title">
         <section className="cp__panel" role="region" aria-label="Formulário de cadastro">
           <h1 id="cp-title" className="cp__brand">Mesa+</h1>
           <p className="cp__subtitle">Cadastrar Pessoa</p>
 
-          {/* sem noValidate -> habilita mensagens padrão */}
           <form className="cp__form" onSubmit={onSubmit}>
             {/* Nome */}
             <label className="fieldCp">
@@ -112,7 +128,6 @@ function CadastroPessoaPage() {
                 onChange={onChange}
                 aria-label="Nome"
                 required
-              
                 autoComplete="name"
               />
             </label>
@@ -198,7 +213,11 @@ function CadastroPessoaPage() {
               />
             </label>
 
-            <button className="btnCp btn--submitCp" type="submit" disabled={status.loading}>
+            <button
+              className="btnCp btn--submitCp"
+              type="submit"
+              disabled={status.loading || status.type === "success"} // evita reenvio enquanto aguarda
+            >
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 

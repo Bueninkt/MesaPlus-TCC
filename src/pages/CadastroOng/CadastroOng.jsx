@@ -1,26 +1,27 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./cadastroOng.css";
 
 import navbarRegister from "../../components/navbar/navbarRegister";
 
 import profile from "../../assets/icons/profile.png";
-import phone from  "../../assets/icons/phone.png";
+import phone from "../../assets/icons/phone.png";
 import email from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
 
-const Navbar = navbarRegister
+const Navbar = navbarRegister;
 
 function CadastroOngPage() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     nome: "",
     email: "",
     senha: "",
     telefone: "",
-    
   });
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
@@ -33,7 +34,7 @@ function CadastroOngPage() {
     }
     return n.replace(/^(\d{0,2})(\d{0,5})(\d{0,4}).*/, "($1) $2-$3").trim().replace(/[- ]$/, "");
   };
-  
+
   const onChange = (e) => {
     const { name, value } = e.target;
     let v = value;
@@ -50,13 +51,12 @@ function CadastroOngPage() {
       setStatus({ type: "error", msg: "Preencha todos os campos.", loading: false });
       return;
     }
-    
+
     const formEl = e.currentTarget;
     if (!formEl.checkValidity()) {
       formEl.reportValidity(); // mostra o balão nativo
       return;
     }
-
 
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
     const url = `${API_BASE}/ong`; // ajuste conforme seu back-end
@@ -78,8 +78,18 @@ function CadastroOngPage() {
         throw new Error(msg || "Falha ao cadastrar.");
       }
 
-      setStatus({ type: "success", msg: "Cadastro realizado com sucesso!", loading: false });
+      // 
+      setStatus({
+        type: "success",
+        msg: "Cadastro feito com sucesso! ",
+        loading: false
+      });
       setForm({ nome: "", email: "", senha: "", telefone: "" });
+
+      setTimeout(() => {
+        navigate("/login", { replace: true, state: { justRegistered: true } });
+      }, 2470);
+
     } catch (err) {
       setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
     }
@@ -87,8 +97,8 @@ function CadastroOngPage() {
 
   return (
     <>
-    <Navbar/>
-  
+      <Navbar />
+
       {/* Fundo com backimage */}
       <div
         className="co__bg"
@@ -172,7 +182,6 @@ function CadastroOngPage() {
               />
             </label>
 
-        
             <button className="btnCo btn--submitCo" type="submit" disabled={status.loading}>
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
