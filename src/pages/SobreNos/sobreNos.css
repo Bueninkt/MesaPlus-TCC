@@ -1,17 +1,4 @@
-/* === FONTES (fixas, iguais ao print) === */
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-/* === VARIÁVEIS === */
-:root {
-  --white: #ffffff;
-  --green-dark: #1B4227;
-  --green-dark-2: #12341F;
-  /* tom da faixa */
-  --green-light: #B9CE5D;
-  --beige-2: #FFF1D4;
-  --container: min(1765px, 92vw);
-}
 
 /* === BASE DA PÁGINA === */
 .sobre {
@@ -27,6 +14,17 @@
   /* alinha exatamente com a navbar */
 }
 
+.sobrenos-bg{
+      position: fixed;
+        inset: 0;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        opacity: .1;
+        /* intensidade sutil como no print */
+        pointer-events: none;
+        z-index: 1;
+}
 
 .hero .container {
   /* espaço vertical igual ao print (grande respiro) */
@@ -64,7 +62,7 @@
    ========================= */
 .faixa {
   width: 100%;
-  height: 6px;
+  height: 3px;
   /* espessura vista no print */
   background: var(--green-dark-2);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.20);
@@ -108,24 +106,38 @@
   color: rgb(255, 255, 255);
 }
 
-.about__right {
-  justify-self: end;
-  /* encosta o logo na borda direita do container */
-  align-self: start;
-  padding-right: 4px;
-  /* microajuste para “colar” como no print */
-}
 
 .about__logo {
   width: 300px;
   margin-top: -28px;
+  padding: 20px;
   /* proporção do logo vista na captura */
-  height: auto;
+  height: 300px;
   display: block;
-  filter:
-    drop-shadow(0 18px 38px rgba(0, 0, 0, 0.35)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
   /* brilho/sombra sob o brasão */
   image-rendering: auto;
+  border-radius: 220px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+}
+
+.about__logo:hover {
+  transition: 0.2s ease;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.rodape {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.rodape p{
+  color: #ffffff;
+  font-family: 'Poppins';
+  font-size: 16px;
 }
 
 /* =========================
@@ -179,6 +191,7 @@
 }
 
 @media (max-width: 560px) {
+
   .brand-title {
     font-size: 96px;
   }
@@ -195,5 +208,15 @@
   .about__text {
     font-size: 18px;
     line-height: 1.7;
+
   }
+
+  .about__logo{
+    width: auto;
+    position: relative;
+    margin-top: 18px;
+    left: 20%;
+    
+  }
+
 }

@@ -2,26 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './hudcadastros.css';
 
-import logo from "../../assets/icons/mesaLogo.png";
+
 import bag from "../../assets/icons/bag.png";
 import houseEat from "../../assets/icons/houseEat.png";
 import user from "../../assets/icons/user.png";
+import backimage from "../../assets/icons/backimage.png";
+import navbarHud from "../../components/navbar/navbarHud";
+
+const NavbarHud = navbarHud
 
 function HudCadastrosPage() {
   return (
     <>
-      {/* Topo */}
-      <header className="hud__header" aria-label="Cabeçalho">
-        <div className="container hud__headerGrid">
-          <Link to="/" className="hud__homeLink" aria-label="Ir para Sobre Nós">
-            <img className="hud__brandmark" src={logo} alt="Mesa+ logotipo" />
-          </Link>
 
-          <h1 className="hud__title">Hud de Cadastro</h1>
-          <Link to="/login" className="btn btn--Hud">Entrar</Link>
-        </div>
-      </header>
+      <NavbarHud />
 
+
+
+      <div className="hudcadastros-bg" style={{ backgroundImage: `url(${backimage})` }}></div>
 
       {/* Cartões */}
       <main className="hud" aria-labelledby="hud-title">
@@ -54,6 +52,11 @@ function HudCadastrosPage() {
           </ul>
         </div>
       </main>
+
+      <footer className='rodapeHud'>
+        <p>&copy; 2025 Todos os Direitos reservados</p>
+      </footer>
+
     </>
   );
 }

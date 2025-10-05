@@ -12,6 +12,8 @@ header.lg__header {
   /* header sem “faixa” clara */
   display: flex;
   align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
 }
 
 header.lg__header>.container.lg__headerGrid {
@@ -20,6 +22,7 @@ header.lg__header>.container.lg__headerGrid {
   margin: auto 16px;
   justify-content: flex-start;
   align-items: center;
+  
 }
 
 header.lg__header .lg__brandmark {
@@ -270,6 +273,22 @@ header.lg__header .lg__brandmark {
   color: #9b1c1c;
 }
 
+
+.rodapelg {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.rodapelg p{
+  color: #ffffff;
+  font-family: 'Poppins';
+  font-size: 16px;
+}
+
+
 /* ========= MODO 1920×1080 =========
    Ajustes específicos para monitores Full HD */
 @media (min-width: 1900px) and (min-height: 1000px) {
@@ -366,3 +385,4 @@ header.lg__header .lg__brandmark {
     padding: 20px;
   }
 }
+

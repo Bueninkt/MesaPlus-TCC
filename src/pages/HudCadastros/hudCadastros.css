@@ -1,8 +1,7 @@
-
 .container {
-  width: var(--container);
   margin-inline: auto;
   padding-inline: 20px;
+  
   /* alinha com a navbar do site */
 }
 
@@ -18,79 +17,32 @@
   border: 0;
 }
 
-/* =========================
-   TOPO (logo, título, botão)
-   ========================= */
-.hud__header {
-  background: var(--green-dark);
+.hudcadastros-bg {
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: .2;
+  /* intensidade sutil como no print */
+  pointer-events: none;
+  z-index: 1;
 }
 
-.hud__headerGrid {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  /* logo | título central | botão */
-  align-items: center;
-  gap: 12px;
-  padding-block: 28px;
-  /* respiro vertical do topo */
-}
 
-.hud__homeLink {
-  display: inline-flex;
-  align-items: center;
-}
-
-.hud__brandmark {
-  width: 88px;
-  /* proporção do print */
-  height: 89px;
-  display: block;
-}
-
-.hud__title {
-  justify-self: center;
-  margin: 0;
-  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  font-weight: 800;
-  font-size: 44px;
-  /* “Hud de Cadastro” */
-  line-height: 1.15;
-  letter-spacing: .3px;
-  color: var(--white);
-  text-align: center;
-}
-
-/* botão “Entrar” (mesmo estilo do site) */
-.btn--Hud {
-  display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 43px;
-        padding-inline: 29px;
-        border: 0;
-        border-radius: 999px;
-        font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-        cursor: pointer;
-        text-decoration: none;
-        box-shadow: 0 1px 0 rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .08);
-}
-
-.btn--Hud {
-  background: var(--green-light);
-  color: var(--green-dark);
-}
 
 /* =========================
    ÁREA DOS CARTÕES
    ========================= */
 .hud {
   background: var(--green-dark);
-  padding-bottom: 80px;
+  padding-bottom: 35px;
+  
   /* respiro inferior da página */
 }
 
 .hud .container {
-  margin-top: 10px;
+  margin-top: 18px;
   /* pequeno espaço após o header */
 }
 
@@ -190,6 +142,21 @@
   filter: brightness(.98);
 }
 
+.rodapeHud {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.rodapeHud p{
+  color: #ffffff;
+  font-family: 'Poppins';
+  font-size: 16px;
+}
+
+
 /* =========================
    RESPONSIVO ( mantém “look”
    e apenas reajusta respiros )
@@ -235,7 +202,7 @@
   }
 
   .card {
-    min-height: 520px;
+    min-height: 520px; 
   }
 
   .card__brand {
@@ -289,3 +256,4 @@
     margin-top: 32px;
   }
 }
+

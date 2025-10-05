@@ -19,7 +19,12 @@
          margin: 0%;
          padding: 0%;
          box-sizing: border-box;
+        --container: min(1765px, 92vw);
+         
      }
+     
      body{
         position: relative;
+    
+
      }
