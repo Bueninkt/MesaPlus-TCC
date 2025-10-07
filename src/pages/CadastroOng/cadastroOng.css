@@ -50,6 +50,8 @@
     margin-top: 36px;
 }
 
+
+
 .fieldCo {
     position: relative;
     display: flex;
@@ -61,7 +63,19 @@
     padding: 7px 12px;
     height: 44px;
     margin: 16px 0;
+    
 }
+
+
+.field__error {
+  color: #d32f2f;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 4px;
+  width: 100%;
+  padding-left: 5px;
+}
+
 
 .field__icon {
     width: 16px;

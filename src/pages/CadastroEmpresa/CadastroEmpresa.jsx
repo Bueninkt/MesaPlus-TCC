@@ -1,79 +1,159 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Removido Link não utilizado
 import "./cadastroEmpresa.css";
 
+// --- Imports de Componentes e Ícones ---
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
-import postCard from "../../assets/icons/postCard.png"; // ícone do doc (CNPJ/MEI)
+import postCard from "../../assets/icons/postCard.png";
 import email from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
 
-const Navbar = navbarRegister
+const Navbar = navbarRegister;
 
+// --- Lógica de Validação Centralizada (Inspirada no CadastroPessoaPage) ---
+const validateField = (name, value) => {
+  switch (name) {
+    case "nome":
+      if (!value) return "Nome é obrigatório.";
+
+      // Nova validação: Verifica apenas se o primeiro caractere é uma letra maiúscula.
+      // Isso permite qualquer tamanho de nome (Ex: "Ana", "Carlos de Andrade", "Maria da Silva Sauro").
+      if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
+        return "O nome deve começar com letra maiúscula.";
+      }
+
+      return ""; // Válido se passar pelas checagens
+
+    case "email":
+      if (!value) return "Email é obrigatório.";
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(value)) {
+        // Mensagens de erro granulares, como no componente de referência
+        if (!value.includes("@")) return "Email deve conter um '@'.";
+        if (!value.includes(".")) return "Email deve conter um '.' após o '@'";
+        if (value.split('.').pop().length < 2) return "O domínio do email parece incompleto (ex: .com, .net)."
+        return "Formato de email inválido.";
+      }
+      return "";
+
+    case "senha":
+      if (!value) return "Senha é obrigatória.";
+      // Validações separadas para feedback claro ao usuário
+      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter letras maiúsculas e minúsculas.";
+      if (!/(?=.*[0-9])/.test(value)) return "Deve conter ao menos um número.";
+      if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
+      if (value.length < 8) return "Senha deve ter no mínimo 8 caracteres.";
+      if (value.length > 14) return "Senha deve ter no máximo 14 caracteres.";
+      return "";
+
+    case "telefone":
+      const phoneDigits = value.replace(/\D/g, "");
+      if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
+      return "";
+
+    case "cnpj":
+      const cnpjDigits = value.replace(/\D/g, "");
+      if (cnpjDigits.length !== 14) return "CNPJ/MEI deve ter 14 dígitos.";
+      return "";
+
+    default:
+      return "";
+  }
+};
+
+// --- Componente ---
 function CadastroEmpresaPage() {
   const navigate = useNavigate();
+  const redirectTimer = useRef(null);
 
   const [form, setForm] = useState({
     nome: "",
     email: "",
     senha: "",
     telefone: "",
-    cnpj: ""             // CNPJ/MEI (14 dígitos)
+    cnpj: ""
   });
+
+  const [errors, setErrors] = useState({});
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
 
-  // ===== Máscaras =====
+  useEffect(() => {
+    return () => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+    };
+  }, []);
+
+  // --- Máscaras (Seguindo o padrão de 'CadastroPessoaPage') ---
+  
+  // Máscara de telefone exatamente igual à do componente de referência para consistência
   const maskPhone = (v) => {
-    const n = v.replace(/\D/g, "").slice(0, 11);
-    if (n.length <= 10) {
-      return n.replace(/^(\d{0,2})(\d{0,4})(\d{0,4}).*/, "($1) $2-$3").trim().replace(/[- ]$/, "");
+    let n = v.replace(/\D/g, "").slice(0, 11);
+    if (n.length > 10) {
+      n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (n.length > 6) {
+      n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (n.length > 2) {
+      n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
+    } else if (n.length > 0) {
+      n = n.replace(/^(\d*)/, "($1");
     }
-    return n.replace(/^(\d{0,2})(\d{0,5})(\d{0,4}).*/, "($1) $2-$3").trim().replace(/[- ]$/, "");
-  };
-  const maskCNPJ = (v) => {
-    const n = v.replace(/\D/g, "").slice(0, 14);
-    return n
-      .replace(/^(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2}).*/, "$1.$2.$3/$4-$5")
-      .replace(/[.\-\/]$/, "");
+    return n;
   };
 
+  // Máscara de CNPJ progressiva, inspirada na máscara de telefone
+  const maskCNPJ = (v) => {
+    return v.replace(/\D/g, "")
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2')
+      .slice(0, 18);
+  };
+
+  // --- Handlers ---
   const onChange = (e) => {
     const { name, value } = e.target;
-    let v = value;
-    if (name === "telefone") v = maskPhone(value);
-    if (name === "cnpj") v = maskCNPJ(value);
-    setForm((s) => ({ ...s, [name]: v }));
+    setForm((s) => ({ ...s, [name]: value }));
+    const errorMessage = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  // ===== Submit =====
+  // Função `handleMask` idêntica para reutilização do padrão
+  const handleMask = (maskFn) => (e) => {
+    const { name, value } = e.target;
+    const maskedValue = maskFn(value);
+    setForm((s) => ({ ...s, [name]: maskedValue }));
+    const errorMessage = validateField(name, maskedValue);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
+  };
+
   async function onSubmit(e) {
     e.preventDefault();
+
+    const formErrors = {};
+    Object.keys(form).forEach(key => {
+      const error = validateField(key, form[key]);
+      if (error) {
+        formErrors[key] = error;
+      }
+    });
+
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length > 0) {
+      setStatus({ type: "error", msg: "Por favor, corrija os campos inválidos.", loading: false });
+      return;
+    }
+
     setStatus({ type: "", msg: "", loading: true });
-
-    if (!form.nome || !form.email || !form.senha || !form.telefone || !form.cnpj) {
-      setStatus({ type: "error", msg: "Preencha todos os campos.", loading: false });
-      return;
-    }
-
-    const cnpjDigits = form.cnpj.replace(/\D/g, "");
-    if (cnpjDigits.length !== 14) {
-      setStatus({ type: "error", msg: "CNPJ/MEI deve ter 14 dígitos.", loading: false });
-      return;
-    }
-
-    const formEl = e.currentTarget;
-    if (!formEl.checkValidity()) {
-      formEl.reportValidity(); // mostra o balão nativo
-      return;
-    }
-
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
-    const url = `${API_BASE}/empresa`; // ajuste conforme seu back-end
+    const url = `${API_BASE}/empresa`;
 
     try {
       const res = await fetch(url, {
@@ -84,7 +164,7 @@ function CadastroEmpresaPage() {
           email: form.email.trim(),
           senha: form.senha,
           telefone: form.telefone.replace(/\D/g, ""),
-          cnpj_mei: cnpjDigits
+          cnpj_mei: form.cnpj.replace(/\D/g, "")
         })
       });
 
@@ -93,7 +173,6 @@ function CadastroEmpresaPage() {
         throw new Error(msg || "Falha ao cadastrar.");
       }
 
-      // sucesso: mostra mensagem e agenda redirecionamento em 10s
       setStatus({
         type: "success",
         msg: "Cadastro feito com sucesso!",
@@ -101,7 +180,9 @@ function CadastroEmpresaPage() {
       });
       setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "" });
 
-      setTimeout(() => {
+      if (redirectTimer.current) clearTimeout(redirectTimer.current);
+
+      redirectTimer.current = setTimeout(() => {
         navigate("/login", { replace: true, state: { justRegistered: true } });
       }, 2470);
 
@@ -113,22 +194,13 @@ function CadastroEmpresaPage() {
   return (
     <>
       <Navbar />
-
-      {/* Fundo com imagem */}
-      <div
-        className="ce__bg"
-        style={{ backgroundImage: `url(${backimage})` }}
-        aria-hidden="true"
-      />
-
-      {/* Painel central */}
+      <div className="ce__bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true" />
       <main className="ce" aria-labelledby="ce-title">
         <section className="ce__panel" role="region" aria-label="Formulário de cadastro de empresa">
           <h1 id="ce-title" className="ce__brand">Mesa+</h1>
           <p className="ce__subtitle">Cadastrar Empresa</p>
-
           <form className="ce__form" onSubmit={onSubmit} noValidate>
-            {/* Nome */}
+
             <label className="fieldCe">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
               <span className="field__label">Nome:</span>
@@ -137,12 +209,14 @@ function CadastroEmpresaPage() {
                 name="nome"
                 value={form.nome}
                 onChange={onChange}
-                aria-label="Nome"
+                aria-label="Nome da empresa"
                 required
+                autoComplete="organization"
+                aria-invalid={!!errors.nome}
               />
+              {errors.nome && <div className="ce__error-message" role="alert">{errors.nome}</div>}
             </label>
 
-            {/* Email */}
             <label className="fieldCe">
               <img className="field__icon" src={email} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
@@ -153,10 +227,13 @@ function CadastroEmpresaPage() {
                 onChange={onChange}
                 aria-label="Email"
                 required
+                autoComplete="email"
+                inputMode="email"
+                aria-invalid={!!errors.email}
               />
+              {errors.email && <div className="ce__error-message" role="alert">{errors.email}</div>}
             </label>
 
-            {/* Senha (toggle) */}
             <label className="fieldCe field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -166,10 +243,12 @@ function CadastroEmpresaPage() {
                 value={form.senha}
                 onChange={onChange}
                 aria-label="Senha"
-                minLength={8}
-                maxLength={10}
                 required
+                maxLength={14}
+                autoComplete="new-password"
+                aria-invalid={!!errors.senha}
               />
+              {errors.senha && <div className="ce__error-message" role="alert">{errors.senha}</div>}
               <button
                 type="button"
                 className="field__toggle"
@@ -182,7 +261,6 @@ function CadastroEmpresaPage() {
               </button>
             </label>
 
-            {/* Telefone */}
             <label className="fieldCe">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
@@ -190,14 +268,16 @@ function CadastroEmpresaPage() {
                 type="tel"
                 name="telefone"
                 value={form.telefone}
-                onChange={onChange}
+                onChange={handleMask(maskPhone)}
                 aria-label="Telefone"
                 required
                 inputMode="numeric"
+                maxLength={15}
+                aria-invalid={!!errors.telefone}
               />
+              {errors.telefone && <div className="ce__error-message" role="alert">{errors.telefone}</div>}
             </label>
 
-            {/* CNPJ/MEI */}
             <label className="fieldCe">
               <img className="field__icon" src={postCard} alt="" aria-hidden="true" />
               <span className="field__label">CNPJ/MEI:</span>
@@ -205,20 +285,31 @@ function CadastroEmpresaPage() {
                 type="text"
                 name="cnpj"
                 value={form.cnpj}
-                onChange={onChange}
+                onChange={handleMask(maskCNPJ)}
                 aria-label="CNPJ/MEI"
                 required
                 inputMode="numeric"
+                maxLength={18} // XX.XXX.XXX/YYYY-ZZ
+                aria-invalid={!!errors.cnpj}
               />
+              {errors.cnpj && <div className="ce__error-message" role="alert">{errors.cnpj}</div>}
             </label>
 
-            <button className="btnCe btn--submitCe" type="submit" disabled={status.loading}>
+            <button
+              className="btnCe btn--submitCe"
+              type="submit"
+              disabled={status.loading || status.type === "success"}
+            >
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 
-            <div className={`ce__status ${status.type ? `ce__status--${status.type}` : ""}`} aria-live="polite">
+            <div
+              className={`ce__status ${status.type ? `ce__status--${status.type}` : ""}`}
+              aria-live="polite"
+            >
               {status.msg}
             </div>
+
           </form>
         </section>
       </main>

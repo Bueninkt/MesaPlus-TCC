@@ -2,7 +2,7 @@ import React from "react";
 
 
 import LoginPage from './pages/Login/Login.jsx';
-import SobreNosPage from './pages/SobreNos/SobreNos.jsx'
+import SobreNosPage from './pages/SobreNos/sobreNos.jsx'
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/cadastroEmpresa.jsx'
