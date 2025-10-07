@@ -105,7 +105,10 @@ function LoginPage() {
                 autoComplete="email"
                 inputMode="email"
                 required
+                aria-invalid={!!errors.email}
               />
+              {errors.email && <div className="lg__error-message" role="alert">{errors.email}</div>}
+    
             </label>
 
             {/* Senha: required + minLength -> mensagem nativa */}
@@ -167,7 +170,7 @@ function LoginPage() {
       </main>
 
 
-      
+
       <footer className='rodapelg'>
         <p>&copy; 2025 Todos os Direitos reservados</p>
       </footer>

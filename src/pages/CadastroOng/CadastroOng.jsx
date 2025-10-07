@@ -1,23 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./cadastroOng.css";
 
-// --- Adicione este CSS ao seu arquivo cadastroOng.css para estilizar os erros ---
-/*
-.field__error {
-  color: #d32f2f;
-  font-size: 0.75rem;
-  text-align: left;
-  margin-top: 4px;
-  width: 100%;
-  padding-left: 5px;
-}
-
-*/
-// ---------------------------------------------------------------------------------
-
+// --- Imports de Componentes e Ícones ---
 import navbarRegister from "../../components/navbar/navbarRegister";
-
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
 import email from "../../assets/icons/email.png";
@@ -28,9 +14,71 @@ import backimage from "../../assets/icons/backimage.png";
 
 const Navbar = navbarRegister;
 
+// --- Lógica de Validação Centralizada e em Tempo Real ---
+const validateField = (name, value) => {
+  switch (name) {
+    case "nome":
+      if (!value) return "Nome da ONG é obrigatório.";
+      if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
+          return "O nome deve começar com letra maiúscula.";
+      }
+      return "";
+
+    case "email":
+      if (!value) return "Email é obrigatório.";
+
+      // A expressão regular principal já valida a maioria dos casos.
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(value)) {
+        return ""; // Se for válido, retorna sucesso.
+      }
+
+      // Se a regex falhar, damos erros mais específicos.
+      if (!value.includes("@")) {
+        return "Email deve conter um '@'.";
+      }
+      
+      const parts = value.split('@');
+      if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
+        return "Formato de email inválido (ex: nome@dominio.org).";
+      }
+
+      const domainPart = parts[1];
+      if (!domainPart.includes('.')) {
+        return "O domínio do email precisa de um ponto (ex: dominio.org).";
+      }
+
+      const tld = domainPart.split('.').pop();
+      if (tld.length < 2) {
+        return "O final do domínio deve ter pelo menos 2 letras (ex: .org, .br).";
+      }
+
+      // Erro genérico se nenhuma das condições específicas for atendida.
+      return "Formato de email inválido.";
+
+
+    case "senha":
+      if (!value) return "Senha é obrigatória.";
+      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter uma letra maiúscula e uma minuscula";
+      if (value.length >= 15 || value.length <= 9) return "Senha no mínimo 10 caracteres.";
+      if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
+      return "";
+
+    case "telefone":
+      const phoneDigits = value.replace(/\D/g, "");
+      if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
+      return "";
+
+    default:
+      return "";
+  }
+};
+
+
+// --- Componente ---
 function CadastroOngPage() {
   const navigate = useNavigate();
-  const redirectTimer = useRef(null); // NOVO: Adicionado para consistência
+  const redirectTimer = useRef(null);
 
   const [form, setForm] = useState({
     nome: "",
@@ -39,90 +87,63 @@ function CadastroOngPage() {
     telefone: "",
   });
 
-  // NOVO: Estado para armazenar os erros de validação dos campos
   const [errors, setErrors] = useState({});
-
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
   
-  // NOVO: Hook para limpar o timer
   useEffect(() => {
     return () => {
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
     };
   }, []);
 
-
+  // --- Máscara de Telefone (padrão do projeto) ---
   const maskPhone = (v) => {
-    const n = v.replace(/\D/g, "").slice(0, 11);
-    if (n.length <= 10) {
-      return n.replace(/^(\d{0,2})(\d{0,4})(\d{0,4}).*/, "($1) $2-$3").trim().replace(/[- ]$/, "");
+    let n = v.replace(/\D/g, "").slice(0, 11);
+    if (n.length > 10) {
+      n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (n.length > 6) {
+      n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (n.length > 2) {
+      n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
+    } else if (n.length > 0) {
+      n = n.replace(/^(\d*)/, "($1");
     }
-    return n.replace(/^(\d{0,2})(\d{0,5})(\d{0,4}).*/, "($1) $2-$3").trim().replace(/[- ]$/, "");
+    return n;
   };
 
-  // ALTERADO: Função onChange para incluir a lógica do nome e limpar erros
+  // --- Handlers ---
   const onChange = (e) => {
     const { name, value } = e.target;
-    let v = value;
-    
-    // Limpa o erro do campo atual ao começar a digitar
-    if (errors[name]) {
-        setErrors(prev => ({ ...prev, [name]: null }));
-    }
-
-    if (name === "nome") {
-        // Garante que a primeira letra seja sempre maiúscula
-        v = value.charAt(0).toUpperCase() + value.slice(1);
-    } else if (name === "telefone") {
-        v = maskPhone(value);
-    }
-    
-    setForm((s) => ({ ...s, [name]: v }));
+    setForm((s) => ({ ...s, [name]: value }));
+    const errorMessage = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  // NOVO: Função de validação para ser usada no onBlur
-  const validateField = (name, value) => {
-    let errorMsg = null;
-    if (name === "email") {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (value && !emailRegex.test(value)) {
-            errorMsg = "Formato de e-mail inválido. Ex: seuemail@dominio.com";
-        }
-    }
-    return errorMsg;
-  }
-  
-  // NOVO: Handler para o evento onBlur (quando o usuário sai do campo)
-  const handleBlur = (e) => {
+  const handleMask = (maskFn) => (e) => {
     const { name, value } = e.target;
-    const error = validateField(name, value);
-    if (error) {
-        setErrors(prev => ({ ...prev, [name]: error }));
-    }
+    const maskedValue = maskFn(value);
+    setForm((s) => ({ ...s, [name]: maskedValue }));
+    const errorMessage = validateField(name, maskedValue);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  // NOVO: Função para validar o formulário inteiro antes do envio
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!form.nome) newErrors.nome = "O nome é obrigatório.";
-    
-    const emailError = validateField("email", form.email);
-    if (emailError) newErrors.email = emailError;
-    if (!form.email) newErrors.email = "O e-mail é obrigatório.";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }
-
-  // ALTERADO: Função onSubmit para incluir a validação final
   async function onSubmit(e) {
     e.preventDefault();
-    
-    // Executa a validação antes de prosseguir
-    if (!validateForm()) {
-        return; // Interrompe o envio se houver erros
+
+    const formErrors = {};
+    Object.keys(form).forEach(key => {
+      const error = validateField(key, form[key]);
+      if (error) {
+        formErrors[key] = error;
+      }
+    });
+
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length > 0) {
+      setStatus({ type: "error", msg: "Por favor, corrija os campos inválidos.", loading: false });
+      return;
     }
 
     setStatus({ type: "", msg: "", loading: true });
@@ -154,7 +175,6 @@ function CadastroOngPage() {
       });
       setForm({ nome: "", email: "", senha: "", telefone: "" });
 
-      // ALTERADO: Usando useRef para o timer
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
       redirectTimer.current = setTimeout(() => {
         navigate("/login", { replace: true, state: { justRegistered: true } });
@@ -188,13 +208,12 @@ function CadastroOngPage() {
                 name="nome"
                 value={form.nome}
                 onChange={onChange}
-                onBlur={handleBlur} // NOVO
-                aria-label="Nome"
+                aria-label="Nome da ONG"
                 required
                 aria-invalid={!!errors.nome}
+                autoComplete="organization"
               />
-              {/* NOVO: Exibe a mensagem de erro */}
-              {errors.nome && <div className="field__error" role="alert">{errors.nome}</div>}
+              {errors.nome && <div className="co__error-message" role="alert">{errors.nome}</div>}
             </label>
 
             {/* Email */}
@@ -206,17 +225,16 @@ function CadastroOngPage() {
                 name="email"
                 value={form.email}
                 onChange={onChange}
-                onBlur={handleBlur} // NOVO
                 aria-label="Email"
                 required
                 aria-invalid={!!errors.email}
-                aria-describedby="email-error"
+                inputMode="email"
+                autoComplete="email"
               />
-              {/* NOVO: Exibe a mensagem de erro */}
-              {errors.email && <div id="email-error" className="field__error" role="alert">{errors.email}</div>}
+              {errors.email && <div className="co__error-message" role="alert">{errors.email}</div>}
             </label>
 
-            {/* Senha (sem alterações) */}
+            {/* Senha */}
             <label className="fieldCo field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -226,10 +244,13 @@ function CadastroOngPage() {
                 value={form.senha}
                 onChange={onChange}
                 aria-label="Senha"
-                minLength={8}
-                maxLength={10}
+                minLength={10}
+                maxLength={14}
                 required
+                aria-invalid={!!errors.senha}
+                autoComplete="new-password"
               />
+               {errors.senha && <div className="co__error-message" role="alert">{errors.senha}</div>}
               <button
                 type="button"
                 className="field__toggle"
@@ -242,7 +263,7 @@ function CadastroOngPage() {
               </button>
             </label>
 
-            {/* Telefone (sem alterações de lógica) */}
+            {/* Telefone */}
             <label className="fieldCo">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
@@ -250,14 +271,22 @@ function CadastroOngPage() {
                 type="tel"
                 name="telefone"
                 value={form.telefone}
-                onChange={onChange}
+                onChange={handleMask(maskPhone)}
                 aria-label="Telefone"
                 required
                 inputMode="numeric"
+                maxLength={15}
+                aria-invalid={!!errors.telefone}
+                autoComplete="tel"
               />
+              {errors.telefone && <div className="co__error-message" role="alert">{errors.telefone}</div>}
             </label>
 
-            <button className="btnCo btn--submitCo" type="submit" disabled={status.loading}>
+            <button
+              className="btnCo btn--submitCo"
+              type="submit"
+              disabled={status.loading || status.type === "success"}
+            >
               {status.loading ? "Cadastrando..." : "Cadastrar"}
             </button>
 

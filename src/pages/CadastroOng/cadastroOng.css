@@ -183,3 +183,25 @@
         padding: 20px;
     }
 }
+
+
+.co__error-message {
+  color: #e74c3c; /* Vermelho para erros */
+  font-size: 0.8rem;
+  /* Ajusta a posição da mensagem de erro */
+  position: absolute;
+  bottom: -18px;
+  left: 35px;
+  white-space: nowrap; 
+}
+
+/* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */
+.fieldCo:has(.cp__error-message) {
+  margin-bottom: 24px;
+}
+
+
+input[aria-invalid="true"] {
+  border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
+  
+}

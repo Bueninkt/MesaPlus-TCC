@@ -29,26 +29,44 @@ const validateField = (name, value) => {
 
       return ""; // Válido se passar pelas checagens
 
-    case "email":
+     case "email":
       if (!value) return "Email é obrigatório.";
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(value)) {
-        // Mensagens de erro granulares, como no componente de referência
-        if (!value.includes("@")) return "Email deve conter um '@'.";
-        if (!value.includes(".")) return "Email deve conter um '.' após o '@'";
-        if (value.split('.').pop().length < 2) return "O domínio do email parece incompleto (ex: .com, .net)."
-        return "Formato de email inválido.";
-      }
-      return "";
 
-    case "senha":
+      // A expressão regular principal já valida a maioria dos casos.
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(value)) {
+        return ""; // Se for válido, retorna sucesso.
+      }
+
+      // Se a regex falhar, damos erros mais específicos.
+      if (!value.includes("@")) {
+        return "Email deve conter um '@'.";
+      }
+      
+      const parts = value.split('@');
+      if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
+        return "Formato de email inválido (ex: nome@dominio.com).";
+      }
+
+      const domainPart = parts[1];
+      if (!domainPart.includes('.')) {
+        return "O domínio do email precisa de um ponto (ex: dominio.com).";
+      }
+
+      const tld = domainPart.split('.').pop();
+      if (tld.length < 2) {
+        return "O final do domínio deve ter pelo menos 2 letras (ex: .com, .br).";
+      }
+
+      // Erro genérico se nenhuma das condições específicas for atendida.
+      return "Formato de email inválido.";
+
+
+     case "senha":
       if (!value) return "Senha é obrigatória.";
-      // Validações separadas para feedback claro ao usuário
-      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter letras maiúsculas e minúsculas.";
-      if (!/(?=.*[0-9])/.test(value)) return "Deve conter ao menos um número.";
+      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter uma letra maiúscula e uma minuscula";
+      if (value.length >= 15 || value.length <= 9) return "Senha no mínimo 10 caracteres.";
       if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
-      if (value.length < 8) return "Senha deve ter no mínimo 8 caracteres.";
-      if (value.length > 14) return "Senha deve ter no máximo 14 caracteres.";
       return "";
 
     case "telefone":
