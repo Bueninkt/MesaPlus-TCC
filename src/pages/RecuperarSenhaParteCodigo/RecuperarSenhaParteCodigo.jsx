@@ -9,7 +9,7 @@ import navbarRegister from "../../components/navbar/navbarRegister";
 const Navbar = navbarRegister;
 
 function RecuperarSenhaParteCodigo() {
-  // A lógica de estado (useState) e a função de submissão (onSubmit) foram removidas.
+ 
 
   return (
     <>

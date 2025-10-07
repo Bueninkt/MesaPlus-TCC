@@ -8,7 +8,7 @@ import "./navbarHud.css"
 
 function navbarHud() {
     return (
-        <>  
+        <>
             <nav className="container-topoHud">
                 <div className="logoHud">
                     <Link to="/" aria-label="Ir para Sobre Nós">
@@ -17,12 +17,13 @@ function navbarHud() {
                 </div>
 
                 <div className="texto-hud">
-                     <h1>Hud de Cadastro</h1>                            
+                    <h1>Hud de Cadastro</h1>
                 </div>
 
-                <div className="botaoHud">
-                    <Link className="btn-entrarHud" to="/login">Entrar</Link>
-                </div>
+
+                {/* Substitua a div e o Link por apenas um Link com a classe principal */}
+                <Link className="botaoHud" to="/login">Entrar</Link>
+
             </nav>
 
         </>

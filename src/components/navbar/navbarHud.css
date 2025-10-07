@@ -1,139 +1,116 @@
+/* ============================================= */
+/* ESTILOS GERAIS (DESKTOP)             */
+/* ============================================= */
+
 .container-topoHud {
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Itens em linha por padrão */
     flex-wrap: nowrap;
-  
-    align-items: center;
+    justify-content: space-between; /* Distribui os itens com espaço entre eles */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
     height: auto;
+    padding: 15px 60px; /* Padding geral para espaçamento nas laterais */
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-    padding-top: 0.7%;
-
 }
 
-.logoHud{
-   bottom: 10%;
-   margin-left: 68px;
-   flex: 19%;
+.logoHud {
+   /* Não precisa mais de flex, margin ou position. O container cuida disso. */
 }
 
 .logo_imgHud {
     width: 148px;
     height: 137px;
-
+    display: block; /* Remove espaço extra que a imagem pode ter */
 }
 
 .texto-hud {
-  flex: 23%;
-
+  /* O texto vai se ajustar automaticamente */
 }
-
 
 .texto-hud h1 {
     color: aliceblue;
     font-family: 'Poppins';
     font-size: 39px;
-
+    margin: 0; /* Remove margens padrão do h1 */
 }
-
 
 .botaoHud {
     background: var(--green-light);
     text-align: center;
-    padding: 10px;
+    padding: 12px 30px; /* Padding um pouco mais generoso */
     max-width: 210px;
     border-radius: 999px;
-    cursor: pointer;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    flex: 2%;
-    margin-right: 96px;
     
-}
-
-.botaoHud:hover {
-   transition: 0.4s;
-   transform: scale(1.1);
-    
-}
-
-.btn-entrarHud {
     color: black;
     font-family: 'Poppins';
     font-weight: 500;
     text-decoration: none;
     font-size: 22px;
-
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.4s; /* Transição movida para o estado base */
 }
 
-/* FAZER A RESPONSIVIDADE COMO AJUSTE FINAL */
+.botaoHud:hover {
+   transform: scale(1.1); 
+}
 
-@media(max-width: 560px) {
-
+/* ============================================= */
+/* RESPONSIVIDADE (TABLET)               */
+/* ============================================= */
+@media(max-width: 1024px) {
     .container-topoHud {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 12%;
-       
+        padding: 15px 30px; /* Diminui o padding lateral em telas menores */
+    }
+
+    .texto-hud h1 {
+        font-size: 32px; /* Diminui um pouco a fonte do título */
+    }
+
+    .logo_imgHud {
+        width: 120px;
+        height: auto; /* Altura automática para manter proporção */
+    }
+}
+
+
+/* ============================================= */
+/* RESPONSIVIDADE (MOBILE)              */
+/* ============================================= */
+@media(max-width: 768px) {
+    .container-topoHud {
+        flex-direction: column; /* Itens ficam em coluna */
+        justify-content: center;
+        padding: 25px 20px; /* Ajusta o padding para o layout vertical */
+        gap: 25px; /* Adiciona um espaço consistente entre os itens */
     }
 
     .texto-hud {
-        position: relative;
-        bottom: 100px;
-        left: 9.1%;
-        
+        /* Garante que o texto fique na ordem correta no layout de coluna */
+        order: -1; /* Coloca o título antes do logo se desejar */
     }
-
-
-     .texto-hud h1 {
-        font-size: 36px;
-
+    
+    .texto-hud h1 {
+        font-size: 28px;
+        text-align: center; /* Centraliza o texto no mobile */
     }
 
     .logoHud {
-        position: absolute;
-        top: 2%;
-        right: 68%;
+        order: -2; /* Coloca o logo no topo */
     }
 
     .logo_imgHud{
-        height: 139px;
-        width: 146px;
+        width: 110px;
     }
 
     .botaoHud {
-        position: absolute;
-        top: 5.6%;
-        left: 50.9%;
-        width: 100%;
-        height: 2.6%;
+        width: 100%; /* Botão ocupa a largura máxima disponível */
+        max-width: 300px; /* Mas não passa de 300px */
+        font-size: 20px;
     }
-   
 
     .botaoHud:hover {
-        transition: 1s;
-        transform:scale(1.06);
+        transform: scale(1.05); /* Efeito de hover mais sutil no mobile */
     }
-
-
-}
-
-
-@media(max-width: 1150px) {
-.logoHud{
-    position: relative;
-    right: 4%;
-}
-
-    .texto-hud{
-        position: relative;
-        right: 22%;
-    }
-
-    .botaoHud{
-        position: absolute;
-        left: 74%;
-        width: 80%;
-    }
-
-    
-    
 }

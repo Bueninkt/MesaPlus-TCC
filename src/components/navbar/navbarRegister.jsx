@@ -16,9 +16,9 @@ function navbarRegister() {
                     </Link>
                 </div>
 
-                <div className="botao">
-                    <Link className="btn-entrarRse" to="/login">Entrar</Link>
-                </div>
+                
+            <Link className="botaoRegister" to="/login">Entrar</Link>
+                
             </nav>
 
         </>

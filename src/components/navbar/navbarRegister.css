@@ -1,47 +1,75 @@
 
-body{
-    position: absolute;
-}
 
-.container-topo{
+/* --- ESTILOS BASE (MOBILE - até 767px) --- */
+.container-topo {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center ;
+    flex-direction: column; /* Itens empilhados na vertical */
+    justify-content: center;
     align-items: center;
-    height: 10%;
-   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-
+    padding: 15px 10px; /* Espaçamento interno para não colar nas bordas */
+    gap: 15px; /* Espaço entre o logo e o botão */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
-.container-topo .logo{
-    margin-top: 12px;
-    padding-left: 5px;  
-    flex: 1%;
+.container-topo .logo {
+    margin: 0;
+    padding: 0;
 }
 
-.logo_img{
-    max-width: min(220px, 90vw);
-    max-height: min(186px, 90vw);
-}
-
-.container-topo .botao{
-    background: var(--green-light);
-    text-align: center;
-    flex: -1%;
-    margin-right: 85px;
+.logo_img {
+    max-width: min(180px, 80vw);
     height: auto;
-    padding: 10px 50px;
+}
+
+.container-topo .botaoRegister {
+    background: var(--green-light); /* Usando um valor fixo para o exemplo */
+    text-align: center;
+    padding: 15px 90px;
     border-radius: 999px;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.834);
+    font-family: "Poppins";
+    font-weight: normal;
     cursor: pointer;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-   
+    margin-bottom: 17px;
 }
 
-.btn-entrarRse{
-    color: black;
-    font-family: 'Poppins';
-    font-weight: 500;
-    text-decoration: none;
-    font-size: 22px;
+/* --- TABLETS (a partir de 768px) --- */
+@media (min-width: 768px) {
+    .container-topo {
+        flex-direction: row; /* Itens lado a lado */
+        justify-content: space-between; /* Logo na esquerda, botão na direita */
+        padding: 18px 30px; /* Ajusta o espaçamento lateral */
+        gap: 20px; /* Remove o gap vertical */
+    }
 
+    .container-topo .logo {
+        margin-top: 0; /* Remove margem desnecessária */
+    }
+    
+    .logo_img {
+        max-width: 200px; /* Aumenta um pouco o logo */
+    }
+
+    .container-topo .botaoRegister {
+        margin-right: 20px; /* Adiciona uma margem moderada */
+        padding: 10px 40px; /* Aumenta um pouco o padding */
+    }
+}
+
+/* --- DESKTOPS (a partir de 1024px) --- */
+@media (min-width: 1024px) {
+    .container-topo {
+        padding: 5px 50px; /* Aumenta o espaçamento para telas grandes */
+    }
+
+    .logo_img {
+        max-width: 220px; /* Tamanho original do seu código */
+    }
+
+    .container-topo .botaoRegister {
+        margin-right: 85px; /* Margem original do seu código */
+        padding: 10px 50px; /* Padding original do seu código */
+    }
 }

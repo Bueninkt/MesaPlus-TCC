@@ -179,19 +179,28 @@
   .about__grid {
     grid-template-columns: 1fr;
     row-gap: 40px;
+    /* Adiciona uma margem inferior para separar a seção 'Sobre Nós' do rodapé */
+    padding-bottom: 40px; 
   }
 
+  /* 🎯 MELHORIA: Centraliza o conteúdo da direita (o logo) */
   .about__right {
-    justify-self: start;
+    justify-self: center; /* Centraliza a coluna completa (onde está o logo) */
+    text-align: center; /* Garante que o conteúdo interno também esteja centrado, se for o caso */
   }
 
+  /* O tamanho do logo estava bom, sem alteração significativa aqui. */
   .about__logo {
     width: 240px;
+    height: 240px; /* Mantém a proporção circular */
+    margin-top: 0; /* Remove a margem negativa que só funcionava no layout de duas colunas */
+    margin-inline: auto; /* Garante que, se for `display: block`, ele também centralize */
   }
 }
 
 @media (max-width: 560px) {
 
+  /* Ajustes de tipografia e respiro permanecem ótimos */
   .brand-title {
     font-size: 96px;
   }
@@ -208,15 +217,26 @@
   .about__text {
     font-size: 18px;
     line-height: 1.7;
-
   }
 
+  /* 🎯 CORREÇÃO: Centraliza o logo de forma robusta */
   .about__logo{
-    width: auto;
-    position: relative;
-    margin-top: 18px;
-    left: 20%;
+    /* Removido: width: auto; position: relative; left: 20%; */
+    /* Usar um tamanho máximo para que ele não fique muito grande */
+    max-width: 200px; 
+    height: 200px;
     
+    /* Centralização robusta no fluxo normal do documento */
+    margin-top: 18px;
+    margin-inline: auto; 
+    display: block; 
+  }
+  
+  /* Garante que o título do rodapé também não quebre */
+  .rodape p {
+      font-size: 14px;
+      padding-inline: 10px; /* Previne que o texto toque as bordas da tela */
+      text-align: center;
   }
 
 }

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // ⬅️ useNavigate adicionado
+import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
 
+// --- Imports de Ícones e Imagens ---
 import logo from "../../assets/icons/mesaLogo.png";
 import emailIcon from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
@@ -10,24 +11,85 @@ import lockIcon from "../../assets/icons/lock.png";
 import seta from "../../assets/icons/seta.png";
 import backimage from "../../assets/icons/backimage.png";
 
+// --- Lógica de Validação Centralizada ---
+const validateField = (name, value) => {
+  switch (name) {
+    case "email":
+      if (!value) return "Email é obrigatório.";
+
+      // A expressão regular principal já valida a maioria dos casos.
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(value)) {
+        return ""; // Se for válido, retorna sucesso.
+      }
+
+      // Se a regex falhar, damos erros mais específicos.
+      if (!value.includes("@")) {
+        return "Email deve conter um '@'.";
+      }
+      
+      const parts = value.split('@');
+      if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
+        return "Formato de email inválido (ex: nome@dominio.org).";
+      }
+
+      const domainPart = parts[1];
+      if (!domainPart.includes('.')) {
+        return "O domínio do email precisa de um ponto (ex: dominio.org).";
+      }
+
+      const tld = domainPart.split('.').pop();
+      if (tld.length < 2) {
+        return "O final do domínio deve ter pelo menos 2 letras (ex: .org, .br).";
+      }
+
+      // Erro genérico se nenhuma das condições específicas for atendida.
+      return "Formato de email inválido.";
+
+    case "senha":
+      if (!value) return "Senha é obrigatória.";
+      return "";
+
+    case "tipo":
+      if (!value) return "Você precisa escolher um tipo de login.";
+      return "";
+
+    default:
+      return "";
+  }
+};
+
 function LoginPage() {
   const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
+  const [errors, setErrors] = useState({}); // ⬅️ Estado para os erros
   const [showPwd, setShowPwd] = useState(false);
   const [status, setStatus] = useState({ type: "", msg: "", loading: false });
-  const navigate = useNavigate(); // ⬅️ instância do navigate
+  const navigate = useNavigate();
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((s) => ({ ...s, [name]: value }));
+    // Validação em tempo real
+    const errorMessage = validateField(name, value);
+    setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
   async function onSubmit(e) {
     e.preventDefault();
 
-    // usa SOMENTE validação nativa (HTML5)
-    const formEl = e.currentTarget; // <form>
-    if (!formEl.checkValidity()) {
-      formEl.reportValidity(); // mostra os balões padrões
+    // 1. Valida todos os campos antes de enviar
+    const formErrors = {};
+    Object.keys(form).forEach(key => {
+      const error = validateField(key, form[key]);
+      if (error) {
+        formErrors[key] = error;
+      }
+    });
+
+    setErrors(formErrors);
+
+    // 2. Se houver erros, interrompe a submissão
+    if (Object.keys(formErrors).length > 0) {
       return;
     }
 
@@ -62,7 +124,6 @@ function LoginPage() {
           loading: false
         });
 
-        // ⬇️ redireciona para /home após 2s
         setTimeout(() => {
           navigate("/home", { replace: true });
         }, 2470);
@@ -92,7 +153,8 @@ function LoginPage() {
           <h1 id="lg-title" className="lg__brand">Mesa+</h1>
           <p className="lg__subtitle">Login</p>
 
-          <form className="lg__form" onSubmit={onSubmit}>
+          <form className="lg__form" onSubmit={onSubmit} noValidate> {/* ⬅️ noValidate adicionado */}
+            {/* Email */}
             <label className="fieldLogin">
               <img className="field__icon" src={emailIcon} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
@@ -108,10 +170,9 @@ function LoginPage() {
                 aria-invalid={!!errors.email}
               />
               {errors.email && <div className="lg__error-message" role="alert">{errors.email}</div>}
-    
             </label>
 
-            {/* Senha: required + minLength -> mensagem nativa */}
+            {/* Senha */}
             <label className="fieldLogin field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -123,8 +184,9 @@ function LoginPage() {
                 aria-label="Senha"
                 autoComplete="current-password"
                 required
-                minLength={6}
+                aria-invalid={!!errors.senha}
               />
+              {errors.senha && <div className="lg__error-message" role="alert">{errors.senha}</div>}
               <button
                 type="button"
                 className="field__toggle"
@@ -138,7 +200,7 @@ function LoginPage() {
 
             <Link to="/recuperarSenhaParteEmail" className="lg__forgot">Esqueci minha senha :(</Link>
 
-            {/* Tipo de login: required nativo */}
+            {/* Tipo de login */}
             <div className="selectField">
               <select
                 name="tipo"
@@ -148,12 +210,14 @@ function LoginPage() {
                 required
                 className="selectField__select"
                 style={{ backgroundImage: `url(${seta})` }}
+                aria-invalid={!!errors.tipo}
               >
                 <option value="" disabled>Escolha o Login</option>
                 <option value="pessoa">Pessoa</option>
                 <option value="empresa">Empresa</option>
                 <option value="ong">ONG</option>
               </select>
+              {errors.tipo && <div className="lg__error-message" role="alert">{errors.tipo}</div>}
             </div>
 
             <Link to="/hudCadastros" className="lg__signup">Cadastre-se</Link>
@@ -168,8 +232,6 @@ function LoginPage() {
           </form>
         </section>
       </main>
-
-
 
       <footer className='rodapelg'>
         <p>&copy; 2025 Todos os Direitos reservados</p>

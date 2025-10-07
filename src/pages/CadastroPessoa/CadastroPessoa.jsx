@@ -55,10 +55,11 @@ const validateField = (name, value) => {
       if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
       return "";
 
-    case "telefone":
+   case "telefone":
       const phoneDigits = value.replace(/\D/g, "");
       if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
       return "";
+
 
     case "cpf":
       const cpfDigitsOnly = value.replace(/\D/g, "");
@@ -116,12 +117,26 @@ function CadastroPessoaPage() {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  const maskPhone = (v) => {
-    const n = v.replace(/\D/g, "").slice(0, 11);
-    if (n.length <= 10) {
-      return n.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+ const maskPhone = (v) => {
+    // Remove todos os caracteres que não são dígitos e limita a 11
+    let n = v.replace(/\D/g, "").slice(0, 11);
+
+    // Aplica a máscara de forma progressiva com base no tamanho do input
+    if (n.length > 10) {
+      // Formato para celular com 11 dígitos: (XX) XXXXX-XXXX
+      n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (n.length > 6) {
+      // Formato para telefone com 7 a 10 dígitos: (XX) XXXX-XXXX
+      n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (n.length > 2) {
+      // Formato para quando o usuário começa a digitar o número após o DDD
+      n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
+    } else if (n.length > 0) {
+      // Formato para quando o usuário está digitando o DDD
+      n = n.replace(/^(\d*)/, "($1");
     }
-    return n.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+
+    return n;
   };
 
   const maskCPF = (v) => {
