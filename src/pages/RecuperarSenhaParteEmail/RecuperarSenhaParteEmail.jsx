@@ -27,7 +27,7 @@ const validateField = (name, value) => {
       if (!value.includes("@")) {
         return "Email deve conter um '@'.";
       }
-      
+
       const parts = value.split('@');
       if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
         return "Formato de email inválido (ex: nome@dominio.org).";
@@ -46,7 +46,7 @@ const validateField = (name, value) => {
       // Erro genérico se nenhuma das condições específicas for atendida.
       return "Formato de email inválido.";
 
-   
+
 
     case "tipo":
       if (!value) return "Você precisa escolher um tipo de login.";
@@ -63,7 +63,7 @@ function RecuperarSenhaParteEmail() {
   // Estado unificado para o formulário e erros, como em LoginPage
   const [form, setForm] = useState({ email: "", tipo: "" });
   const [errors, setErrors] = useState({});
-  
+
   // Estado para o status da submissão (API)
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
 
@@ -75,10 +75,10 @@ function RecuperarSenhaParteEmail() {
     const errorMessage = validateField(name, value);
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
- 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     // 1. Limpa mensagens de API anteriores
     setStatus({ loading: true, error: "", success: "" });
 
@@ -106,28 +106,33 @@ function RecuperarSenhaParteEmail() {
         { email: form.email, tipo: form.tipo }
       );
 
-      setStatus({ 
-        loading: false, 
-        error: "", 
+      setStatus({
+        loading: false,
+        error: "",
         success: response.data.message || "Código enviado! Redirecionando..."
       });
-      
-      // 5. Navega para a próxima página após um breve delay
+
+      // ======================= MUDANÇA APLICADA AQUI =======================
+      // 5. Salva os dados no localStorage para que a próxima tela possa usá-los.
+      localStorage.setItem('recoveryEmail', form.email);
+      localStorage.setItem('recoveryType', form.tipo);
+      // =====================================================================
+
+      // 6. Navega para a próxima página após um breve delay
       setTimeout(() => {
-        navigate("/recuperarSenhaParteCodigo", { state: { email: form.email, tipo: form.tipo } });
+        // Agora navegamos sem passar o "state", pois os dados já estão no localStorage
+        navigate("/recuperarSenhaParteCodigo");
       }, 2500);
 
     } catch (error) {
-      // 6. Trata erros da API
-      const errorMessage = error.response?.data?.message || 
-                           "Não foi possível conectar ao servidor. Tente novamente.";
+      // 7. Trata erros da API
+      const errorMessage = error.response?.data?.message ||
+        "Não foi possível conectar ao servidor. Tente novamente.";
       setStatus({ loading: false, error: errorMessage, success: "" });
     }
   };
 
-  // ... (início do seu componente)
-
-return (
+  return (
     <>
       <Navbar />
 
@@ -158,8 +163,6 @@ return (
               aria-invalid={!!errors.email}
             />
           </label>
-          {/* ANTES: <p className="error-message">{errors.email}</p> */}
-          {/* DEPOIS: Usando a nova classe para erros de campo */}
           {errors.email && <p className="field-error-message" role="alert">{errors.email}</p>}
 
 
@@ -182,18 +185,11 @@ return (
               <option value="ong">ONG</option>
             </select>
           </div>
-          {/* ANTES: <p className="error-message">{errors.tipo}</p> */}
-          {/* DEPOIS: Usando a nova classe para erros de campo */}
           {errors.tipo && <p className="field-error-message" role="alert">{errors.tipo}</p>}
 
 
           {/* Exibição de mensagens de status da API */}
-          {/* ANTES: <p className="error-message">{status.error}</p> */}
-          {/* DEPOIS: Usando as classes específicas para status da API */}
           {status.error && <p className="api-status-message api-status-message--error">{status.error}</p>}
-          
-          {/* ANTES: <p className="success-message">{status.success}</p> */}
-          {/* DEPOIS: Usando as classes específicas para status da API */}
           {status.success && <p className="api-status-message api-status-message--success">{status.success}</p>}
 
 

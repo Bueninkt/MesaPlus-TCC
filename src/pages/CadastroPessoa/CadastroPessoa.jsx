@@ -42,7 +42,7 @@ const validateField = (name, value) => {
 
       const tld = domainPart.split('.').pop();
       if (tld.length < 2) {
-        return "O final do domínio (após o último ponto) deve ter pelo menos 2 letras (ex: .com, .br).";
+        return "O final do domínio deve ter pelo menos 2 letras (ex: .com, .br).";
       }
 
       // Erro genérico se nenhuma das condições específicas for atendida.

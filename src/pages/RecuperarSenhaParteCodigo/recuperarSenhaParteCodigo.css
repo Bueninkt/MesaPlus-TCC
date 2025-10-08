@@ -1,173 +1,176 @@
 .container-RecuperarSenhaParteCodigo {
-    background-color: var(--beige);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: min(580px, 92vw);
-    height: min(400px, 92vw);
-    margin: 0px auto;
-    background: var(--beige);
-    border-radius: 12px;
-    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-    padding: 22px 26px 24px;
-  
-  }
-  
-  
-  .imagemFundoRsc{
-    position: fixed;
-    inset: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    opacity: .3;
-    /* intensidade sutil como no print */
-    pointer-events: none;
-    z-index: 1;
-  }
-  
-  
-  
-  .container-RecuperarSenhaParteCodigo .h1 {
-    position: absolute;
-    text-align: center;
-    font-family: "Alex Brush", cursive;
-    font-weight: 500;
-    font-size: 99px;
-    top: 36%;
-  
-  }
-  
-  .container-RecuperarSenhaParteCodigo .recuperar {
-    position: absolute;
-    top: 53%;
-    text-align: center;
-    font-family: 'Poppins';
-    font-size: 20px;
-  
-  }
-  
-  .container-RecuperarSenhaParteCodigo label {
-    position: relative;
-    top: 7%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    background: var(--beige);
-    border: 2px solid rgba(27, 66, 39, .65);
-    border-radius: 7px;
-    padding: 7px;
-    width: min(450px);
-    height: 45px;
-    margin-top: 133px;
-  }
-  
-  .container-RecuperarSenhaParteCodigo h2 {
-    position: relative;
-    top: 7.4%;
-    display: inline-block;
-    text-align: start;
-    font-family: 'Poppins';
-    font-size: 12px;
-    font-weight: 600;
-    margin: 2px 10px 38px 4px;
-    color: #000000a8;
-  
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centraliza o conteúdo verticalmente */
+  align-items: center;    /* Centraliza o conteúdo horizontalmente */
+  width: min(580px, 92vw);
+  height: auto; /* Use min-height para permitir que o conteúdo cresça se necessário */
+  margin: 20px auto; /* Adiciona um pouco de margem vertical */
+  padding: 24px 26px;
+  background: var(--beige);
+  border-radius: 12px;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  text-align: center; /* Garante que todo o texto dentro seja centralizado por padrão */
+  box-sizing: border-box;
+}
 
-  .container-RecuperarSenhaParteCodigo .reenvio {
-    position: relative;
-    bottom: 9.9%;
-    left: 75.9%;
-    font-family: 'Poppins';
-    font-size: 12px;
-    font-weight: 600;
-    margin: 2px 10px 38px 4px;
-    color: #000000a8;
-    text-decoration: underline ;
-    cursor: pointer;
-  }
-  
-  
+.imagemFundoRsc {
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: .3;
+  pointer-events: none;
+  z-index: -1;
+  /* Coloca a imagem atrás de todo o conteúdo */
+}
 
-  
-  .container-RecuperarSenhaParteCodigo input {
-    border: 0;
-    background: transparent;
-    outline: none;
-    font-size: 19px;
-    letter-spacing: 0.6px;
-    color: #1a1a1a;
-    width: 100%;
-  }
-  
-  .btnRecuperarSenhaParteCodigo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 0;
-    border-radius: 999px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 600;
-    line-height: 1;
-    transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
-  }
-  
-  .btn--submitRecuperarSenhaParteCodigo {
-    display: flex;
-    margin: 1px auto;
-    min-width: 160px;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 15px 16px;
-    background: var(--green-dark);
-    color: #fff;
-    text-decoration: none;
-    font-family: 'Poppins';
-  }
+.container-RecuperarSenhaParteCodigo .menu-topo {
+  display: flex;
+  justify-content: space-between;
+}
 
-  @media (max-width: 560px) {
-    .container-RecuperarSenhaParteCodigo{
-      position: relative;
-      width: 456px;
-      display: flex;
-      flex-direction: column;
-      padding-right: 1px;
-      padding-left: 1px;
-    }
+.container-RecuperarSenhaParteCodigo .mesa {
+  font-family: "Alex Brush", cursive;
+  font-weight: 500;
+  font-size: 90px;
+  /* Fonte responsiva */
+  margin: 0;
+  line-height: 1;
+}
 
-    .container-RecuperarSenhaParteCodigo label{
-      width: 398px;
-    }
+.container-RecuperarSenhaParteCodigo .recuperar {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  margin-top: 0px;
+}
 
-    .container-RecuperarSenhaParteCodigo .h1{
-      top: 3%;
-    }
+.container-RecuperarSenhaParteCodigo form {
+  width: 100%;
+  max-width: 455px;
+  /* Limita a largura do formulário */
+  display: flex;
+  flex-direction: column;
+}
 
-    .container-RecuperarSenhaParteCodigo .recuperar{
-      position: relative;
-      top: 27%;
-      
-    }
+.container-RecuperarSenhaParteCodigo label {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  margin-top: 18px;
+  margin-bottom: 1px;
+  /* Espaço abaixo do campo de email */
+  padding: 7px;
+  background: var(--beige);
+  border: 2px solid rgba(27, 66, 39, .65);
+  border-radius: 7px;
+  box-sizing: border-box;
+}
 
-    .container-RecuperarSenhaParteCodigo .reenvio{
-      position: relative;
-      left: 73%;
-      bottom: 10%;
-      
-    }
+.menu-info {
+  display: flex;
+  justify-content: space-between;
+}
 
 
-    .container-RecuperarSenhaParteCodigo .btnRecuperarSenhaParteCodigo{
-      position: relative;
-      left: 1%;
-      bottom: 10%;
-  
-      
-    }
+.container-RecuperarSenhaParteCodigo .infoCodigo {
+  text-align: left;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000000a8;
+  margin: 10px 0;
+  /* Espaçamento mais consistente */
+}
+
+.container-RecuperarSenhaParteCodigo .reenvio {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #000000a8;
+  margin: 10px 0;
+  text-decoration: none;
+
+}
+
+.container-RecuperarSenhaParteCodigo input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 17px;
+  color: #1a1a1a;
+  font-family: 'Poppins', sans-serif;
+}
 
 
+.btnRecuperarPC {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 33px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--green-dark);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+  margin: 8px auto; 
+}
+
+
+/* =============================================================== */
+/* === ESTILOS PARA MENSAGENS DE ERRO E SUCESSO (ADICIONADO) === */
+/* =============================================================== */
+
+.error-message,
+.success-message {
+  display: flex;
+  padding: 12px 15px;
+  margin-bottom: 7px;
+  border-radius: 8px;
+  height: 55px;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.error-message {
+  font-family: 'Poppins';
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.success-message {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+/* Animação suave de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
   }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =============================================================== */
+/* =============================================================== */
+

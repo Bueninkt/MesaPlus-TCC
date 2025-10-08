@@ -17,7 +17,7 @@
 }
 
 .logo_img {
-    max-width: min(180px, 80vw);
+    width: 160px;
     height: auto;
 }
 
@@ -53,23 +53,25 @@
     }
 
     .container-topo .botaoRegister {
-        margin-right: 20px; /* Adiciona uma margem moderada */
-        padding: 10px 40px; /* Aumenta um pouco o padding */
+        margin-right: 85px; /* Margem original do seu código */
+        padding: 15px 57px; /* Padding original do seu código */
+        font-size: 20px;
     }
 }
 
 /* --- DESKTOPS (a partir de 1024px) --- */
 @media (min-width: 1024px) {
     .container-topo {
-        padding: 5px 50px; /* Aumenta o espaçamento para telas grandes */
+        padding: 23px 50px; /* Aumenta o espaçamento para telas grandes */
     }
 
     .logo_img {
-        max-width: 220px; /* Tamanho original do seu código */
+        max-width: 210px; /* Tamanho original do seu código */
     }
 
     .container-topo .botaoRegister {
         margin-right: 85px; /* Margem original do seu código */
-        padding: 10px 50px; /* Padding original do seu código */
+        padding: 15px 57px; /* Padding original do seu código */
+        font-size: 20px;
     }
 }

@@ -1,203 +1,204 @@
+.cp {
+    position: relative;
+    background: var(--green-dark);
+    padding-top: 0px;
 
-    .cp {
-        position: relative;
-        background: var(--green-dark);
-        padding-top: 0px;
+}
 
-    }
+.cp__bg {
+    position: fixed;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: .3;
+    /* intensidade sutil como no print */
+    pointer-events: none;
+    z-index: 1;
+}
 
-    .cp__bg {
-        position: fixed;
-        inset: 0;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        opacity: .3;
-        /* intensidade sutil como no print */
-        pointer-events: none;
-        z-index: 1;
-    }
+/* Painel central */
+.cp__panel {
+    margin: 0 auto;
+    width: min(560px, 92vw);
+    height: 100%;
+    background: var(--beige);
+    border-radius: 14px;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
+    padding: 22px 29px;
+    z-index: 999;
+}
 
-    /* Painel central */
-    .cp__panel {
-        margin: 0 auto;
-        width: min(560px, 92vw);
-        height: 100%;
-        background: var(--beige);
-        border-radius: 14px;
-        box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
-        padding: 22px 29px;
-        z-index: 999;
-    }
+.cp__brand {
+    margin: 0 0 2px 0;
+    text-align: center;
+    font-family: 'Alex Brush', cursive;
+    font-weight: 400;
+    font-size: 84px;
+    /* proporção do print */
+    line-height: 1;
+    color: #0d0d0d;
+}
 
-    .cp__brand {
-        margin: 0 0 2px 0;
-        text-align: center;
-        font-family: 'Alex Brush', cursive;
-        font-weight: 400;
-        font-size: 84px;
-        /* proporção do print */
-        line-height: 1;
-        color: #0d0d0d;
-    }
+.cp__subtitle {
+    margin: 0 0 12px 0;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: #171717;
+}
 
-    .cp__subtitle {
-        margin: 0 0 12px 0;
-        text-align: center;
-        font-size: 17px;
-        font-weight: 600;
-        color: #171717;
-    }
+/* Form */
+.cp__form {
+    margin-top: 36px;
+}
 
-    /* Form */
-    .cp__form {
-        margin-top: 36px;
-    }
+.fieldCp {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F9EAD0;
+    border: 2px solid rgba(27, 66, 39, .65);
+    border-radius: 7px;
+    padding: 7px 12px;
+    height: 42px;
+    margin: 16px 0;
+}
 
-    .fieldCp {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: #F9EAD0;
-        border: 2px solid rgba(27, 66, 39, .65);
-        border-radius: 7px;
-        padding: 7px 12px;
-        height: 42px;
-        margin: 16px 0;
-    }
+.field__icon {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+}
 
-    .field__icon {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 auto;
-    }
+.field__label {
+    font-size: 13px;
+    color: #1B4227;
+    font-weight: 600;
+    margin-right: 6px;
+    white-space: nowrap;
+}
 
-    .field__label {
-        font-size: 13px;
-        color: #1B4227;
-        font-weight: 600;
-        margin-right: 6px;
-        white-space: nowrap;
-    }
+.fieldCp input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #1a1a1a;
+    width: 100%;
+}
 
-    .fieldCp input {
-        border: 0;
-        background: transparent;
-        outline: none;
-        font-size: 14px;
-        color: #1a1a1a;
-        width: 100%;
-    }
+/* Toggle senha */
+.field--pwd {
+    padding-right: 42px;
+}
 
-    /* Toggle senha */
-    .field--pwd {
-        padding-right: 42px;
-    }
+.field__toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0;
+}
 
-    .field__toggle {
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 28px;
-        height: 28px;
-        display: grid;
-        place-items: center;
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        padding: 0;
-    }
+/* Esconde o "olho" nativo do Edge/IE e o botão de limpar */
+.fieldCp input[type="password"]::-ms-reveal,
+.fieldCp input[type="password"]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+}
 
-    /* Esconde o "olho" nativo do Edge/IE e o botão de limpar */
-    .fieldCp input[type="password"]::-ms-reveal,
-    .fieldCp input[type="password"]::-ms-clear {
-        display: none;
-        width: 0;
-        height: 0;
-    }
+.field__toggle img {
+    width: 20px;
+    height: 20px;
+    opacity: .9;
+}
 
-    .field__toggle img {
-        width: 20px;
-        height: 20px;
-        opacity: .9;
-    }
+.field__toggle:hover img {
+    opacity: 1;
+}
 
-    .field__toggle:hover img {
-        opacity: 1;
-    }
+.btnCp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 43px;
+    padding-inline: 45px;
+    border: 0;
+    border-radius: 999px;
+    font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    cursor: pointer;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 
-    .btnCp {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 43px;
-        padding-inline: 45px;
-        border: 0;
-        border-radius: 999px;
-        font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-        cursor: pointer;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-        
-         
-    }
 
-    /* Botão enviar */
-    .btn--submitCp {
-        display: flex;
-        margin: 30px auto 0;
-        min-width: 160px;
-        font-size: 15px;
-        font-weight: 600;
-        padding: 11px 16px;
-        background: var(--green-dark);
-        color: #fff;
-        text-decoration: none;
-    }
+}
 
-    .btn--submitCp:hover {
-        filter: brightness(1.06);
-        transform: translateY(-1px);
-    }
+/* Botão enviar */
+.btn--submitCp {
+    display: flex;
+    margin: 30px auto 0;
+    min-width: 160px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 11px 16px;
+    background: var(--green-dark);
+    color: #fff;
+    text-decoration: none;
+}
 
-    /* Status */
-    .cp__status {
-        min-height: 20px;
-        text-align: center;
-        margin-top: 10px;
-        font-size: 13px;
-    }
+.btn--submitCp:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
 
-    .cp__status--success {
-        color: #0b7c3e;
-    }
+/* Status */
+.cp__status {
+    min-height: 20px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+}
 
-    .cp__status--error {
-        color: #9b1c1c;
-    }
+.cp__status--success {
+    color: #0b7c3e;
+}
+
+.cp__status--error {
+    color: #9b1c1c;
+}
 
 /* Adicione estas classes ao seu CSS para estilizar os erros */
 
 .cp__error-message {
     font-family: 'Poppins';
-  color: #e74c3c; /* Vermelho para erros */
-  font-size: 0.8rem;
-  /* Ajusta a posição da mensagem de erro */
-  position: absolute;
-  bottom: -18px;
-  left: 35px;
-  white-space: nowrap; 
+    color: #e74c3c;
+    /* Vermelho para erros */
+    font-size: 0.8rem;
+    /* Ajusta a posição da mensagem de erro */
+    position: absolute;
+    top: 41px;
+    left: 2px;
+    white-space: nowrap;
 }
 
 /* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */
 .fieldCp:has(.cp__error-message) {
-  margin-bottom: 24px;
-  font-family: 'Poppins';
+    margin-bottom: 24px;
+    font-family: 'Poppins';
 }
 
 
 input[aria-invalid="true"] {
-  border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
-  box-shadow: 0 0 3px #e74c3c;
+    border-color: #e74c3c !important;
+    /* Borda vermelha para inputs inválidos */
+    box-shadow: 0 0 3px #e74c3c;
 }

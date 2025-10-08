@@ -13,24 +13,18 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
-.logoHud {
-   /* Não precisa mais de flex, margin ou position. O container cuida disso. */
-}
 
 .logo_imgHud {
-    width: 148px;
-    height: 137px;
-    display: block; /* Remove espaço extra que a imagem pode ter */
+   width: 147px;
+    height: auto;
 }
 
-.texto-hud {
-  /* O texto vai se ajustar automaticamente */
-}
+
 
 .texto-hud h1 {
     color: aliceblue;
     font-family: 'Poppins';
-    font-size: 39px;
+    font-size: 45px;
     margin: 0; /* Remove margens padrão do h1 */
 }
 

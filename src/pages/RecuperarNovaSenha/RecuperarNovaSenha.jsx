@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom"; // evite Link envolvendo o submit
 import backimage from "../../assets/icons/backimage.png";
 import check from '../../assets/icons/check.png'
 import lockIcon from "../../assets/icons/lock.png";
@@ -12,69 +11,9 @@ import navbarRegister from "../../components/navbar/navbarRegister";
 const Navbar = navbarRegister;
 
 function RecuperarNovaSenha() {
-  // chaves coerentes e sem espaços
-  const [form, setForm] = useState({ novaSenha: "", confirmarSenha: "" });
-
-  // dois controles de visibilidade independentes
+  // Controles de visibilidade independentes para os ícones de olho
   const [showNova, setShowNova] = useState(false);
   const [showConf, setShowConf] = useState(false);
-
-  const [status, setStatus] = useState({ type: "", msg: "", loading: false });
-
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setForm((s) => ({ ...s, [name]: value }));
-  };
-
-  async function onSubmit(e) {
-    e.preventDefault();
-
-    // validação nativa
-    const formEl = e.currentTarget;
-    if (!formEl.checkValidity()) {
-      formEl.reportValidity();
-      return;
-    }
-
-    // validação de igualdade
-    if (form.novaSenha !== form.confirmarSenha) {
-      setStatus({ type: "error", msg: "As senhas não coincidem.", loading: false });
-      return;
-    }
-
-    setStatus({ type: "", msg: "", loading: true });
-
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
-    const url = `${API_BASE}/enviar-codigo`;
-
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        // ajuste este payload para o que seu backend espera (ex.: token/código, email, etc.)
-        body: JSON.stringify({
-          senha: String(form.novaSenha).trim(),
-          confirmarSenha: String(form.confirmarSenha).trim(),
-        }),
-      });
-
-      if (!res.ok) {
-        const msg = await res.text().catch(() => "");
-        throw new Error(msg || "Falha ao recuperar senha.");
-      }
-
-      const data = await res.json();
-      if (data.status) {
-        setStatus({ type: "success", msg: "Senha atualizada com sucesso!", loading: false });
-        // navegue programaticamente aqui se quiser
-        // navigate("/");
-      } else {
-        setStatus({ type: "error", msg: data.message || "Falha em enviar.", loading: false });
-      }
-    } catch (err) {
-      setStatus({ type: "error", msg: err.message || "Erro ao conectar.", loading: false });
-    }
-  }
 
   return (
     <>
@@ -87,19 +26,19 @@ function RecuperarNovaSenha() {
       />
 
       <main className="container-RecuperarNovaSenha">
-        <div className="h1">Mesa+</div>
-        <p>Recuperação Senha</p>
+        <div className="menuNs-top">
+          <p className="mesaNs">Mesa+</p>
+          <p className="recuperarNs">Recuperação Senha</p>
+        </div>
 
-        <form onSubmit={onSubmit} noValidate>
+        <form>
           {/* NOVA SENHA */}
-          <label className="novaSenha">
+          <label>
             <img className="imagemCadeado" src={lockIcon} alt="cadeado" aria-hidden="true" />
 
             <input
               type={showNova ? "text" : "password"}
               name="novaSenha"
-              value={form.novaSenha}
-              onChange={onChange}
               aria-label="Nova Senha"
               autoComplete="new-password"
               placeholder="Nova Senha:"
@@ -119,14 +58,12 @@ function RecuperarNovaSenha() {
           </label>
 
           {/* CONFIRMAR SENHA */}
-          <label className="confirmarSenha">
+          <label>
             <img className="imagemCheck" src={check} alt="Check" aria-hidden="true" />
 
             <input
               type={showConf ? "text" : "password"}
               name="confirmarSenha"
-              value={form.confirmarSenha}
-              onChange={onChange}
               aria-label="Confirmar Senha"
               autoComplete="new-password"
               placeholder="Confirmar Senha:"
@@ -149,25 +86,10 @@ function RecuperarNovaSenha() {
           <button
             className="btnRecuperarNovaSenha btn--submitRecuperarNovaSenha"
             type="submit"
-            disabled={status.loading}
           >
-            {status.loading ? "Recuperado.." : "Recuperar Senha"}
+            Recuperar Senha
           </button>
-
-          {/* feedback simples (opcional) */}
-          {status.msg && (
-            <p
-              role="status"
-              style={{
-                marginTop: 12,
-                fontFamily: "Poppins",
-                fontSize: 14,
-                color: status.type === "error" ? "#b30000" : "#1B4227",
-              }}
-            >
-              {status.msg}
-            </p>
-          )}
+          
         </form>
       </main>
     </>
