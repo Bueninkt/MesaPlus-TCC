@@ -233,9 +233,7 @@ function LoginPage() {
         </section>
       </main>
 
-      <footer className='rodapelg'>
-        <p>&copy; 2025 Todos os Direitos reservados</p>
-      </footer>
+     
     </>
   );
 }
