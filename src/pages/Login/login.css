@@ -291,13 +291,15 @@ header.lg__header .lg__brandmark {
 
 
 .lg__error-message {
-  color: #e74c3c; /* Vermelho para erros */
-  font-size: 0.8rem;
-  /* Ajusta a posição da mensagem de erro */
-  position: absolute;
-  bottom: -18px;
-  left: 35px;
-  white-space: nowrap; 
+  font-family: 'Poppins';
+    color: #e74c3c;
+    /* Vermelho para erros */
+    font-size: 0.8rem;
+    /* Ajusta a posição da mensagem de erro */
+    position: absolute;
+    top: 36.1px;
+    left: 2px;
+    white-space: nowrap;
 }
 
 /* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */

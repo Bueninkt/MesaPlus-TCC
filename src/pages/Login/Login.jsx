@@ -30,17 +30,17 @@ const validateField = (name, value) => {
 
       const parts = value.split('@');
       if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
-        return "Formato de email inválido (ex: nome@dominio.org).";
+        return "Formato de email inválido (ex: nome@dominio.com).";
       }
 
       const domainPart = parts[1];
       if (!domainPart.includes('.')) {
-        return "O domínio do email precisa de um ponto (ex: dominio.org).";
+        return "O domínio do email precisa de um ponto (ex: dominio.).";
       }
 
       const tld = domainPart.split('.').pop();
       if (tld.length < 2) {
-        return "O final do domínio deve ter pelo menos 2 letras (ex: .org, .br).";
+        return "O final do domínio deve ter pelo menos 2 letras (ex: .com, .br).";
       }
 
       // Erro genérico se nenhuma das condições específicas for atendida.
