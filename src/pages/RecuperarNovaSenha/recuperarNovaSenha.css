@@ -167,3 +167,46 @@ display: flex;
   cursor: pointer;
   
 }
+
+/* Estilos para o container dos critérios da senha */
+.password-criteria {
+  text-align: left;
+  margin-top: 15px;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.password-criteria p {
+  margin: 4px 0;
+  transition: color 0.3s ease;
+}
+
+/* Cores para validação em tempo real */
+.password-criteria .valid {
+  color: green;
+}
+
+.password-criteria .invalid {
+  color: #c53030; /* Vermelho escuro */
+}
+
+/* Estilos para as mensagens de feedback da API */
+.api-message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+
+.api-message.success {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Verde escuro */
+  border: 1px solid #c3e6cb;
+}
+
+.api-message.error {
+  background-color: #f8d7da; /* Vermelho claro */
+  color: #721c24; /* Vermelho escuro */
+  border: 1px solid #f5c6cb;
+}

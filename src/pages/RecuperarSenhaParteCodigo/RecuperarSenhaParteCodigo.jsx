@@ -18,12 +18,12 @@ function RecuperarSenhaParteCodigo() {
   const navigate = useNavigate();
 
   const [codigo, setCodigo] = useState("");
-  
+
   // NOVO: Estado unificado para loading, erro e SUCESSO.
-  const [status, setStatus] = useState({ 
-    loading: false, 
-    error: "", 
-    success: "" 
+  const [status, setStatus] = useState({
+    loading: false,
+    error: "",
+    success: ""
   });
 
   const handleCodigoChange = (e) => {
@@ -34,7 +34,7 @@ function RecuperarSenhaParteCodigo() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     // Validação antes do envio
     const validationError = validateCode(codigo);
     if (validationError) {
@@ -44,8 +44,8 @@ function RecuperarSenhaParteCodigo() {
 
     setStatus({ loading: true, error: "", success: "" });
 
-    const email = localStorage.getItem("recoveryEmail");
-    const tipo = localStorage.getItem("recoveryType");
+    const email = localStorage.getItem("email");
+    const tipo = localStorage.getItem("userType");
 
     if (!email || !tipo) {
       setStatus({
@@ -59,7 +59,7 @@ function RecuperarSenhaParteCodigo() {
     try {
       // 1. VERIFICAR O CÓDIGO
       await axios.post('http://localhost:8080/v1/mesa-plus/codigo-recuperacao', { email, tipo, codigo });
-      
+
       // 2. APAGAR O CÓDIGO DO BANCO
       await axios.put('http://localhost:8080/v1/mesa-plus/apagar-codigo', { email, tipo });
 
@@ -91,7 +91,7 @@ function RecuperarSenhaParteCodigo() {
           <p className="mesa">Mesa+</p>
           <p className="recuperar">Recuperação Senha</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} noValidate>
           <label>
             <input
@@ -110,7 +110,7 @@ function RecuperarSenhaParteCodigo() {
               aria-invalid={!!status.error}
             />
           </label>
-          
+
           <div className="menu-info">
             <h2 className="infoCodigo">Verifique o código no seu email</h2>
             <Link className="reenvio" to="/recuperarSenhaParteEmail">
@@ -121,11 +121,11 @@ function RecuperarSenhaParteCodigo() {
           {/* NOVO: Renderização condicional para as mensagens */}
           {status.error && <p className="error-message" role="alert">{status.error}</p>}
           {status.success && <p className="success-message" role="alert">{status.success}</p>}
-          
+
           <button
             className="btnRecuperarPC btn--submitRecuperarPC"
             type="submit"
-            
+
             disabled={status.loading || status.success}
           >
             {status.loading ? "Verificando..." : "Verificar Código"}

@@ -68,7 +68,7 @@ header.lg__header .lg__brandmark {
 
 .lg__panel {
   width: min(560px, 92vw);
-  height: 95%;
+  height: auto;
   margin: 0px auto;
   background: var(--beige);
   border-radius: 12px;

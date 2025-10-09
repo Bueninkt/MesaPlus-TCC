@@ -27,7 +27,7 @@ const validateField = (name, value) => {
       if (!value.includes("@")) {
         return "Email deve conter um '@'.";
       }
-      
+
       const parts = value.split('@');
       if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
         return "Formato de email inválido (ex: nome@dominio.org).";
@@ -48,6 +48,9 @@ const validateField = (name, value) => {
 
     case "senha":
       if (!value) return "Senha é obrigatória.";
+      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter uma letra maiúscula e uma minuscula";
+      if (value.length >= 15 || value.length <= 9) return "Senha no mínimo 10 caracteres.";
+      if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
       return "";
 
     case "tipo":
@@ -109,10 +112,21 @@ function LoginPage() {
         })
       });
 
+      // --- INÍCIO DA MODIFICAÇÃO ---
       if (!res.ok) {
+        // Verifica se o status da resposta é 404 (Não Encontrado) ou 401 (Não Autorizado),
+        // que são comumente usados para credenciais inválidas.
+        if (res.status === 404 || res.status === 401) {
+          // Lança um erro com a mensagem amigável e fixa.
+          throw new Error("Email ou senha ou tipo incorretos.");
+        }
+        
+        // Para qualquer outro tipo de erro (ex: 500 Internal Server Error),
+        // mantém o comportamento original de tentar extrair a mensagem da API.
         const msg = await res.text().catch(() => "");
-        throw new Error(msg || "Falha no login.");
+        throw new Error(msg || "Falha no login. Tente novamente mais tarde.");
       }
+      // --- FIM DA MODIFICAÇÃO ---
 
       const data = await res.json();
       if (data.status && data.usuario) {
@@ -129,9 +143,12 @@ function LoginPage() {
         }, 2470);
 
       } else {
+        // Se a resposta for OK (status 200) mas a API indicar falha no corpo do JSON.
         setStatus({ type: "error", msg: data.message || "Falha no login.", loading: false });
       }
     } catch (err) {
+      // Este bloco 'catch' agora receberá a mensagem personalizada ou a da API,
+      // e a exibirá para o usuário.
       setStatus({ type: "error", msg: err.message || "Erro ao conectar.", loading: false });
     }
   }
@@ -183,6 +200,9 @@ function LoginPage() {
                 onChange={onChange}
                 aria-label="Senha"
                 autoComplete="current-password"
+                maxLength={14}
+                minLength={10}
+      
                 required
                 aria-invalid={!!errors.senha}
               />
@@ -233,7 +253,7 @@ function LoginPage() {
         </section>
       </main>
 
-     
+
     </>
   );
 }

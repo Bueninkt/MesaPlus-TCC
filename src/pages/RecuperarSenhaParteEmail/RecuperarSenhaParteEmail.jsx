@@ -114,8 +114,8 @@ function RecuperarSenhaParteEmail() {
 
       // ======================= MUDANÇA APLICADA AQUI =======================
       // 5. Salva os dados no localStorage para que a próxima tela possa usá-los.
-      localStorage.setItem('recoveryEmail', form.email);
-      localStorage.setItem('recoveryType', form.tipo);
+      localStorage.setItem('email', form.email);
+      localStorage.setItem('userType', form.tipo);
       // =====================================================================
 
       // 6. Navega para a próxima página após um breve delay
