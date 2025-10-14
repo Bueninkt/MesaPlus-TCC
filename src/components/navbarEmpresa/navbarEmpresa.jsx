@@ -7,7 +7,7 @@ function NavbarEmpresa() {
 
   // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
   const links = [
-    { label: 'Home', to: '/home' },
+    { label: 'Home', to: '/home' }, 
     { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
     { label: 'Mapa', to: '/mapa' },
     { label: 'Meu Perfil', to: '/meu-perfil' },

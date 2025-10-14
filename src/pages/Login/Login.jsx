@@ -119,7 +119,7 @@ function LoginPage() {
         if (res.status === 404 || res.status === 401) {
           // Lança um erro com a mensagem amigável e fixa.
           throw new Error("Email ou senha ou tipo incorretos.");
-        }
+        } 
         
         // Para qualquer outro tipo de erro (ex: 500 Internal Server Error),
         // mantém o comportamento original de tentar extrair a mensagem da API.
@@ -129,6 +129,7 @@ function LoginPage() {
       // --- FIM DA MODIFICAÇÃO ---
 
       const data = await res.json();
+      // ... dentro do try ...
       if (data.status && data.usuario) {
         localStorage.setItem("userType", form.tipo);
         localStorage.setItem("user", JSON.stringify(data.usuario));
@@ -138,9 +139,35 @@ function LoginPage() {
           loading: false
         });
 
+        // --- INÍCIO DO AGENTE DE REDIRECIONAMENTO ---
+
+        // 1. Define uma rota padrão caso algo dê errado.
+        let destinationPath = '/login'; 
+
+        // 2. Decide a rota correta com base no tipo de login.
+        switch (form.tipo) {
+          case 'empresa':
+            // Usando o seu exemplo: pode ser a página de perfil da empresa.
+            destinationPath = '/sobreNosEmpresa'; 
+            break;
+          case 'pessoa':
+            // Exemplo: levar para o dashboard pessoal.
+            destinationPath = '/sobreNosUsuario'; 
+            break;
+          case 'ong':
+            // Exemplo: levar para a página de gerenciamento da ONG.
+            destinationPath = '/sobreNosOng';
+            break;
+          default:
+            // Se o tipo for desconhecid  o, vai para a rota padrão definida acima.
+            console.warn(`${form.tipo}.Algo Deu errado.`);
+            break;
+        }
+
+        // 3. Executa a navegação para a rota decidida.
         setTimeout(() => {
-          navigate("/home", { replace: true });
-        }, 2470);
+          navigate(destinationPath, { replace: true });
+        }, 2470); // Mantém o mesmo tempo de espera para a mensagem de sucesso ser lida.
 
       } else {
         // Se a resposta for OK (status 200) mas a API indicar falha no corpo do JSON.

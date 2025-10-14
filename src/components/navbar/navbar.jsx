@@ -12,6 +12,7 @@ function Navbar() {
     { label: 'Mapa', to: '/mapa' },
     { label: 'Meu Perfil', to: '/meu-perfil' },
     { label: 'Meus Alimentos', to: '/meus-alimentos' },
+    { label: 'Favoritos', to: '/favoritos' },
     { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
   ];
 

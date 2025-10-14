@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import './sobreNos.css';
 import logo from "../../assets/icons/mesaLogo.png";
-import navbar from '../../components/navbar/navbar.jsx';
+import navbar from '../navbar/navbar';
 import backimage from "../../assets/icons/backimage.png";
 
 
