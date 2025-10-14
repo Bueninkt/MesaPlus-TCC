@@ -1,8 +1,8 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import './navbar.css';
+import './navbarEmpresa.css';
 
-function Navbar() {
+function NavbarEmpresa() {
   const { pathname } = useLocation();
 
   // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
@@ -11,7 +11,7 @@ function Navbar() {
     { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
     { label: 'Mapa', to: '/mapa' },
     { label: 'Meu Perfil', to: '/meu-perfil' },
-    { label: 'Meus Alimentos', to: '/meus-alimentos' },
+    { label: 'Meus Alimentos', to: '/meus-alimentos'},
     { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
   ];
 
@@ -19,17 +19,17 @@ function Navbar() {
   const firstIndexForPath = links.findIndex(it => it.to === pathname);
 
   return (
-    <nav className="nav" aria-label="Navegação principal">
-      <div className="nav__wrap">
-        <ul className="nav__menu" role="menubar">
+    <nav className="navEmpresa" aria-label="Navegação principal">
+      <div className="nav__wrapEmpresa">
+        <ul className="navEmpresa__menu" role="menubar">
           {links.map((item, idx) => {
             const isActive = idx === firstIndexForPath && pathname === item.to;
             return (
-              <li key={item.label} className="nav__item" role="none">
+              <li key={item.label} className="navEmpresa__item" role="none">
                 <Link
                   role="menuitem"
                   to={item.to}
-                  className={`nav__link${isActive ? ' is-active' : ''}`}
+                  className={`navEmpresa__link${isActive ? ' is-active' : ''}`}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {item.label}
@@ -39,14 +39,14 @@ function Navbar() {
           })}
         </ul>
 
-        <div className="nav__actions">
-          <Link to="/login" className="btnNav btn--login">Entrar</Link>
-          <Link to="/hudCadastros" className="btnNav
-          btn--signup">Cadastrar-se</Link>
+        <div className="navEmpresa__actions">
+          <Link to="/login" className="btnNavEmpresa btnEmpresa--login">Entrar</Link>
+          <Link to="/hudCadastros" className="btnNavEmpresa
+          btnEmpresa--signup">Cadastrar-se</Link>
         </div>
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+export default NavbarEmpresa;
