@@ -55,16 +55,7 @@ header.lg__header .lg__brandmark {
   z-index: 1;
 }
 
-/* Centralização vertical em telas grandes */
-@media (min-width: 1200px) and (min-height: 800px) {
-  .lg {
-    display: grid;
-    align-content: center;
-    /* centraliza verticalmente o painel */
-    padding: 24px 0;
-    /* respiro mínimo */
-  }
-}
+
 
 .lg__panel {
   width: min(560px, 92vw);
@@ -311,6 +302,17 @@ header.lg__header .lg__brandmark {
 input[aria-invalid="true"] {
   border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
   
+}
+
+/* Centralização vertical em telas grandes */
+@media (min-width: 1200px) and (min-height: 800px) {
+  .lg {
+    display: grid;
+    align-content: center;
+    /* centraliza verticalmente o painel */
+    padding: 24px 0;
+    /* respiro mínimo */
+  }
 }
 
 

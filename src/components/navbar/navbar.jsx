@@ -9,10 +9,8 @@ function Navbar() {
   const links = [
     { label: 'Home', to: '/home' },
     { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
-    { label: 'Mapa', to: '/mapa' },
     { label: 'Meu Perfil', to: '/meu-perfil' },
     { label: 'Meus Alimentos', to: '/meus-alimentos' },
-    { label: 'Favoritos', to: '/favoritos' },
     { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
   ];
 

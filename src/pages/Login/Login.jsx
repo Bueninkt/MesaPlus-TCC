@@ -279,7 +279,7 @@ function LoginPage() {
           </form>
         </section>
       </main>
-
+            )
 
     </>
   );
