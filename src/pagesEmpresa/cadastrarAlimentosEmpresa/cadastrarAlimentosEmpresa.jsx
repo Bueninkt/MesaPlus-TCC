@@ -1,46 +1,77 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './cadastrarAlimentosEmpresa.css'; // Certifique-se de que o CSS seja importado
+import './cadastrarAlimentosEmpresa.css'; 
 
 import logo from "../../assets/icons/mesaLogo.png";
 
-// --- NOVO: Constantes do Azure (ATENÇÃO: ATUALIZE ISTO) ---
-// Use os dados do seu container do Azure para ESTE projeto (Mesa_Plus)
-const AZURE_ACCOUNT = 'mesaplus'; // 1. Mude para a conta do Mesa_Plus
-const AZURE_CONTAINER = 'fotos';     // 2. Mude para o container de alimentos
-const SAS_TOKEN = 'sp=racwdl&st=2025-10-18T17:24:40Z&se=2025-10-18T18:39:40Z&sv=2024-11-04&sr=c&sig=u9HArr%2BEdHG9CUsI4ti%2BbQRrXtni%2FfvQ8AhCSS7VSK8%3D'; // 3. Gere um NOVO SAS Token para o container 'alimentos'
+// --- Constantes do Azure ---
+const AZURE_ACCOUNT = 'mesaplus';
+const AZURE_CONTAINER = 'fotos';
+const SAS_TOKEN = 'sp=racwdl&st=2025-10-18T17:24:40Z&se=2025-10-18T18:39:40Z&sv=2024-11-04&sr=c&sig=u9HArr%2BEdHG9CUsI4ti%2BbQRrXtni%2FfvQ8AhCSS7VSK8%3D';
 
-// Hardcode o ID da empresa (como já estava no handleSubmit)
 const idEmpresa = 1;
 
 
-/**
- * --- NOVO: Função de Upload para o Azure ---
- * Adaptada do seu código JS puro.
- */
+
+// --- Função de Upload para o Azure (sem alterações) ---
 const uploadParaAzure = async (file) => {
-    // Cria um nome único para o blob
+    // ... (código de upload sem alteração) ...
     const blobName = `${idEmpresa}_${Date.now()}_${file.name}`;
-
-    // URL completa para a requisição PUT (com SAS Token)
     const url = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
-
     const res = await fetch(url, {
         method: 'PUT',
-        headers: {
-            'x-ms-blob-type': 'BlockBlob',
-            'Content-Type': file.type
-        },
+        headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': file.type },
         body: file
     });
-
-    if (!res.ok) {
-        throw new Error(`Azure retornou status ${res.status}`);
-    }
-
-    // Retorna a URL pública (SEM o SAS Token)
+    if (!res.ok) throw new Error(`Azure retornou status ${res.status}`);
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
+};
+
+
+// --- Função de Validação (sem alterações) ---
+const validateField = (name, value) => {
+    switch (name) {
+        case "nome":
+            if (!value) return "Nome é obrigatório.";
+            if (value.length < 2) return "Nome deve ter pelo menos 2 caracteres.";
+            return "";
+        case "dataDeValidade":
+            if (!value) return "Data de validade é obrigatória.";
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); 
+            const [year, month, day] = value.split('-').map(Number);
+            const localSelectedDate = new Date(year, month - 1, day);
+            if (localSelectedDate < today) {
+                return "A data de validade não pode ser no passado.";
+            }
+            return "";
+        case "peso":
+            if (!value) return ""; // Opcional
+            const numPeso = Number(value);
+            if (isNaN(numPeso)) return "Peso deve ser um número.";
+            if (numPeso <= 0) return "Peso deve ser maior que zero.";
+            return ""; 
+        case "quantidade":
+            if (!value) return "Quantidade é obrigatória.";
+            const numQuantidade = Number(value);
+            if (isNaN(numQuantidade)) return "Quantidade deve ser um número.";
+            if (numQuantidade <= 0) return "Quantidade deve ser maior que zero.";
+            if (!Number.isInteger(numQuantidade)) return "Quantidade deve ser um número inteiro.";
+            return "";
+        case "descricao":
+            if (!value) return "Descrição é obrigatória.";
+            if (value.length < 10) return "Descrição deve ter pelo menos 10 caracteres.";
+            return "";
+        case "imagem":
+            if (!value) return "A foto é obrigatória.";
+            return "";
+        case "categorias":
+            if (!value || value.length === 0) return "Selecione ao menos uma categoria.";
+            return "";
+        default:
+            return "";
+    }
 };
 
 
@@ -48,10 +79,9 @@ function CadastrarAlimentosEmpresaPage() {
     // --- Estados para os campos do formulário ---
     const [nome, setNome] = useState('');
     const [dataDeValidade, setDataDeValidade] = useState('');
+    const [peso, setPeso] = useState('');
     const [quantidade, setQuantidade] = useState('');
     const [descricao, setDescricao] = useState('');
-
-    // O estado 'imagem' agora guardará a URL final do Azure
     const [imagem, setImagem] = useState('');
 
     // --- Estados da UI ---
@@ -59,13 +89,27 @@ function CadastrarAlimentosEmpresaPage() {
     const [isCategoriaOpen, setIsCategoriaOpen] = useState(false);
     const [selectedCategorias, setSelectedCategorias] = useState({});
     const [mensagem, setMensagem] = useState('');
+    
+    // --- NOVO: Estado para rastrear interação com categoria ---
+    const [categoriaInteracted, setCategoriaInteracted] = useState(false);
 
-    // --- NOVOS Estados e Refs para Upload ---
-    const [previewUrl, setPreviewUrl] = useState(null); // Para a miniatura local
-    const [isUploading, setIsUploading] = useState(false); // Para feedback de loading
-    const fileInputRef = useRef(null); // Para "clicar" no input escondido
+    // --- Estados de Upload ---
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
 
-    // --- BUSCAR CATEGORIAS (Conecta ao controllerCategoria.js -> categoriaDAO.js) ---
+    // --- Estado para Erros de Validação ---
+    const [errors, setErrors] = useState({
+        nome: '',
+        dataDeValidade: '',
+        peso: '',
+        quantidade: '',
+        descricao: '',
+        imagem: '',
+        categorias: ''
+    });
+
+    // --- BUSCAR CATEGORIAS (sem alterações) ---
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
@@ -81,9 +125,22 @@ function CadastrarAlimentosEmpresaPage() {
         fetchCategorias();
     }, []);
 
+    // --- ATUALIZADO: useEffect para validar categorias ---
+    // Agora só valida se o usuário tiver interagido (aberto o menu)
+    useEffect(() => {
+        // Só valida SE o usuário já interagiu E fechou o menu
+        if (categoriaInteracted && !isCategoriaOpen && listaCategorias.length > 0) { 
+            const selecionadas = Object.keys(selectedCategorias).filter(id => selectedCategorias[id] === true);
+            const error = validateField('categorias', selecionadas);
+            setErrors(prev => ({
+                ...prev,
+                categorias: error
+            }));
+        }
+    }, [isCategoriaOpen, selectedCategorias, listaCategorias, categoriaInteracted]); // <-- Dependência adicionada
 
-    // --- Funções de Manipulação (Handlers) ---
 
+    // --- Funções de Manipulação (Handlers - sem alterações) ---
     const handleCategoriaChange = (event) => {
         const { id, checked } = event.target;
         setSelectedCategorias(prevState => ({
@@ -102,109 +159,120 @@ function CadastrarAlimentosEmpresaPage() {
             .join(', ');
     };
 
-
-    // --- NOVAS Funções para Upload ---
-
-    /**
-     * Chamado quando o usuário seleciona um arquivo.
-     */
+    // --- Funções para Upload (sem alterações) ---
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
-
-        // 1. Gerar Preview Local
         const reader = new FileReader();
-        reader.onload = () => {
-            setPreviewUrl(reader.result); // Mostra a miniatura
-        };
+        reader.onload = () => { setPreviewUrl(reader.result); };
         reader.readAsDataURL(file);
-
-        // 2. Fazer Upload para o Azure
         setIsUploading(true);
         setMensagem('');
-
+        setErrors(prev => ({ ...prev, imagem: '' })); 
         try {
             const azureUrl = await uploadParaAzure(file);
-            setImagem(azureUrl); // 3. Salva a URL final do Azure no estado 'imagem'
+            setImagem(azureUrl);
             setMensagem('');
             setIsUploading(false);
-
+            setErrors(prev => ({ ...prev, imagem: '' })); 
         } catch (error) {
             console.error("Erro no upload para Azure:", error);
-            setMensagem('Erro ao enviar imagem. Tente novamente.');
+            
             setIsUploading(false);
-            setPreviewUrl(null); // Limpa o preview se o upload falhar
+            setPreviewUrl(null);
             setImagem('');
+            setErrors(prev => ({ ...prev, imagem: 'Falha no upload. Tente novamente.' }));
         }
     };
 
-    /**
-     * Permite que o usuário clique no 'dropzone' para abrir o seletor de arquivos.
-     */
     const handlePreviewClick = () => {
-        if (isUploading) return; // Não faz nada se estiver enviando
+        if (isUploading) return;
         fileInputRef.current.click();
     };
 
-    /**
-     * Limpa o preview e a URL da imagem.
-     */
     const handleRemovePreview = (event) => {
-        event.stopPropagation(); // Impede que o 'handlePreviewClick' seja disparado
+        event.stopPropagation();
         setPreviewUrl(null);
         setImagem('');
         setMensagem('');
-        // Reseta o valor do input para permitir selecionar o mesmo arquivo novamente
         if (fileInputRef.current) {
             fileInputRef.current.value = null;
         }
+        setErrors(prev => ({ ...prev, imagem: 'A foto é obrigatória.' }));
     };
 
+    // --- Funções de Validação (sem alterações) ---
+    const handleBlur = (event) => {
+        const { name, value } = event.target;
+        const error = validateField(name, value);
+        setErrors(prevErrors => ({
+            ...prevErrors,
+            [name]: error
+        }));
+    };
 
-    // --- SUBMISSÃO DO FORMULÁRIO (NÃO PRECISA DE MUDANÇAS) ---
-    // Esta função já pega a URL do estado 'imagem', que agora é
-    // preenchido pela função de upload do Azure.
+    const handleValidation = () => {
+        const categoriasSelecionadas = Object.keys(selectedCategorias).filter(id => selectedCategorias[id] === true);
+        const newErrors = {
+            nome: validateField('nome', nome),
+            dataDeValidade: validateField('dataDeValidade', dataDeValidade),
+            peso: validateField('peso', peso),
+            quantidade: validateField('quantidade', quantidade),
+            descricao: validateField('descricao', descricao),
+            imagem: validateField('imagem', imagem),
+            categorias: validateField('categorias', categoriasSelecionadas)
+        };
+        setErrors(newErrors);
+        return Object.values(newErrors).every(error => error === "");
+    };
+
+    // --- SUBMISSÃO DO FORMULÁRIO (sem alterações) ---
     const handleSubmit = async (event) => {
         event.preventDefault();
         setMensagem('');
 
-        // Validação extra: Impede o envio se a imagem ainda estiver carregando
+        // Define que a categoria foi "interagida" no submit,
+        // caso o usuário tente enviar sem nunca ter clicado nela.
+        setCategoriaInteracted(true); 
+
+        if (!handleValidation()) {
+            setMensagem("Por favor, corrija os erros no formulário.");
+            return; 
+        }
         if (isUploading) {
             setMensagem("Por favor, aguarde o envio da imagem terminar.");
             return;
         }
-
         const categoriasFormatadas = Object.keys(selectedCategorias)
             .filter(id => selectedCategorias[id] === true)
             .map(id => ({ id: Number(id) }));
-
         const payload = {
             nome: nome,
             quantidade: Number(quantidade),
             data_de_validade: dataDeValidade,
             descricao: descricao,
-            imagem: imagem, // <-- Esta é a URL do Azure, salva no estado
-            id_empresa: idEmpresa, // ID fixo
-            categorias: categoriasFormatadas
+            imagem: imagem,
+            id_empresa: idEmpresa, 
+            categorias: categoriasFormatadas,
+            peso: peso ? Number(peso) : undefined 
         };
-
-        // ... (restante da lógica do handleSubmit) ...
         try {
             const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
-
             if (response.status === 200) {
                 setMensagem('Alimento cadastrado com sucesso!');
-                // Limpar o formulário
                 setNome('');
                 setDataDeValidade('');
+                setPeso('');
                 setQuantidade('');
                 setDescricao('');
                 setImagem('');
-                setPreviewUrl(null); // Limpa o preview
+                setPreviewUrl(null); 
                 setSelectedCategorias({});
-                if (fileInputRef.current) fileInputRef.current.value = null; // Limpa o input file
+                if (fileInputRef.current) fileInputRef.current.value = null; 
+                setErrors({ nome: '', dataDeValidade: '', peso: '', quantidade: '', descricao: '', imagem: '', categorias: '' });
+                setCategoriaInteracted(false); // Reseta a interação
             } else {
                 setMensagem(response.data.message || 'Ocorreu um erro ao cadastrar.');
             }
@@ -221,7 +289,6 @@ function CadastrarAlimentosEmpresaPage() {
 
     return (
         <div className="page-container">
-            {/* ... (logo e background) ... */}
             <Link to="/sobreNosEmpresa">
                 <img src={logo} alt="Mesa+ Logo" className="site-logo" />
             </Link>
@@ -231,14 +298,22 @@ function CadastrarAlimentosEmpresaPage() {
                 <h1>Mesa+</h1>
                 <h2>Cadastrar Alimentos</h2>
 
-                <form className="cadastro-form" onSubmit={handleSubmit}>
+                <form className="cadastro-form" onSubmit={handleSubmit} noValidate>
                     <div className="form-columns">
-                        {/* Coluna da Esquerda (sem alterações) */}
+                        {/* Coluna da Esquerda */}
                         <div className="form-left-column">
-                            {/* ... (campos Nome, Validade, Peso, Quantidade, Descrição) ... */}
                             <fieldset className="form-group">
                                 <legend>Nome:</legend>
-                                <input type="text" id="nome" name="nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
+                                <input
+                                    type="text"
+                                    id="nome"
+                                    name="nome"
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
+                                    onBlur={handleBlur}
+                                />
+                                {/* ATUALIZADO: Span de erro sempre presente (controlado pelo CSS) */}
+                                <span className="validation-error">{errors.nome}</span>
                             </fieldset>
 
                             <fieldset className="form-group">
@@ -246,40 +321,65 @@ function CadastrarAlimentosEmpresaPage() {
                                 <input
                                     type="date"
                                     id="data_de_validade"
-                                    name="data_de_validade"
+                                    name="dataDeValidade"
                                     value={dataDeValidade}
                                     onChange={(e) => setDataDeValidade(e.target.value)}
-                                    required
+                                    onBlur={handleBlur}
                                 />
+                                {/* ATUALIZADO: Span de erro sempre presente */}
+                                <span className="validation-error">{errors.dataDeValidade}</span>
                             </fieldset>
 
                             <div className="form-row">
                                 <fieldset className="form-group">
-                                    <legend>Peso: g</legend>
-                                    <input type="text" id="peso" name="peso" />
+                                    <legend>Peso: grama</legend>
+                                    <input
+                                        type="number"
+                                        id="peso"
+                                        name="peso"
+                                        value={peso}
+                                        maxLength={5}
+                                        onChange={(e) => setPeso(e.target.value)}
+                                        onBlur={handleBlur}
+                                    />
+                                    {/* ATUALIZADO: Span de erro sempre presente */}
+                                    <span className="validation-error">{errors.peso}</span>
                                 </fieldset>
                                 <fieldset className="form-group">
                                     <legend>Quantidade:</legend>
-                                    <input type="number" id="quantidade" name="quantidade" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} required />
+                                    <input
+                                        type="number"
+                                        id="quantidade"
+                                        name="quantidade"
+                                        value={quantidade}
+                                        onChange={(e) => setQuantidade(e.target.value)}
+                                        onBlur={handleBlur}
+                                    />
+                                    {/* ATUALIZADO: Span de erro sempre presente */}
+                                    <span className="validation-error">{errors.quantidade}</span>
                                 </fieldset>
                             </div>
                             <fieldset className="form-group descricao">
                                 <legend>Descrição:</legend>
-                                <textarea id="descricao" name="descricao" value={descricao} onChange={(e) => setDescricao(e.target.value)} required></textarea>
+                                <textarea
+                                    id="descricao"
+                                    name="descricao"
+                                    value={descricao}
+                                    onChange={(e) => setDescricao(e.target.value)}
+                                    onBlur={handleBlur}
+                                ></textarea>
+                                {/* ATUALIZADO: Span de erro sempre presente */}
+                                <span className="validation-error">{errors.descricao}</span>
                             </fieldset>
                         </div>
 
                         {/* Coluna da Direita */}
                         <div className="form-right-column">
-
-                            {/* --- NOVO: Bloco de Upload de Foto --- */}
                             <fieldset className="form-group foto">
                                 <legend>
                                     <div className="add-image-icon"></div>
                                     Foto:
                                 </legend>
-
-                                {/* Input de arquivo real (fica escondido) */}
                                 <input
                                     type="file"
                                     ref={fileInputRef}
@@ -287,8 +387,6 @@ function CadastrarAlimentosEmpresaPage() {
                                     accept="image/png, image/jpeg, image/webp"
                                     style={{ display: 'none' }}
                                 />
-
-                                {/* 'Dropzone' visível que mostra o preview */}
                                 <div
                                     className="foto-dropzone"
                                     onClick={handlePreviewClick}
@@ -297,7 +395,6 @@ function CadastrarAlimentosEmpresaPage() {
                                         cursor: isUploading ? 'progress' : 'pointer'
                                     }}
                                 >
-                                    {/* Botão de remover (só aparece se tiver preview) */}
                                     {previewUrl && !isUploading && (
                                         <button
                                             type="button"
@@ -307,27 +404,24 @@ function CadastrarAlimentosEmpresaPage() {
                                             &times;
                                         </button>
                                     )}
-
-                                    {/* Placeholder (só aparece se não tiver preview) */}
                                     {!previewUrl && (
                                         <div className="upload-placeholder">
                                             {isUploading ? 'Enviando...' : 'Clique para adicionar foto'}
                                         </div>
                                     )}
                                 </div>
+                                {/* ATUALIZADO: Span de erro sempre presente. O CSS vai alinhar */}
+                                <span className="validation-error">{errors.imagem}</span>
                             </fieldset>
 
-                            {/* Categoria (sem alterações) */}
                             <fieldset
                                 className="form-group categoria-custom-select"
-                                // 1. O onClick foi MOVIDO para cá
-                                onClick={() => setIsCategoriaOpen(!isCategoriaOpen)}
+                                onClick={() => {
+                                    setIsCategoriaOpen(!isCategoriaOpen);
+                                    setCategoriaInteracted(true); 
+                                }}
                             >
                                 <legend>Categoria:</legend>
-
-                                {/* * O onClick foi REMOVIDO deste div.
-          * Adicionamos um estilo de cursor para o header.
-        */}
                                 <div
                                     className="categoria-select-header"
                                     style={{ cursor: 'pointer' }}
@@ -337,11 +431,9 @@ function CadastrarAlimentosEmpresaPage() {
                                     </span>
                                     <div className={`dropdown-arrow ${isCategoriaOpen ? 'open' : ''}`}></div>
                                 </div>
-
                                 {isCategoriaOpen && (
                                     <div
                                         className="categoria-dropdown-list"
-                                        // 2. ADICIONADO: Impede que o clique no dropdown feche o menu.
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         {listaCategorias.length > 0 ? (
@@ -357,13 +449,18 @@ function CadastrarAlimentosEmpresaPage() {
                                         )}
                                     </div>
                                 )}
+                                {/* ATUALIZADO: Span de erro sempre presente */}
+                                <span className="validation-error">{errors.categorias}</span>
                             </fieldset>
                         </div>
                     </div>
 
-                    {/* Mensagem de Feedback */}
+                    {/* Mensagem de Feedback (sem alteração) */}
                     {mensagem && (
-                        <p style={{ textAlign: 'center', color: mensagem.startsWith('Erro') ? 'red' : 'green', marginTop: '1rem' }}>
+                        <p className={`
+                            feedback-message 
+                            ${mensagem.startsWith('Erro') || mensagem.startsWith('Por favor') ? 'error' : 'success'}
+                        `}>
                             {mensagem}
                         </p>
                     )}

@@ -7,11 +7,10 @@ function NavbarEmpresa() {
 
   // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
   const links = [
-    { label: 'Home', to: '/home' }, 
+    { label: 'Home', to: '/home' },
     { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
-    { label: 'Mapa', to: '/mapa' },
     { label: 'Meu Perfil', to: '/meu-perfil' },
-    { label: 'Meus Alimentos', to: '/meus-alimentos'},
+    { label: 'Meus Alimentos', to: '/meus-alimentos' },
     { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
   ];
 
@@ -38,12 +37,6 @@ function NavbarEmpresa() {
             );
           })}
         </ul>
-
-        <div className="navEmpresa__actions">
-          <Link to="/login" className="btnNavEmpresa btnEmpresa--login">Entrar</Link>
-          <Link to="/hudCadastros" className="btnNavEmpresa
-          btnEmpresa--signup">Cadastrar-se</Link>
-        </div>
       </div>
     </nav>
   );

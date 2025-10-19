@@ -27,6 +27,7 @@
   padding: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0;
   flex-wrap: nowrap;
   min-width: 0;
@@ -135,29 +136,6 @@
   flex-shrink: 0;
 }
 
-.btnNavEmpresa {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 42px;
-  padding-inline: 20px;
-  border-radius: 999px;
-  border: none;
-  font: 600 15px/1 Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; /* FIXO */
-  cursor: pointer;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .08);
-  text-decoration: none;
-}
-
-.btnEmpresa--login {
-  background: var(--green-light);
-  color: var(--green-dark);
-}
-
-.btnEmpresa--signup {
-  background: var(--beige-2);
-  color: var(--green-dark);
-}
 
 /* breakpoints só ajustam respiro, NÃO a tipografia */
 @media (max-width: 900px) {
