@@ -1,28 +1,33 @@
-
+// Navbar.js
 import { Link, useLocation } from 'react-router-dom';
 import './navbar.css';
 
 function Navbar() {
-  const { pathname } = useLocation();
+  // 1. Usamos 'pathname' e 'hash' para saber a URL completa
+  const { pathname, hash } = useLocation();
+  
+  // Combina o caminho e a âncora: (ex: "/" ou "/#sobre-nos")
+  const currentPath = pathname + (hash || ''); 
 
-  // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
+  // 2. MODIFICAÇÃO: Todos os links são âncoras na rota "/"
   const links = [
-    { label: 'Home', to: '/home' },
-    { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
-    { label: 'Meu Perfil', to: '/meu-perfil' },
-    { label: 'Meus Alimentos', to: '/meus-alimentos' },
-    { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
+    { label: 'Sobre Nós', to: '/#sobre-nos' },
+    { label: 'Problema', to: '/#problema' },
+    { label: 'Próximos Passos', to: '/#proximos-passos' },
+    { label: 'Benefícios', to: '/#beneficios' }
   ];
 
-  // Garante que apenas a primeira ocorrência do caminho fique ativa (caso existam duas com o mesmo "to")
-  const firstIndexForPath = links.findIndex(it => it.to === pathname);
+  // 3. Lógica de "ativo" (NÃO PRECISA MUDAR)
+  // Esta lógica já funciona perfeitamente para âncoras
+  const activeIndex = links.findIndex(it => it.to === currentPath);
 
   return (
     <nav className="nav" aria-label="Navegação principal">
       <div className="nav__wrap">
         <ul className="nav__menu" role="menubar">
           {links.map((item, idx) => {
-            const isActive = idx === firstIndexForPath && pathname === item.to;
+            const isActive = idx === activeIndex;
+            
             return (
               <li key={item.label} className="nav__item" role="none">
                 <Link
@@ -38,10 +43,10 @@ function Navbar() {
           })}
         </ul>
 
+        {/* Os botões de Entrar/Cadastrar continuam indo para páginas diferentes */}
         <div className="nav__actions">
           <Link to="/login" className="btnNav btn--login">Entrar</Link>
-          <Link to="/hudCadastros" className="btnNav
-          btn--signup">Cadastrar-se</Link>
+          <Link to="/hudCadastros" className="btnNav btn--signup">Cadastrar-se</Link>
         </div>
       </div>
     </nav>

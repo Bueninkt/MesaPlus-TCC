@@ -28,3 +28,19 @@
     
 
      }
+
+     html {
+  scroll-behavior: smooth;
+}
+
+/* 2. Esta é a regra principal para o "ajuste perfeito".
+  Ela se aplica a TODAS as suas seções: 
+  #sobre-nos, #problema, #proximos-passos, #beneficios
+*/
+section[id] {
+  /* 👇 IMPORTANTE: AJUSTE ESTE VALOR! 
+    Coloque aqui a ALTURA EXATA da sua Navbar.
+    (Ex: 80px, 70px, 92px, etc.)
+  */
+  scroll-margin-top: 80px; 
+}

@@ -27,7 +27,7 @@ import SobreNosUsuarioPage from './pagesUsuario/SobreNosUsuario/sobreNosUsuario.
 
 {/*PagesRegister */ }
 import LoginPage from './pages/Login/Login.jsx';
-import SobreNosPage from './pages/SobreNos/sobreNos.jsx'
+import LadingPage from './pages/Lading/landing.jsx'
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/cadastroEmpresa.jsx'
@@ -44,7 +44,7 @@ function AppRoutes() {
     <>
       <Routes>
         {/*RouteRegisters */}
-        <Route path="/" element={<SobreNosPage/>}></Route>
+        <Route path="/" element={<LadingPage/>}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/hudCadastros" element={<HudCadastrosPage />}></Route>
         <Route path="/cadastroPessoa" element={<CadastroPessoaPage />}></Route>

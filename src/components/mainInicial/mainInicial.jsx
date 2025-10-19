@@ -4,7 +4,7 @@ import './mainInicial.css';
 import logo from "../../assets/icons/mesaLogo.png";
 
 function mainInicial  (params) {
-    return (
+    return null (
         <>
     
           <div className="sobrenos-bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true"></div>
