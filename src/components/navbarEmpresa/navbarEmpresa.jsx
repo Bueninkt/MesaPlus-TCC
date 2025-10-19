@@ -11,7 +11,7 @@ function NavbarEmpresa() {
     { label: 'Sobre Nós', to: '/' },             // por ora aponta para a mesma página inicial
     { label: 'Meu Perfil', to: '/meu-perfil' },
     { label: 'Meus Alimentos', to: '/meus-alimentos' },
-    { label: 'Cadastrar Alimentos', to: '/cadastrar-alimentos' },
+    { label: 'Cadastrar Alimentos', to: '/cadastrarAlimentosEmpresa' },
   ];
 
   // Garante que apenas a primeira ocorrência do caminho fique ativa (caso existam duas com o mesmo "to")

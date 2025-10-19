@@ -1,23 +1,24 @@
+import { Link, useNavigate } from 'react-router-dom'; 
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './cadastrarAlimentosEmpresa.css'; 
+import './cadastrarAlimentosEmpresa.css';
 
 import logo from "../../assets/icons/mesaLogo.png";
 
 // --- Constantes do Azure ---
 const AZURE_ACCOUNT = 'mesaplus';
 const AZURE_CONTAINER = 'fotos';
-const SAS_TOKEN = 'sp=racwdl&st=2025-10-18T17:24:40Z&se=2025-10-18T18:39:40Z&sv=2024-11-04&sr=c&sig=u9HArr%2BEdHG9CUsI4ti%2BbQRrXtni%2FfvQ8AhCSS7VSK8%3D';
-
-const idEmpresa = 1;
+const SAS_TOKEN = 'sp=racwdl&st=2025-10-19T12:16:18Z&se=2025-10-19T13:31:18Z&sv=2024-11-04&sr=c&sig=i3q%2B4KjaDR504MbIZ5U4CJ2%2BgGwAhI4XHFeRYMvHaZM%3D';
 
 
 
-// --- Função de Upload para o Azure (sem alterações) ---
-const uploadParaAzure = async (file) => {
-    // ... (código de upload sem alteração) ...
-    const blobName = `${idEmpresa}_${Date.now()}_${file.name}`;
+
+
+// --- ALTERADO: Função de Upload agora recebe idEmpresa ---
+const uploadParaAzure = async (file, idEmpresa) => {
+    // Adiciona uma verificação para o caso do id ser nulo
+    const idUsuario = idEmpresa || 'id_desconhecido';
+    const blobName = `${idUsuario}_${Date.now()}_${file.name}`;
     const url = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
     const res = await fetch(url, {
         method: 'PUT',
@@ -28,8 +29,7 @@ const uploadParaAzure = async (file) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-
-// --- Função de Validação (sem alterações) ---
+// --- Função de Validação (COM ALTERAÇÃO) ---
 const validateField = (name, value) => {
     switch (name) {
         case "nome":
@@ -39,7 +39,7 @@ const validateField = (name, value) => {
         case "dataDeValidade":
             if (!value) return "Data de validade é obrigatória.";
             const today = new Date();
-            today.setHours(0, 0, 0, 0); 
+            today.setHours(0, 0, 0, 0);
             const [year, month, day] = value.split('-').map(Number);
             const localSelectedDate = new Date(year, month - 1, day);
             if (localSelectedDate < today) {
@@ -47,11 +47,12 @@ const validateField = (name, value) => {
             }
             return "";
         case "peso":
-            if (!value) return ""; // Opcional
+            // --- MUDANÇA 1: Tornando o peso obrigatório ---
+            if (!value) return "Peso é obrigatório."; // <-- ALTERADO
             const numPeso = Number(value);
             if (isNaN(numPeso)) return "Peso deve ser um número.";
             if (numPeso <= 0) return "Peso deve ser maior que zero.";
-            return ""; 
+            return "";
         case "quantidade":
             if (!value) return "Quantidade é obrigatória.";
             const numQuantidade = Number(value);
@@ -76,6 +77,10 @@ const validateField = (name, value) => {
 
 
 function CadastrarAlimentosEmpresaPage() {
+    // --- NOVO: Estado para o ID da empresa e hook de navegação ---
+    const [idEmpresa, setIdEmpresa] = useState(null);
+    const navigate = useNavigate();
+
     // --- Estados para os campos do formulário ---
     const [nome, setNome] = useState('');
     const [dataDeValidade, setDataDeValidade] = useState('');
@@ -89,7 +94,7 @@ function CadastrarAlimentosEmpresaPage() {
     const [isCategoriaOpen, setIsCategoriaOpen] = useState(false);
     const [selectedCategorias, setSelectedCategorias] = useState({});
     const [mensagem, setMensagem] = useState('');
-    
+
     // --- NOVO: Estado para rastrear interação com categoria ---
     const [categoriaInteracted, setCategoriaInteracted] = useState(false);
 
@@ -109,6 +114,39 @@ function CadastrarAlimentosEmpresaPage() {
         categorias: ''
     });
 
+    // --- NOVO: useEffect para verificar autenticação e buscar ID ---
+    useEffect(() => {
+        try {
+            const userString = localStorage.getItem("user");
+            const userType = localStorage.getItem("userType");
+
+            // Verifica se está logado E se é do tipo 'empresa'
+            if (userString && userType === 'empresa') {
+                const usuario = JSON.parse(userString);
+
+                // Verifica se o objeto de usuário tem a propriedade 'id'
+                // (Assumindo que o LoginPage salva o usuário com um 'id')
+                if (usuario && usuario.id) {
+                    setIdEmpresa(usuario.id); // Guarda o ID no estado
+                } else {
+                    // Se não tiver ID, força o logout e redireciona
+                    console.error("Dados do usuário incompletos no localStorage.");
+                    localStorage.clear();
+                    navigate('/login');
+                }
+            } else {
+                // Se não estiver logado ou não for 'empresa', redireciona
+                console.warn("Acesso não autorizado. Redirecionando para login.");
+                navigate('/login');
+            }
+        } catch (error) {
+            // Se o JSON do localStorage estiver corrompido
+            console.error("Erro ao processar dados do usuário:", error);
+            localStorage.clear();
+            navigate('/login');
+        }
+    }, [navigate]); // A dependência [navigate] garante que a função não seja recriada
+
     // --- BUSCAR CATEGORIAS (sem alterações) ---
     useEffect(() => {
         const fetchCategorias = async () => {
@@ -123,13 +161,11 @@ function CadastrarAlimentosEmpresaPage() {
             }
         };
         fetchCategorias();
-    }, []);
+    }, []); // Roda apenas uma vez na montagem
 
-    // --- ATUALIZADO: useEffect para validar categorias ---
-    // Agora só valida se o usuário tiver interagido (aberto o menu)
+    // --- ATUALIZADO: useEffect para validar categorias (sem alterações na lógica) ---
     useEffect(() => {
-        // Só valida SE o usuário já interagiu E fechou o menu
-        if (categoriaInteracted && !isCategoriaOpen && listaCategorias.length > 0) { 
+        if (categoriaInteracted && !isCategoriaOpen && listaCategorias.length > 0) {
             const selecionadas = Object.keys(selectedCategorias).filter(id => selectedCategorias[id] === true);
             const error = validateField('categorias', selecionadas);
             setErrors(prev => ({
@@ -137,9 +173,7 @@ function CadastrarAlimentosEmpresaPage() {
                 categorias: error
             }));
         }
-    }, [isCategoriaOpen, selectedCategorias, listaCategorias, categoriaInteracted]); // <-- Dependência adicionada
-
-
+    }, [isCategoriaOpen, selectedCategorias, listaCategorias, categoriaInteracted]);
     // --- Funções de Manipulação (Handlers - sem alterações) ---
     const handleCategoriaChange = (event) => {
         const { id, checked } = event.target;
@@ -160,24 +194,32 @@ function CadastrarAlimentosEmpresaPage() {
     };
 
     // --- Funções para Upload (sem alterações) ---
+    // --- Funções para Upload (COM ALTERAÇÃO) ---
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
+
+        // --- NOVO: Verificação de segurança ---
+        if (!idEmpresa) {
+            setMensagem("Erro de autenticação. Tente relogar.");
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = () => { setPreviewUrl(reader.result); };
         reader.readAsDataURL(file);
         setIsUploading(true);
         setMensagem('');
-        setErrors(prev => ({ ...prev, imagem: '' })); 
+        setErrors(prev => ({ ...prev, imagem: '' }));
         try {
-            const azureUrl = await uploadParaAzure(file);
+            // --- ALTERADO: Passando o idEmpresa do estado para a função de upload ---
+            const azureUrl = await uploadParaAzure(file, idEmpresa);
             setImagem(azureUrl);
             setMensagem('');
             setIsUploading(false);
-            setErrors(prev => ({ ...prev, imagem: '' })); 
+            setErrors(prev => ({ ...prev, imagem: '' }));
         } catch (error) {
             console.error("Erro no upload para Azure:", error);
-            
             setIsUploading(false);
             setPreviewUrl(null);
             setImagem('');
@@ -228,16 +270,22 @@ function CadastrarAlimentosEmpresaPage() {
 
     // --- SUBMISSÃO DO FORMULÁRIO (sem alterações) ---
     const handleSubmit = async (event) => {
+
         event.preventDefault();
         setMensagem('');
 
-        // Define que a categoria foi "interagida" no submit,
-        // caso o usuário tente enviar sem nunca ter clicado nela.
-        setCategoriaInteracted(true); 
+        // --- NOVO: Verificação de segurança ---
+        // Garante que o ID da empresa foi carregado antes de enviar
+        if (!idEmpresa) {
+            setMensagem("Erro: ID da empresa não encontrado. Faça login novamente.");
+            return;
+        }
+
+        setCategoriaInteracted(true);
 
         if (!handleValidation()) {
             setMensagem("Por favor, corrija os erros no formulário.");
-            return; 
+            return;
         }
         if (isUploading) {
             setMensagem("Por favor, aguarde o envio da imagem terminar.");
@@ -246,16 +294,18 @@ function CadastrarAlimentosEmpresaPage() {
         const categoriasFormatadas = Object.keys(selectedCategorias)
             .filter(id => selectedCategorias[id] === true)
             .map(id => ({ id: Number(id) }));
+
+        // --- ALTERADO: O payload agora usa o 'idEmpresa' do estado ---
         const payload = {
             nome: nome,
             quantidade: Number(quantidade),
             data_de_validade: dataDeValidade,
             descricao: descricao,
             imagem: imagem,
-            id_empresa: idEmpresa, 
+            id_empresa: idEmpresa, // <-- Pega o ID dinâmico do estado
             categorias: categoriasFormatadas,
-            peso: peso ? Number(peso) : undefined 
-        };
+            peso: peso ? Number(peso) : undefined
+        }
         try {
             const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
                 headers: { 'Content-Type': 'application/json' }
@@ -268,9 +318,9 @@ function CadastrarAlimentosEmpresaPage() {
                 setQuantidade('');
                 setDescricao('');
                 setImagem('');
-                setPreviewUrl(null); 
+                setPreviewUrl(null);
                 setSelectedCategorias({});
-                if (fileInputRef.current) fileInputRef.current.value = null; 
+                if (fileInputRef.current) fileInputRef.current.value = null;
                 setErrors({ nome: '', dataDeValidade: '', peso: '', quantidade: '', descricao: '', imagem: '', categorias: '' });
                 setCategoriaInteracted(false); // Reseta a interação
             } else {
@@ -284,7 +334,20 @@ function CadastrarAlimentosEmpresaPage() {
                 setMensagem('Erro de conexão. Não foi possível cadastrar o alimento.');
             }
         }
+
+
+
+
     };
+
+
+    if (!idEmpresa) { // <-- Posição errada
+        return (
+            <div className="page-container" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <p>Verificando autenticação...</p>
+            </div>
+        );
+    }
 
 
     return (
@@ -338,8 +401,12 @@ function CadastrarAlimentosEmpresaPage() {
                                         id="peso"
                                         name="peso"
                                         value={peso}
-                                        maxLength={5}
-                                        onChange={(e) => setPeso(e.target.value)}
+                                        // --- MUDANÇA 2: Limite de 5 caracteres para PESO ---
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 5) {
+                                                setPeso(e.target.value);
+                                            }
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {/* ATUALIZADO: Span de erro sempre presente */}
@@ -352,7 +419,12 @@ function CadastrarAlimentosEmpresaPage() {
                                         id="quantidade"
                                         name="quantidade"
                                         value={quantidade}
-                                        onChange={(e) => setQuantidade(e.target.value)}
+                                        // --- MUDANÇA 2: Limite de 5 caracteres para QUANTIDADE ---
+                                        onChange={(e) => {
+                                            if (e.target.value.length <= 5) {
+                                                setQuantidade(e.target.value);
+                                            }
+                                        }}
                                         onBlur={handleBlur}
                                     />
                                     {/* ATUALIZADO: Span de erro sempre presente */}
@@ -418,7 +490,7 @@ function CadastrarAlimentosEmpresaPage() {
                                 className="form-group categoria-custom-select"
                                 onClick={() => {
                                     setIsCategoriaOpen(!isCategoriaOpen);
-                                    setCategoriaInteracted(true); 
+                                    setCategoriaInteracted(true);
                                 }}
                             >
                                 <legend>Categoria:</legend>
