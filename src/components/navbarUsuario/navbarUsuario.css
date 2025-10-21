@@ -1,0 +1,147 @@
+
+.navUsuario {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--green-dark);
+    width: 100%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;  
+  }
+  
+  .nav__wrapUsuario {
+    width: min(1765px, 92vw);
+    margin-inline: auto;
+    padding-block: 40px;
+    padding-inline: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    column-gap: 16px;
+  
+  }
+  
+      /* Seu código existente */
+  .navUsuario__menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    
+    /* --- ESTILOS ADICIONADOS --- */
+  
+    /* Para Firefox e navegadores modernos */
+    scrollbar-width: thin;
+    scrollbar-color: #FFF1D4 #f1f1f100;
+  }
+  
+  /* Para Chrome, Safari, Edge e outros navegadores WebKit */
+  .navUsuario__menu::-webkit-scrollbar {
+    height: 1px; /* Altura da barra de rolagem horizontal */
+  }
+  
+  .navUsuario__menu::-webkit-scrollbar-track {
+      border-radius: 10px;
+  }
+  
+  .navUsuario__menu::-webkit-scrollbar-thumb {
+    background-color: #B9CE5D; /* Cor principal do seletor */
+    border-radius: 10px;
+    border: 2px solid #f1f1f1; /* Adiciona um pequeno espaçamento */
+  }
+  
+  .navUsuario__menu::-webkit-scrollbar-thumb:hover {
+    background-color: #a2b64d; /* Cor do seletor ao passar o mouse */
+  }
+  
+  
+  .navUsuario__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  
+  .navUsuario__item + .navUsuario__item::before {
+    content: "•";
+    color: var(--green-light);
+    margin: 0 10px;
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+  
+  /* ===== LINKS ===== */
+  .navUsuario__link {
+    position: relative;          /* referência pro ::after */
+    display: inline-flex;
+    align-items: center;
+    color: rgba(255, 255, 255, .92);
+    text-decoration: none;
+    font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 20px;             /* FIXO */
+    font-weight: 600;
+    letter-spacing: .2px;
+    padding-bottom: 6px;         /* espaço para o underline */
+    transition: opacity .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* underline “carregando” */
+  .navUsuario__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;                   /* dentro da caixa do link */
+    height: 3px;                 /* espessura do traço */
+    width: 100%;
+    background: var(--green-light); /* #B9CE5D */
+    transform: scaleX(0);        /* começa zerado */
+    transform-origin: left;      /* cresce da esquerda para a direita */
+    transition: transform .190s cubic-bezier(.7022,1,.7420,1); /* animação suave */
+    will-change: transform;
+  }
+  
+  /* hover/focus: anima o “carregamento” até 100% */
+  .navUsuario__link:hover::after,
+  .navUsuario__link:focus-visible::after {
+    transform: scaleX(1);
+  }
+  
+  /* hover sem sombreamento */
+  .navUsuario__link:hover { opacity: 1; }
+  
+  /* estado ativo mantém a cor e o underline já completo */
+  .navUsuario__link.is-active { color: var(--white); }
+  .navUsuario__link.is-active::after {
+    transform: scaleX(1);
+    transition: none;            /* evita “reanimar” quando a rota já está ativa */
+  }
+  
+  /* acessibilidade: reduz animação se o usuário preferir menos movimento */
+  @media (prefers-reduced-motion: reduce) {
+    .navUsuario__link::after { transition: none; }
+  }
+  
+  .navUsuario__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  
+  
+  /* breakpoints só ajustam respiro, NÃO a tipografia */
+  @media (max-width: 900px) {
+    .nav__wrapUsuario { padding-block: 14px; }
+  }
+  @media (max-width: 560px) {
+    .nav__wrapUsuario { padding-block: 12px; }
+  }
+  

@@ -68,12 +68,7 @@ function LandingPage() {
         </main>
       </section>
 
-      {/* ========================================================= */}
-      {/* 🚨 SEÇÕES CORRIGIDAS ABAIXO 🚨 */}
-      {/* ========================================================= */}
-
-      {/* Seção De Problema */}
-      {/* 👇 CLASSE CORRIGIDA 👇 */}
+      
       <section id="problema" className="problema">
         <div className="container">
 

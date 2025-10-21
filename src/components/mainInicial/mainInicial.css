@@ -1,5 +1,3 @@
-
-
 /* === BASE DA PÁGINA === */
 .sobre {
   background: var(--green-dark);
@@ -16,14 +14,14 @@
 
 .sobrenos-bg{
       position: fixed;
-        inset: 0;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        opacity: .1;
-        /* intensidade sutil como no print */
-        pointer-events: none;
-        z-index: 1;
+      inset: 0;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      opacity: .1;
+      /* intensidade sutil como no print */
+      pointer-events: none;
+      z-index: 1;
 }
 
 .hero .container {
@@ -58,8 +56,8 @@
 }
 
 /* =========================
-   FAIXA DIVISÓRIA (linha)
-   ========================= */
+    FAIXA DIVISÓRIA (linha)
+    ========================= */
 .faixa {
   width: 100%;
   height: 3px;
@@ -141,10 +139,10 @@
 }
 
 /* =========================
-   AJUSTES RESPONSIVOS
-   (sem alterar tipografia principal,
-   apenas respiros para não quebrar)
-   ========================= */
+    AJUSTES RESPONSIVOS
+    (sem alterar tipografia principal,
+    apenas respiros para não quebrar)
+    ========================= */
 @media (max-width: 1200px) {
   .brand-title {
     font-size: 120px;
@@ -239,4 +237,542 @@
       text-align: center;
   }
 
+}
+
+
+.problema {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 96px 0;
+  overflow: visible; /* Necessário para o ícone sobreposto */
+}
+
+.problema__heading {
+  /* Estilo do título centralizado mantido */
+  margin: 0 0 72px 0;
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.problema__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px; /* Mais espaço entre os cards */
+  align-items: stretch;
+}
+
+.problema-card {
+  position: relative; /* FUNDAMENTAL para a sobreposição */
+  background: var(--beige);
+  border-radius: 12px;
+  padding: 32px;
+  padding-top: 80px; /* Abre espaço para o ícone sobreposto */
+  text-align: left;
+  
+  /* Sombra profissional para o card claro */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, 
+              rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.problema-card:hover {
+  transform: translateY(-10px);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 25px -5px, 
+              rgba(0, 0, 0, 0.1) 0px 10px 10px -5px;
+}
+
+/* --- NOVO: O Círculo do Ícone Sobreposto --- */
+.problema-card__visual {
+  position: absolute;
+  top: -45px; /* Puxa o ícone para cima, metade para fora */
+  left: 32px; /* Alinha com o padding do card */
+  
+  width: 90px;
+  height: 90px;
+  background: var(--green-dark-2);
+  border-radius: 50%;
+  
+  /* Borda na cor do card para um efeito de "recorte" */
+  border: 5px solid var(--beige); 
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Sombra para o ícone "flutuar" */
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+  
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.problema-card:hover .problema-card__visual {
+  /* Efeito de hover divertido no ícone */
+  transform: rotate(-10deg) scale(1.1);
+  background: var(--green-light); /* Muda a cor do círculo no hover */
+}
+
+/* O ícone dentro do círculo */
+.problema-card__icon {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  filter: invert(93%) sepia(18%) saturate(543%) hue-rotate(334deg) brightness(107%) contrast(102%); /* Colore de bege */
+  transition: filter 0s ease;
+}
+
+.problema-card:hover .problema-card__icon {
+  /* No hover, o ícone fica verde escuro para contrastar com o novo fundo */
+  filter: invert(13%) sepia(26%) saturate(2204%) hue-rotate(102deg) brightness(97%) contrast(101%);
+}
+
+
+/* --- NOVO: Conteúdo de Texto --- */
+.problema-card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- NOVO: A Tag de Destaque --- */
+.problema-card__tag {
+  display: inline-block;
+  align-self: flex-start; /* Garante que a tag fique à esquerda */
+  background: var(--green-light); /* Ponto de cor vibrante */
+  color: var(--green-dark-2);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px; /* Formato de pílula */
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* --- NOVO: Título de Impacto --- */
+.problema-card__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--green-dark-2); 
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.problema-card__text {
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--green-dark); 
+  opacity: 0.9; /* Deixa o texto de parágrafo mais suave */
+}
+
+
+/* === RESPONSIVIDADE (DESIGN ELABORADO) === */
+@media (max-width: 980px) {
+  .problema__grid {
+    grid-template-columns: 1fr; /* Coluna única */
+    gap: 80px; /* Mais espaço vertical, já que o ícone flutua */
+    max-width: 600px; 
+    margin-inline: auto; 
+  }
+  
+  .problema__heading {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .problema {
+    padding: 80px 0;
+  }
+  
+  .problema__heading {
+    font-size: 32px;
+    margin-bottom: 64px;
+  }
+
+  .problema-card {
+    padding: 24px;
+    padding-top: 70px; /* Ajusta o espaço para o ícone */
+  }
+
+  /* Ajusta o ícone para telas menores */
+  .problema-card__visual {
+    top: -35px;
+    left: 24px;
+    width: 80px;
+    height: 80px;
+    border-width: 4px;
+  }
+  
+  .problema-card__icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .problema-card__tag {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .problema-card__title {
+    font-size: 24px;
+  }
+
+  .problema-card__text {
+    font-size: 17px;
+  }
+}
+
+/* =========================
+    SOLUÇÃO
+   ========================= */
+
+/* =========================
+    PRÓXIMOS PASSOS (DESIGN DE ASCENSÃO)
+   ========================= */
+
+.proximos-passos {
+  background: var(--beige); /* Fundo claro! */
+  color: var(--green-dark);
+  padding: 96px 0;
+  overflow: hidden; /* Garante que os elementos não vazem */
+}
+
+/* Títulos com cor escura para o fundo claro */
+.passos__heading {
+  margin: 0 0 16px 0;
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--green-dark-2); /* Cor escura */
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.passos__subheading {
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--green-dark); /* Cor escura */
+  opacity: 0.9;
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 80px auto;
+}
+
+/* O container da timeline */
+.passos__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Espaço entre os "degraus" */
+  position: relative;
+  max-width: 900px; /* Limita a largura da timeline */
+  margin: 0 auto;
+}
+
+/* Linha pontilhada no fundo (o conector vertical) */
+.passos__timeline::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  left: 58px; /* Alinha com o centro dos números */
+  bottom: 30px;
+  width: 4px;
+  background-image: linear-gradient(
+    var(--green-light) 40%, 
+    rgba(255, 255, 255, 0) 0%
+  );
+  background-position: left;
+  background-size: 4px 15px; /* Cria o efeito "pontilhado" */
+  background-repeat: repeat-y;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+
+/* Cada item da timeline */
+.passo-item {
+  display: grid;
+  /* Colunas: [Número] [Conteúdo] */
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 32px;
+  position: relative;
+  z-index: 2; /* Fica na frente da linha pontilhada */
+}
+
+/* Círculo do número */
+.passo-item__number-wrapper {
+  width: 80px;
+  height: 80px;
+  background: var(--green-dark-2); /* Fundo escuro */
+  border: 6px solid var(--beige); /* Borda na cor do fundo (efeito de "recorte") */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(27, 66, 39, 0.1) 0px 4px 16px, 
+              rgba(27, 66, 39, 0.1) 0px 8px 24px;
+  justify-self: center; /* Centraliza o círculo na sua coluna */
+}
+
+.passo-item__number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--green-light); /* Cor de destaque */
+}
+
+/* Conteúdo do item (ícone + texto) */
+.passo-item__content {
+  background: var(--white); /* Card branco sobre fundo bege */
+  border-radius: 12px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: rgba(27, 66, 39, 0.1) 0px 4px 16px, 
+              rgba(27, 66, 39, 0.05) 0px 8px 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.passo-item__content:hover {
+  transform: scale(1.02);
+  box-shadow: rgba(27, 66, 39, 0.15) 0px 10px 30px, 
+              rgba(27, 66, 39, 0.1) 0px 12px 30px;
+}
+
+.passo-item__icon {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0; /* Impede que o ícone encolha */
+  /* Filtro para deixar o ícone verde-escuro */
+  filter: invert(13%) sepia(26%) saturate(2204%) hue-rotate(102deg) brightness(97%) contrast(101%);
+}
+
+.passo-item__icon--globo {
+  filter: none;
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  border-radius: 50%;
+
+}
+
+.passo-item__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.passo-item__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green-dark-2);
+  margin-bottom: 6px;
+}
+
+.passo-item__description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--green-dark);
+  opacity: 0.9;
+}
+
+
+/* === RESPONSIVIDADE (DESIGN DE ASCENSÃO) === */
+
+@media (max-width: 980px) {
+  /* Alinha os números à esquerda no tablet/mobile */
+  .passos__timeline {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .passos__timeline::before {
+    left: 40px; /* Ajusta a posição da linha */
+  }
+
+  .passo-item {
+    grid-template-columns: 80px 1fr; /* Coluna do número menor */
+    gap: 20px;
+  }
+
+  .passo-item__number-wrapper {
+    width: 60px;
+    height: 60px;
+    border-width: 4px;
+  }
+
+  .passo-item__number {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .passos__heading {
+    font-size: 32px;
+  }
+  .passos__subheading {
+    font-size: 18px;
+    margin-bottom: 56px;
+  }
+
+  .passos__timeline::before {
+    left: 30px; /* Ajusta a linha para telas pequenas */
+  }
+  
+  .passo-item {
+    grid-template-columns: 60px 1fr; /* Coluna do número ainda menor */
+    gap: 16px;
+  }
+
+  .passo-item__number-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .passo-item__number {
+    font-size: 16px;
+  }
+
+  /* Empilha o ícone e o texto no card */
+  .passo-item__content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+
+  .passo-item__icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+  }
+  
+  .passo-item__icon--logo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .passo-item__title {
+    font-size: 20px;
+  }
+  
+  .passo-item__description {
+    font-size: 16px;
+  }
+}
+/* =========================
+    BENEFÍCIOS
+   ========================= */
+
+.beneficios {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 96px 0;
+}
+
+.beneficios__heading {
+  /* Reutiliza o estilo .problema__heading (que é baseado no .about__heading) */
+  margin: 0 0 72px 0;
+  font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #f1ebde;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.beneficios__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px; /* Espaço entre os cards */
+}
+
+.beneficio-card {
+  background: var(--green-dark-2);
+  padding: 40px 32px;
+  border-radius: 12px;
+  text-align: center;
+  
+  /* Sombra profissional e marcante */
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  
+  /* Transição suave para o hover */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.beneficio-card:hover {
+  transform: scale(1.03) translateY(-8px); /* Efeito de "levantar" */
+  cursor: default;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 20px 35px, rgba(0, 0, 0, 0.3) 0px 15px 15px;
+}
+
+.beneficio-card__icon {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 24px;
+  /* Colore os ícones de branco/bege */
+  filter: invert(93%) sepia(18%) saturate(543%) hue-rotate(334deg) brightness(107%) contrast(102%);
+}
+
+.beneficio-card__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--beige-2);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.beneficio-card__text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--white);
+  opacity: 0.9; /* Texto levemente mais suave */
+}
+
+/* === RESPONSIVIDADE (BENEFÍCIOS) === */
+@media (max-width: 1200px) {
+  .beneficios__grid {
+    gap: 32px;
+  }
+  .beneficio-card__title {
+    font-size: 22px;
+  }
+  .beneficio-card__text {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 980px) {
+  .beneficios__grid {
+    grid-template-columns: 1fr; /* Coluna única */
+    gap: 40px;
+    max-width: 600px; /* Limita a largura dos cards */
+    margin-inline: auto; /* Centraliza o bloco de cards */
+  }
+  
+  .beneficios__heading {
+    font-size: 36px;
+    margin-bottom: 56px;
+  }
+}
+
+@media (max-width: 560px) {
+  .beneficios {
+    padding: 80px 0;
+  }
+  .beneficios__heading {
+    font-size: 32px;
+  }
 }
