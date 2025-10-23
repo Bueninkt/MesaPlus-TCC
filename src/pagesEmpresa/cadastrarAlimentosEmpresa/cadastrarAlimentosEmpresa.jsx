@@ -8,7 +8,7 @@
         // --- Constantes do Azure ---
         const AZURE_ACCOUNT = 'mesaplustcc';
         const AZURE_CONTAINER = 'fotos';
-        const SAS_TOKEN = 'sp=racwdl&st=2025-10-21T13:50:58Z&se=2025-10-21T20:30:58Z&sv=2024-11-04&sr=c&sig=L2Us9Q7Gfkkhl5vgPm78jyZwbiRa2mmf18y6xDxgjCE%3D';
+        const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
 
 
 
@@ -40,8 +40,8 @@
                     if (!value) return "Data de validade é obrigatória.";
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    const [year, month, day] = value.split('-').map(Number);
-                    const localSelectedDate = new Date(year, month - 1, day);
+                    const [day, month, year ] = value.split('-').map(Number);
+                    const localSelectedDate = new Date(day, month - 1, year);
                     if (localSelectedDate < today) {
                         return "A data de validade não pode ser no passado.";
                     }
@@ -341,7 +341,7 @@
             };
 
 
-            if (!idEmpresa) { // <-- Posição errada
+            if (!idEmpresa) { 
                 return (
                     <div className="page-container" style={{ textAlign: 'center', paddingTop: '100px' }}>
                         <p>Verificando autenticação...</p>

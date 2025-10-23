@@ -5,6 +5,7 @@ import navbarEmpresa from '../../components/navbarEmpresa/navbarEmpresa';
 const NavbarEmpresa = navbarEmpresa;
 const Main = mainInicial
 
+
 function sobreNosEmpresaPage(params) {
     return (
         <>
