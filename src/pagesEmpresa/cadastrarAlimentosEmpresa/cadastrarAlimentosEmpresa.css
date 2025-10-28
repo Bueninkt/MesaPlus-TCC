@@ -1,452 +1,444 @@
-  .background-pattern {
-    position: fixed;
-    inset: 0;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-image: url('../../assets/icons/backimage.png');
-    opacity: .3;
-    /* intensidade sutil como no print */
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  /* Contêiner principal do componente */
-  /* Contêiner principal do componente */
-  .page-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 2;
-    /* <-- MUDE DE 0 PARA 2 */
-    min-height: 100vh;
-  }
-
-  /* ===== NOVO ESTILO PARA A LOGO DO SITE ===== */
-
-.site-logo {
-  position: fixed; /* <-- MUDE DE 'absolute' PARA 'fixed' */
-  top: 2rem;
-  left: 2rem; 
-  width: 150px;
-  height: auto;
-  z-index: 5; 
+.background-pattern {
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url('../../assets/icons/backimage.png');
+  opacity: .3;
+  /* intensidade sutil como no print */
+  pointer-events: none;
+  z-index: 1;
 }
 
-  /* ========================================= */
+/* Contêiner principal do componente */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+}
+
+/* ===== NOVO ESTILO PARA A LOGO DO SITE ===== */
+.site-logo {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 150px;
+  height: auto;
+  z-index: 5;
+}
+
+/* ========================================= */
+
+/* Card Principal do Formulário */
+.form-card {
+  background-color: var(--beige);
+  border-radius: 20px;
+  padding: 2.5rem 3.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 976px;
+  box-sizing: border-box;
+}
+
+/* Tipografia */
+.form-card h1 {
+  font-family: 'Alex Brush', cursive;
+  font-weight: 400;
+  color: #000000;
+  font-size: 5.5rem;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+}
+
+.form-card h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #000000;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0 0 2rem 0;
+}
+
+/* Layout do Formulário (Grid) */
+.cadastro-form {
+  width: 100%;
+}
+
+.form-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.form-left-column,
+.form-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Estilo dos Campos (Fieldset e Legend) */
+.form-group {
+  border: 2px solid var(--green-dark);
+  border-radius: 8px;
+  padding: 0.3rem 1.25rem;
+  background-color: transparent;
+  margin: 0;
+}
+
+.form-group legend {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  color: var(--green-dark);
+  background-color: var(--beige);
+  padding: 0 0.5rem;
+  margin-left: 0.75rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Ícone de adicionar imagem (div) */
+.add-image-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: url('../../assets/icons/addImage.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+}
+
+/* Estilo dos Inputs Internos */
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #000000;
+}
+
+/* Estilo do input de data */
+.form-group input[type="date"] {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #000000;
+  cursor: text;
+  line-height: 1.5rem;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+/* Estilo dos Inputs Internos (Number) */
+.form-group input[type="number"] {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #000000;
+}
+
+/* Remove setas do input[type=number] */
+.form-group input[type="number"]::-webkit-outer-spin-button,
+.form-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group input::placeholder {
+  color: #aaa;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Campos Específicos */
+.form-group.descricao {
+  flex-grow: 1;
+}
+
+.form-group.descricao textarea {
+  height: 98%;
+  min-height: 100px;
+  resize: none;
+}
+
+.form-group.foto {
+  flex-grow: 1;
+}
+
+/* Estilos para o .foto-dropzone */
+.foto-dropzone {
+  margin-bottom: 5px;
+  min-height: 150px;
+  height: 95%;
+  width: 100%;
+  border: 2px dashed var(--green-dark);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f95b;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-color 0.2s ease;
+}
+
+.foto-dropzone:hover {
+  background-color: #f0f0f038;
+}
+
+.upload-placeholder {
+  font-family: 'Poppins', sans-serif;
+  color: var(--green-dark);
+  font-size: 1rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Estilos para o botão de remover (X) */
+.remove-preview-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  color: #c0392b;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 24px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.remove-preview-btn:hover {
+  background-color: white;
+  border-color: #c0392b;
+  transform: scale(1.1);
+}
 
 
-  /* Card Principal do Formulário */
-  .form-card {
-    background-color: var(--beige);
-    border-radius: 20px;
-    padding: 2.5rem 3.5rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 900px;
-    box-sizing: border-box;
-  }
+/* Categoria (Dropdown Customizado) */
+.form-group.categoria-custom-select {
+  position: relative;
+}
 
-  /* Tipografia */
-  .form-card h1 {
-    font-family: 'Alex Brush', cursive;
-    font-weight: 400;
-    color: #000000;
-    font-size: 5.5rem;
-    text-align: center;
-    margin: 0;
-    line-height: 1;
-  }
+.categoria-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  min-height: 1.5rem;
+}
 
-  .form-card h2 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: #000000;
-    font-size: 1.5rem;
-    text-align: center;
-    margin: 0 0 2rem 0;
-  }
+.categoria-display-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: var(--preto, #000000);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
 
-  /* Layout do Formulário (Grid) */
-  .cadastro-form {
-    width: 100%;
-  }
+/* Seta customizada do Dropdown (div) */
+.dropdown-arrow {
+  width: 16px;
+  height: 16px;
+  background-image: url('../../assets/icons/seta.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 0.2s ease-in-out;
+  flex-shrink: 0;
+}
 
-  .form-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
+/* Animação da seta ao abrir */
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
 
-  .form-left-column,
-  .form-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+/* Lista Dropdown (Checkbox) */
+.categoria-dropdown-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background-color: var(--beige);
+  border: 2px solid var(--green-dark);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-  .form-row {
-    display: flex;
-    gap: 1.5rem;
-  }
+/* Estilo do Checkbox Customizado */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: var(--preto);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
 
-  /* Estilo dos Campos (Fieldset e Legend) */
-  .form-group {
-    border: 2px solid var(--green-dark);
-    border-radius: 8px;
-    padding: 0.3rem 1.25rem;
-    background-color: transparent;
-    margin: 0;
-  }
+.checkbox-container:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
-  .form-group legend {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
-    color: var(--green-dark);
-    background-color: var(--beige);
-    padding: 0 0.5rem;
-    margin-left: 0.75rem;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+.checkbox-container input[type="checkbox"] {
+  display: none;
+  /* Esconde o checkbox original */
+}
 
-  /* Ícone de adicionar imagem (div) */
-  .add-image-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    background-image: url('../../assets/icons/addImage.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    display: inline-block;
-  }
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--green-dark);
+  border-radius: 4px;
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  flex-shrink: 0;
+}
 
-  /* Estilo dos Inputs Internos */
-  .form-group input[type="text"],
-  .form-group textarea {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: #000000;
+/* Estilo do "check" (quando marcado) */
+.checkbox-container input[type="checkbox"]:checked+.custom-checkbox {
+  background-color: var(--green-dark);
+  border-color: var(--green-dark);
+}
 
-  }
+.checkbox-container input[type="checkbox"]:checked+.custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
 
-  /* Adicione isso ao seu .css para estilizar o input de data */
-  .form-group input[type="date"] {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: #000000;
-    cursor:text;
+/* --- NOVA CLASSE ADICIONADA --- */
+/* Nova classe para os itens do dropdown de unidade */
+.unidade-dropdown-item {
+ display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: var(--preto);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
 
+.unidade-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
-    /* Isso ajuda a alinhar o texto em alguns navegadores */
-    line-height: 1.5rem;
-  }
+/* --- FIM DA NOVA CLASSE --- */
 
-  /* Remove o ícone de calendário padrão (opcional) */
-  .form-group input[type="date"]::-webkit-calendar-picker-indicator {
-    /* pode ocultar ou estilizar aqui */
-    opacity: 0.5;
-    cursor: pointer;
-  }
+/* Botão de Submit */
+.submit-button {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 2.5rem auto 0 auto;
+  padding: 1rem;
+  background-color: var(--red);
+  color: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-  /* Estilo dos Inputs Internos */
-  .form-group input[type="number"] {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: #000000;
+.submit-button:hover {
+  background: var(--green-dark);
+}
 
-  }
+.submit-button:active {
+  transform: scale(0.98);
+}
 
-  /* Para navegadores WebKit (Chrome, Safari, Edge, Opera) */
-  .form-group input[type="number"]::-webkit-outer-spin-button,
-  .form-group input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+/* Validação de Erro dos Campos */
 
+ .validation-error {
+  color: #D93025;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+  text-align: left;
+}
 
+.form-right-column .validation-error {
+  padding-left: 2px;
+}
 
-  .form-group input::placeholder {
-    color: #aaa;
-    font-style: italic;
-    font-weight: 300;
-  }
+.feedback-message {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
 
-  /* Campos Específicos */
-  .form-group.descricao {
-    flex-grow: 1;
-  }
+/* Cor para mensagens de erro */
+.feedback-message.error {
+  color: #D93025;
+}
 
-  .form-group.descricao textarea {
-    height: 98%;
-    min-height: 100px;
-    resize: none;
-  }
-
-  .form-group.foto {
-    flex-grow: 1;
-  }
-
-  /* Estilos para o .foto-dropzone (modificados) */
-  .foto-dropzone {
-    margin-bottom: 5px;
-    min-height: 150px;
-    height: 95%;
-    width: 100%;
-    border: 2px dashed var(--green-dark);
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f9f9f95b;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-    /* Garante que a imagem não vaze do contêiner */
-
-    /* --- Propriedades CRÍTICAS para o ajuste da imagem --- */
-    background-size: cover;
-    /* Faz a imagem cobrir todo o espaço */
-    background-position: center;
-    /* Centraliza a imagem no contêiner */
-    background-repeat: no-repeat;
-    /* Evita que a imagem se repita */
-    /* --- FIM das Propriedades CRÍTICAS --- */
-
-    transition: background-color 0.2s ease;
-  }
-
-  .foto-dropzone:hover {
-    background-color: #f0f0f038;
-  }
-
-  /* Estilos para o placeholder (texto "Clique para adicionar") */
-  .upload-placeholder {
-    font-family: 'Poppins', sans-serif;
-    color: var(--green-dark);
-    font-size: 1rem;
-    text-align: center;
-    padding: 1rem;
-  }
-
-  /* Estilos para o botão de remover (X) */
-  .remove-preview-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    color: #c0392b;
-    /* Vermelho */
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 24px;
-    /* Centraliza o 'x' */
-    text-align: center;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.2s ease;
-  }
-
-  .remove-preview-btn:hover {
-    background-color: white;
-    border-color: #c0392b;
-    transform: scale(1.1);
-  }
-
-
-  /* Categoria (Dropdown Customizado) */
-  .form-group.categoria-custom-select {
-    position: relative;
-  }
-
-  .categoria-select-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    width: 100%;
-
-    min-height: 1.5rem;
-  }
-
-  .categoria-display-text {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: var(--preto, #000000);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: 10px;
-  }
-
-  /* Seta customizada do Dropdown (div) */
-  .dropdown-arrow {
-    width: 16px;
-    height: 16px;
-    background-image: url('../../assets/icons/seta.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    transition: transform 0.2s ease-in-out;
-    flex-shrink: 0;
-  }
-
-  /* Animação da seta ao abrir */
-  .dropdown-arrow.open {
-    transform: rotate(180deg);
-  }
-
-  /* Lista Dropdown (Checkbox) */
-  .categoria-dropdown-list {
-    position: absolute;
-    top: calc(100% + 5px);
-    left: 0;
-    right: 0;
-    background-color: var(--beige);
-    border: 2px solid var(--green-dark);
-    border-radius: 8px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  /* Estilo do Checkbox Customizado */
-  .checkbox-container {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: var(--preto);
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-
-  .checkbox-container:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-
-  .checkbox-container input[type="checkbox"] {
-    display: none;
-    /* Esconde o checkbox original */
-  }
-
-  .custom-checkbox {
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--green-dark);
-    border-radius: 4px;
-    background-color: #fff;
-    display: inline-block;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  /* Estilo do "check" (quando marcado) */
-  .checkbox-container input[type="checkbox"]:checked+.custom-checkbox {
-    background-color: var(--green-dark);
-    border-color: var(--green-dark);
-  }
-
-  .checkbox-container input[type="checkbox"]:checked+.custom-checkbox::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 1px;
-    width: 6px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    transform: rotate(45deg);
-  }
-
-
-  /* Botão de Submit */
-  .submit-button {
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    margin: 2.5rem auto 0 auto;
-    padding: 1rem;
-    background-color: var(--red);
-    color: var(--white);
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 1.25rem;
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .submit-button:hover {
-    background: var(--green-dark);
-    /* Um tom de vermelho um pouco mais escuro */
-  }
-
-  .submit-button:active {
-    transform: scale(0.98);
-  }
-
-
-  /* Validação de Erro dos Campos */
-  .validation-error {
-      color: #D93025;       /* Cor do erro */
-      font-size: 0.8rem;
-      margin-top: 4px;
-      display: block;      /* Faz ocupar sua própria linha */
-      text-align: left; 
-  }
-
-  .form-right-column .validation-error {
-      padding-left: 2px;
-  }
-
-  .feedback-message {
-      text-align: center;
-      margin-top: 1rem;
-      font-weight: 500;
-      font-size: 0.9rem; /* Opcional: bom para feedback */
-  }
-
-  /* Cor para mensagens de erro */
-  .feedback-message.error {
-      color: #D93025; /* O vermelho que você estava usando */
-  }
-
-  /* Cor para mensagens de sucesso */
-  .feedback-message.success {
-      color: green; /* O verde que você estava usando */
-  }
-
-  /* Medias Querys */
+/* Cor para mensagens de sucesso */
+.feedback-message.success {
+  color: green;
+}
 
 /* ================================================================= */
 /* ===== MEDIA QUERIES (Layout Responsivo para telas menores) ===== */
@@ -455,73 +447,53 @@
 /* --- Breakpoint 1: Tablets (e telas menores que 900px) --- */
 @media (max-width: 1300px) {
 
-  /* * TRATATIVA DA PÁGINA E LOGO:
-   * Muda o layout da página para organizar os itens em uma coluna
-   * (logo em cima, card embaixo) e alinha no topo.
-   */
   .page-container {
-    flex-direction: column;         /* Empilha os itens verticalmente */
-    justify-content: flex-start;    /* Alinha o conteúdo no topo */
-    padding: 1.4rem 1.5rem;           /* Reduz o padding geral da página */
-               /* Garante que o container ocupe a altura total */
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1.4rem 1.5rem;
   }
 
-  /* * TRATATIVA DA LOGO:
-   * Tira a logo da posição 'fixed' (flutuante) e a coloca
-   * como um item normal no fluxo da página, centralizada.
-   */
   .site-logo {
-    position: relative;     /* <-- MUITO IMPORTANTE: Tira do 'fixed' */
-    top: auto;              /* Reseta a propriedade 'top' */
-    left: auto;             /* Reseta a propriedade 'left' */
-    
-    /* Centraliza a logo horizontalmente */
+    position: relative;
+    top: auto;
+    left: auto;
     margin-left: auto;
     margin-right: auto;
-
-    /* Ajusta o tamanho e o espaçamento para ficar acima do card */
-    width: 140px;           /* Tamanho um pouco menor para tablets */
-    margin-bottom: 2rem;    /* Espaço entre a logo e o card */
+    width: 140px;
+    margin-bottom: 2rem;
   }
 
-  /* * AJUSTES DO FORMULÁRIO:
-   * Garante que o card ocupe a largura total disponível e ajusta paddings.
-   */
   .form-card {
-    width: 100%;            /* Ocupa toda a largura disponível */
-    max-width: 800px;       /* Reduz a largura máxima do card em tablets */
-    margin-top: 0;          /* Remove a margem superior que talvez estivesse lá para desviar da logo fixa */
-    padding: 1rem 3.6rem;   /* Reduz o padding interno do card */
+    width: 100%;
+    max-width: 800px;
+    margin-top: 0;
+    padding: 1rem 3.6rem;
+    
   }
 
-  /* Ajusta os títulos dentro do card */
   .form-card h1 {
-    font-size: 4.5rem;      /* Título principal menor */
+    font-size: 4.5rem;
   }
 
   .form-card h2 {
-    font-size: 1.3rem;      /* Subtítulo menor */
+    font-size: 1.3rem;
   }
 
-  /* * TRATATIVA DAS COLUNAS:
-   * Empilha as duas colunas principais do formulário (esquerda e direita)
-   */
   .form-columns {
-    grid-template-columns: 1fr; /* Muda para uma única coluna */
-    gap: 1.9rem;                /* Espaçamento entre a coluna de cima e a de baixo */
+    grid-template-columns: 1fr;
+    gap: 1.9rem;
   }
 
-  /* Garante que o espaçamento entre os campos dentro das colunas seja consistente */
   .form-left-column,
-  .form-right-column {
+  Z .form-right-column {
     gap: 1.5rem;
   }
 
-  .foto-dropzone{
+  .foto-dropzone {
     height: 315px;
   }
-  
-  .form-group.foto{
+
+  .form-group.foto {
     height: 390px;
   }
 }
@@ -530,24 +502,22 @@
 /* --- Breakpoint 2: Smartphones (Telas muito pequenas, abaixo de 480px) --- */
 @media (max-width: 529px) {
 
-  /* Ajusta ainda mais o padding da página para telas muito pequenas */
   .page-container {
-    padding: 1.5rem 1rem; 
+    padding: 1.5rem 1rem;
   }
 
-  /* Logo um pouco menor para smartphones */
   .site-logo {
     width: 120px;
     margin-bottom: 1.5rem;
   }
 
-  /* Card com menos padding interno e bordas mais arredondadas */
+
+
   .form-card {
     padding: 1.5rem 2rem;
     border-radius: 15px;
   }
 
-  /* Títulos ainda menores para smartphones */
   .form-card h1 {
     font-size: 3.5rem;
   }
@@ -557,45 +527,41 @@
     margin-bottom: 1.5rem;
   }
 
-  /* * TRATATIVA DAS LINHAS:
-   * Empilha os campos que ficavam lado a lado em uma mesma linha (Ex: Peso e Quantidade)
-   */
   .form-row {
-    flex-direction: column; /* Muda para empilhar verticalmente */
-    gap: 1rem;              /* Reduz o espaçamento entre os campos empilhados */
+    flex-direction: column;
+    gap: 1rem;
+
   }
 
-  /* Reduz todos os espaçamentos (gaps) gerais do formulário para otimizar espaço */
+  
   .form-columns,
   .form-left-column,
   .form-right-column {
     gap: 1rem;
   }
-  
-  /* Ajustes finos de fonte e padding dos campos individuais */
+
   .form-group {
     padding: 0.2rem 1rem;
   }
+
   .form-group legend {
     font-size: 0.9rem;
   }
-  
-  /* Reduz a fonte de todos os inputs, textareas e elementos de seleção */
+
   .form-group input[type="text"],
   .form-group input[type="date"],
   .form-group input[type="number"],
   .form-group textarea,
+
   .categoria-display-text,
   .checkbox-container {
     font-size: 0.9rem;
   }
 
-  /* Diminui a altura mínima da área de dropzone da foto */
   .foto-dropzone {
     min-height: 150px;
   }
 
-  /* Reduz o tamanho e o padding do botão de submit */
   .submit-button {
     font-size: 1.1rem;
     padding: 0.8rem;
