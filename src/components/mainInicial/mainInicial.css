@@ -1,3 +1,8 @@
+:root { 
+    --container: min(1765px, 92vw); 
+}
+
+
 /* === BASE DA PÁGINA === */
 .sobre {
   background: var(--green-dark);

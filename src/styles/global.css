@@ -5,37 +5,33 @@
 
 
      /* ===== Paleta ===== */
-:root {
-    --white: #ffffff;
-    --green-dark: #1B4227;
-    --green-dark-2: #12341F;
-    --beige: #FFF1D4;
-    --green-light: #B9CE5D;
-    --beige-2: #FFF1D4;
+     :root {
+         --white: #ffffff;
+         --green-dark: #1B4227;
+         --green-dark-2: #12341F;
+         --beige: #FFF1D4;
+         --green-light: #B9CE5D;
+         --beige-2: #FFF1D4;
+     }
 
-    /* ==> MOVIDO PARA CÁ <== */
-    --container: min(1765px, 92vw); 
-}
+     /* ===== Base ===== */
+     * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+     }
 
-/* ===== Base ===== */
-* {
-    margin: 0; /* (0 é o mesmo que 0%, mas um pouco mais comum) */
-    padding: 0;
-    box-sizing: border-box;
-    /* Variável --container removida daqui */
-}
+     /* O resto do seu CSS está perfeito */
+     body {
+         position: relative;
+     }
 
-/* O resto do seu CSS está perfeito */
-body {
-    position: relative;
-}
+     html {
+         scroll-behavior: smooth;
+         height: 100%;
+         width: 100%;
+     }
 
-html {
-    scroll-behavior: smooth;
-    height: 100%;
-    width: 100% ;
-}
-
-section[id] {
-    scroll-margin-top: 80px; 
-}
+     section[id] {
+         scroll-margin-top: 80px;
+     }
