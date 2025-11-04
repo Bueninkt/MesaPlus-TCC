@@ -129,7 +129,7 @@
     .navOng__link::after { transition: none; }
   }
   
-  .navUsuario__actions {
+  .navOng__actions {
     display: flex;
     align-items: center;
     gap: 10px;

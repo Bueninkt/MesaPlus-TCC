@@ -1,0 +1,19 @@
+
+
+/* Container principal da página (abaixo da navbar) */
+.home-usuario-container {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 40px; /* Mais preenchimento nas laterais */
+  gap: 40px; /* Espaço entre a coluna de filtro e a de conteúdo */
+  align-items: flex-start; /* Alinha pelo topo */
+}
+
+/* Coluna da Esquerda (Filtros) */
+.coluna-filtros-usuario {
+  flex: 3; /* Ocupa uma fração do espaço */
+  max-width: 400px; /* Trava a largura máxima (igual ao .filtrar-container) */
+  min-width: 300px; /* Impede que fique muito estreito */
+}
+
+

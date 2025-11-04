@@ -8,7 +8,6 @@ import CadastrarAlimentosEmpresaPage from './pagesEmpresa/cadastrarAlimentosEmpr
 import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpresa.jsx'
 import MeusAlimentosEmpresaPage from './pagesEmpresa/MeusAlimentosEmpresa/MeusAlimentosEmpresa.jsx'
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
-import HomeEmpresaPage from './pagesEmpresa/homeEmpresa/homeEmpresa.jsx';
 
 {/*PagesOng */ }
 import FavoritosOngPage from './pagesOng/FavoritosOng/favoritosOng.jsx'
@@ -60,7 +59,6 @@ function AppRoutes() {
         <Route path="/meuPerfilEmpresa" element={<MeuPerfilEmpresaPage />}></Route>
         <Route path="/meusAlimentosEmpresa" element={<MeusAlimentosEmpresaPage />}></Route>
         <Route path="/sobreNosEmpresa" element={<SobreNosEmpresaPage />}></Route>
-        <Route path="/homeEmpresa" element={<HomeEmpresaPage />}></Route>
 
 
         {/*RouteOng*/}
