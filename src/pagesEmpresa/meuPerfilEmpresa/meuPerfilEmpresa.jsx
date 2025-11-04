@@ -3,6 +3,10 @@ import './MeuPerfilEmpresa.css';
 import NavbarEmpresa from '../../components/navbarEmpresa/navbarEmpresa';
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 
+// 1. Imports dos ícones adicionados
+import eye from "../../assets/icons/eye.png";
+import eyeclosed from "../../assets/icons/eye-closed.png";
+
 // 1. Dados mockados (simulando um GET de endpoint)
 const mockProfileData = {
     nome: "MC Donald's empresaaaaaaaaaaaass",
@@ -14,32 +18,61 @@ const mockProfileData = {
 };
 
 // Componente para um campo de perfil individual
-// Ajuda a gerenciar a lógica de visualização/edição e o scroll
+// *** COMPONENTE MODIFICADO ***
 const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text" }) => {
-    // O campo CNPJ nunca é editável
-    if (name === "cnpj") {
-        isEditing = false;
-    }
-    // O campo Senha tem tratamento especial
-    if (name === "senha" && !isEditing) {
-        valor = "••••••••";
+    
+    // 2. Estado local para visibilidade da senha
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    
+    // 3. Verifica se é o campo de senha
+    const isPasswordField = name === "senha";
+
+    // 4. Função para alternar a visibilidade
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(prev => !prev);
+    };
+
+    // 5. Determina o valor e o tipo a serem exibidos
+    let displayValue = valor;
+    let inputType = type;
+
+    if (isPasswordField) {
+        if (isEditing) {
+            // Se estiver editando, alterna o tipo do input
+            inputType = isPasswordVisible ? "text" : "password";
+        } else {
+            // Se estiver visualizando, alterna o texto
+            displayValue = isPasswordVisible ? valor : '•'.repeat(valor.length);
+        }
     }
 
     return (
         <div className="campo-container">
             <label className="campo-label">{label}:</label>
-            <div className="campo-valor-wrapper">
+            {/* 6. Adiciona classe wrapper para estilização do ícone */}
+            <div className={`campo-valor-wrapper ${isPasswordField ? 'password-field-wrapper' : ''}`}>
                 {isEditing ? (
                     <input 
-                        type={type}
+                        type={inputType} // 7. Usa o tipo dinâmico
                         name={name}
                         value={valor}
                         onChange={onChange}
                         className="campo-input"
+                        // Mantém a lógica de 'size' original
                         size={valor.length > 35 ? valor.length : 35}
                     />
                 ) : (
-                    <span className="campo-texto">{valor}</span>
+                    <span className="campo-texto">{displayValue}</span> // 8. Usa o valor dinâmico
+                )}
+                
+                {/* 9. Renderiza o ícone se for o campo de senha */}
+                {isPasswordField && (
+                    <img
+                        src={isPasswordVisible ? eyeclosed : eye}
+                        alt={isPasswordVisible ? "Ocultar senha" : "Mostrar senha"}
+                        className="password-toggle-icon"
+                        onClick={togglePasswordVisibility}
+                    />
                 )}
             </div>
         </div>
@@ -100,9 +133,6 @@ function MeuPerfilEmpresaPage() {
                             className="perfil-imagem" 
                         />
                         
-                        {/* * MUDANÇA APLICADA AQUI: 
-                          * O <label> e o <input> só aparecem se isEditing for true 
-                        */}
                         {isEditing && (
                             <>
                                 <label htmlFor="file-upload" className="editar-foto-label">
@@ -134,7 +164,7 @@ function MeuPerfilEmpresaPage() {
                             valor={formData.senha}
                             isEditing={isEditing}
                             onChange={handleChange}
-                            type="password"
+                            type="password" // O tipo inicial ainda é password
                         />
                         <PerfilCampo 
                             label="Endereço"
@@ -162,7 +192,7 @@ function MeuPerfilEmpresaPage() {
                             label="CNPJ"
                             name="cnpj"
                             valor={formData.cnpj}
-                            isEditing={isEditing} // Será ignorado, pois o CNPJ não é editável
+                            isEditing={isEditing} 
                             onChange={handleChange}
                         />
 

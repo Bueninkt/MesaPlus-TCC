@@ -113,7 +113,7 @@
 .campo-input {
     border: none;
     outline: dashed 1.5px var(--green-light);
-    background-color: transparent;
+    background-color: #12341f05;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     color: #333;
@@ -161,4 +161,44 @@
 
 .btn-atualizar:hover {
     filter: brightness(1.05);
+}
+
+
+/* --- CSS para Funcionalidade de Exibir/Ocultar Senha --- */
+
+/* 1. Torna o wrapper um container de posicionamento */
+.campo-valor-wrapper.password-field-wrapper {
+  position: relative;
+  /* Garante que o input/span se comporte como esperado dentro do wrapper */
+  /* (Pode precisar de ajustes dependendo do seu CSS original) */
+}
+
+/* 2. Estiliza o ícone de olho */
+.password-toggle-icon {
+  position: absolute;
+  right: 10px; /* Distância da borda direita do wrapper */
+  top: 50%;
+  transform: translateY(-50%); /* Centraliza verticalmente */
+  cursor: pointer;
+  width: 20px; /* Tamanho do ícone */
+  height: 20px; /* Tamanho do ícone */
+  z-index: 2; /* Garante que o ícone fique sobre o input */
+}
+
+/* 3. Adiciona espaço no input para o ícone não sobrepor o texto */
+.password-field-wrapper .campo-input {
+  /* Adiciona padding para o texto não ficar embaixo do ícone */
+  padding-right: 40px !important; /* (largura do ícone + espaçamento) */
+  
+  /* Essencial para que o padding seja absorvido sem aumentar a largura total 
+     baseada no 'size' do input. */
+  box-sizing: border-box; 
+}
+
+/* 4. Adiciona espaço no texto (modo visualização) */
+.password-field-wrapper .campo-texto {
+  /* Também precisa de padding caso a senha seja exibida no modo de visualização */
+  padding-right: 40px;
+  /* Garante que o box-sizing seja consistente */
+  box-sizing: border-box; 
 }
