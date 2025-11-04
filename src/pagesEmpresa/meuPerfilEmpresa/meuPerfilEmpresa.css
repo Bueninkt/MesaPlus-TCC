@@ -1,174 +1,164 @@
-/* Importações de fonte e :root da paleta (do seu global.css) */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
-:root {
-  --white: #ffffff;
-  --green-dark: #1B4227;
-  --beige: #FFF1D4;
-  --green-light: #B9CE5D;
+
+/* ===== Container da Página ===== */
+.perfil-pagina-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
 }
 
-/* Container principal da página */
-.meu-perfil-page-container {
-  background-color: var(--green-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+/* ===== Card Principal ===== */
+.perfil-card {
+    background-color: var(--beige);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap; /* Permite quebrar em telas menores */
+    gap: 2rem 3rem; /* Espaçamento entre foto e dados */
+    padding: 2.5rem;
+    max-width: 1000px;
+    width: 100%;
 }
 
-/* O card de perfil */
-.profile-card {
-  background-color: var(--beige);
-  border-radius: 25px;
-  padding: 40px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
-  width: 100%;
-}
-
-/* Container que segura o Ícone e o Grid */
-.profile-card-content {
-  display: flex;
-  align-items: flex-start;
-  /* Alinha o topo do ícone com o topo do grid */
-  gap: 40px;
-}
-
-.profile-icon-wrapper {
-  flex-shrink: 0;
-}
-
-.profile-icon {
-  width: 100px;
-  height: 100px;
-}
-
-/* --- CORREÇÃO DE ALINHAMENTO --- */
-
-.profile-info-grid {
-  flex: 1;
-  /* Ocupa o espaço restante */
-  display: grid;
-  /* Cria 2 colunas de tamanho igual (1fr) */
-  grid-template-columns: 1fr 1fr;
-
-  /* gap: [vertical] [horizontal] */
-  /* Define o espaço vertical (30px) e horizontal (50px) entre os itens */
-  gap: 30px 50px;
-
-  min-width: 0;
-
-  /* * CORREÇÃO 1: MUDANÇA DE 'start' PARA 'end'
-     * Isso alinha os itens do grid pela base (pelo fim).
-     * Como o <hr> é o último elemento em cada .info-item, 
-     * isso forçará que todas as linhas <hr> fiquem na mesma altura vertical.
-    */
-  align-items: end;
-}
-
-/* Título (MC Donald's) */
-.info-item h1.profile-name {
-  font-size: 2.1rem;
-  font-weight: 600;
-  color: var(--green-dark);
-  line-height: 1.3;
-  margin: 0;
-}
-
-/* Todos os outros parágrafos de info */
-.info-item p {
-  font-size: 0.95rem;
-  color: var(--green-dark);
-  line-height: 1.4;
-  margin: 0;
-  word-break: break-word;
-}
-
-.info-item p strong {
-  font-weight: 600;
-}
-
-/* Divisores (linhas horizontais) */
-.info-divider {
-  border: 0;
-  height: 1.5px;
-  background-color: var(--green-dark);
-  opacity: 0.4;
-  margin-top: 8px;
-  /* Espaço entre o texto e a linha */
-
-  /* * CORREÇÃO 2: ADIÇÃO DE 'width: 100%'
-     * Isso força a linha a ocupar 100% da largura da coluna do grid,
-     * resolvendo o problema da linha "Senha" ser mais curta.
-    */
-  width: 100%;
-}
-
-/* Rodapé do Card (Botões) */
-.profile-card-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 35px;
-  /* Espaço acima dos botões */
-}
-
-/* Estilo base dos botões */
-.btn {
-  border: none;
-  border-radius: 20px;
-  padding: 8px 22px;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s ease-in-out;
-}
-
-/* Botão Secundário (Editar Perfil) */
-.btn-secondary {
-  background-color: var(--white);
-  color: var(--green-dark);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  text-transform: capitalize;
-  /* "Editar Perfil" */
-}
-
-/* Botão Primário (Atualizar) */
-.btn-primary {
-  background-color: var(--green-light);
-  color: var(--green-dark);
-  text-transform: lowercase;
-  /* "atualizar" como na imagem */
-}
-
-
-/* ===== RESPONSIVIDADE ===== */
-@media (max-width: 768px) {
-  .profile-card-content {
+/* ===== Seção da Foto (Coluna Esquerda) ===== */
+.perfil-foto-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-  }
+    gap: 1rem;
+    flex-basis: 200px; /* Largura base da coluna da foto */
+    flex-grow: 1;
+}
 
-  .profile-info-grid {
-    grid-template-columns: 1fr;
-    /* Coluna única */
-    gap: 20px;
-    width: 100%;
-    align-items: normal;
-    /* Reseta o alinhamento para o padrão */
-  }
+.perfil-imagem {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
-  .info-item h1.profile-name {
-    text-align: center;
-    /* Centraliza o nome */
-  }
+.editar-foto-label {
+    color: var(--green-dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
 
-  .profile-card-footer {
+.editar-foto-label:hover {
+    opacity: 0.7;
+}
+
+.file-input-hidden {
+    display: none;
+}
+
+/* ===== Seção dos Dados (Coluna Direita) ===== */
+.perfil-dados-container {
+    flex-basis: 500px; /* Largura base da coluna de dados */
+    flex-grow: 9;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem 2.5rem; /* gap de linha e coluna */
+}
+
+/* ===== Campos Individuais (Label + Valor) ===== */
+.campo-container {
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
-    /* Botões ocupam 100% */
-  }
+    gap: 0.25rem;
+    min-width: 0; /* Essencial para o overflow funcionar em flex/grid */
+}
+
+.campo-label {
+    font-weight: 600;
+    color: var(--green-dark-2);
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+/* ===== O CONTÊINER COM ROLAGEM (A MÁGICA) ===== */
+.campo-valor-wrapper {
+    overflow-x: auto; /* 'auto' é melhor que 'scroll' (só aparece se precisar) */
+    padding-bottom: 8px; /* Espaço para a barra de rolagem não colar */
+    border-bottom: 2px solid var(--green-dark-2);
+
+    /* Estilização da barra de rolagem (WebKit) */
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--green-light);
+        border-radius: 10px;
+    }
+    /* Estilização da barra de rolagem (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-light) rgba(0, 0, 0, 0.05);
+}
+
+/* Texto no modo de visualização */
+.campo-texto {
+    display: block; /* Garante que o span ocupe o espaço */
+    white-space: nowrap; /* Impede a quebra de linha */
+    color: #333;
+    font-size: 1rem;
+    padding: 0.25rem 0; /* Alinha altura com o input */
+}
+
+/* Input no modo de edição */
+.campo-input {
+    border: none;
+    outline: dashed 1.5px var(--green-light);
+    background-color: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #333;
+    min-width: 100%;
+    padding: 0.25rem 0;
+    /* O próprio input terá rolagem interna se o texto for muito longo */
+}
+
+/* ===== Botões ===== */
+.perfil-botoes {
+    grid-column: 1 / -1; /* Ocupa todas as colunas do grid */
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-editar, .btn-atualizar {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-editar {
+    background-color: var(--white);
+    color: var(--green-dark);
+    border: 1px solid var(--green-dark);
+}
+
+.btn-editar:hover {
+    background-color: #f7f7f7;
+}
+
+.btn-atualizar {
+    background-color: var(--green-light);
+    color: var(--green-dark-2);
+    border: 1px solid var(--green-light);
+}
+
+.btn-atualizar:hover {
+    filter: brightness(1.05);
 }
