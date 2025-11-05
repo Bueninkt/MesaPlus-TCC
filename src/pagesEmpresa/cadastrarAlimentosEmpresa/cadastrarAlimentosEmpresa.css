@@ -190,13 +190,13 @@
 
 .form-group.foto {
   flex-grow: 1;
+  max-height: 360px;
 }
 
 /* Estilos para o .foto-dropzone */
 .foto-dropzone {
   margin-bottom: 5px;
-  min-height: 150px;
-  height: 95%;
+  height: 93%;
   width: 100%;
   border: 2px dashed var(--green-dark);
   border-radius: 8px;

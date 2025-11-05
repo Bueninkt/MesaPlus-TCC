@@ -556,7 +556,7 @@ function CadastrarAlimentosEmpresaPage() {
                                             className="remove-preview-btn"
                                             onClick={handleRemovePreview}
                                         >
-                                        
+                                        &times;
                                         </button>
                                     )}
                                     {!previewUrl && (
