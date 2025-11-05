@@ -5,7 +5,7 @@ import './cadastrarAlimentosEmpresa.css';
 
 import logo from "../../assets/icons/mesaLogo.png";
 
-// --- Constantes do Azure ---
+// --- Constantes do Azure (sem alteração) ---
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
@@ -43,18 +43,17 @@ const validateField = (name, value) => {
             }
             return "";
 
-        // --- REMOVIDOS: "peso" e "quantidade" ---
-
-        // --- ADICIONADOS: Novos campos ---
-        case "valorMedida":
-            if (!value) return "Valor é obrigatório.";
+        // --- ALTERADO: "valorPeso" -> "peso" ---
+        case "peso":
+            if (!value) return "Peso é obrigatório.";
             const numValor = Number(value);
-            if (isNaN(numValor)) return "Valor deve ser um número.";
-            if (numValor <= 0) return "Valor deve ser maior que zero.";
+            if (isNaN(numValor)) return "Peso deve ser um número.";
+            if (numValor <= 0) return "Peso deve ser maior que zero.";
             return "";
 
-        case "idUnidadeSelecionada":
-            if (!value) return "Unidade de medida é obrigatória.";
+        // --- ALTERADO: "idUnidadeSelecionada" -> "idTipoPeso" ---
+        case "idTipoPeso":
+            if (!value) return "Tipo de peso é obrigatório.";
             return "";
 
         case "descricao":
@@ -80,26 +79,24 @@ function CadastrarAlimentosEmpresaPage() {
     // --- Estados para os campos do formulário (REFATORADOS) ---
     const [nome, setNome] = useState('');
     const [dataDeValidade, setDataDeValidade] = useState('');
-    // --- REMOVIDO: peso, setPeso ---
-    // --- REMOVIDO: quantidade, setQuantidade ---
     const [descricao, setDescricao] = useState('');
     const [imagem, setImagem] = useState('');
 
-    // --- ADICIONADO: Novos estados para Valor e Unidade ---
-    const [valorMedida, setValorMedida] = useState('');
-    const [listaUnidades, setListaUnidades] = useState([]);
-    const [idUnidadeSelecionada, setIdUnidadeSelecionada] = useState(null);
-    const [isUnidadeOpen, setIsUnidadeOpen] = useState(false);
-    const [unidadeInteracted, setUnidadeInteracted] = useState(false);
+    // --- REFATORADO: Novos estados para Valor e Tipo de Peso ---
+    const [peso, setPeso] = useState(''); // Era valorPeso
+    const [listaTiposPeso, setListaTiposPeso] = useState([]); // Era listaUnidades
+    const [idTipoPeso, setIdTipoPeso] = useState(null); // Era idUnidadeSelecionada
+    const [isTipoPesoOpen, setIsTipoPesoOpen] = useState(false); // Era isUnidadeOpen
+    const [tipoPesoInteracted, setTipoPesoInteracted] = useState(false); // Era unidadeInteracted
 
-    // --- Estados da UI (Categoria) ---
+    // --- Estados da UI (Categoria - sem alteração) ---
     const [listaCategorias, setListaCategorias] = useState([]);
     const [isCategoriaOpen, setIsCategoriaOpen] = useState(false);
     const [selectedCategorias, setSelectedCategorias] = useState({});
     const [mensagem, setMensagem] = useState('');
     const [categoriaInteracted, setCategoriaInteracted] = useState(false);
 
-    // --- Estados de Upload ---
+    // --- Estados de Upload (sem alteração) ---
     const [previewUrl, setPreviewUrl] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef(null);
@@ -108,9 +105,8 @@ function CadastrarAlimentosEmpresaPage() {
     const [errors, setErrors] = useState({
         nome: '',
         dataDeValidade: '',
-        // --- REMOVIDO: peso, quantidade ---
-        valorMedida: '', // --- ADICIONADO ---
-        idUnidadeSelecionada: '', // --- ADICIONADO ---
+        peso: '', // --- ALTERADO ---
+        idTipoPeso: '', // --- ALTERADO ---
         descricao: '',
         imagem: '',
         categorias: ''
@@ -152,26 +148,26 @@ function CadastrarAlimentosEmpresaPage() {
                 }
             } catch (error) {
                 console.error("Erro ao buscar categorias:", error);
-                setMensagem("Falha ao carregar categorias. Tente recarregar a página.");
+                setMensagem("Erro ao carregar categorias. Tente recarregar a página.");
             }
         };
         fetchCategorias();
     }, []);
 
-    // --- NOVO: useEffect para buscar Unidades de Medida ---
+    // --- REFATORADO: useEffect para buscar Tipos de Peso ---
     useEffect(() => {
-        const fetchUnidades = async () => {
+        const fetchTiposPeso = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/v1/mesa-plus/unidades-medida');
-                if (response.data && response.data.unidades) {
-                    setListaUnidades(response.data.unidades);
+                const response = await axios.get('http://localhost:8080/v1/mesa-plus/tipos-peso');
+                if (response.data && response.data.tiposPeso) {
+                    setListaTiposPeso(response.data.tiposPeso);
                 }
             } catch (error) {
-                console.error("Erro ao buscar unidades de medida:", error);
-                setMensagem("Erro: Falha ao carregar unidades. Tente recarregar a página.");
+                console.error("Erro ao buscar tipos de peso:", error);
+                setMensagem("Erro: Falha ao carregar tipos de peso. Tente recarregar a página.");
             }
         };
-        fetchUnidades();
+        fetchTiposPeso();
     }, []); // Roda apenas uma vez na montagem
 
     // --- useEffect para validar categorias (sem alteração) ---
@@ -186,15 +182,15 @@ function CadastrarAlimentosEmpresaPage() {
         }
     }, [isCategoriaOpen, selectedCategorias, listaCategorias, categoriaInteracted]);
 
-    // --- NOVO: useEffect para validar Unidade de Medida ---
+    // --- REFATORADO: useEffect para validar Tipo de Peso ---
     useEffect(() => {
-        if (unidadeInteracted && !isUnidadeOpen && listaUnidades.length > 0) {
-            const error = validateField('idUnidadeSelecionada', idUnidadeSelecionada);
-            setErrors(prev => ({ ...prev, idUnidadeSelecionada: error }));
+        if (tipoPesoInteracted && !isTipoPesoOpen && listaTiposPeso.length > 0) {
+            const error = validateField('idTipoPeso', idTipoPeso);
+            setErrors(prev => ({ ...prev, idTipoPeso: error }));
         }
-    }, [isUnidadeOpen, idUnidadeSelecionada, listaUnidades, unidadeInteracted]);
+    }, [isTipoPesoOpen, idTipoPeso, listaTiposPeso, tipoPesoInteracted]);
 
-    // --- Funções de Manipulação (Categoria) ---
+    // --- Funções de Manipulação (Categoria - sem alteração) ---
     const handleCategoriaChange = (event) => {
         const { id, checked } = event.target;
         setSelectedCategorias(prevState => ({
@@ -213,16 +209,16 @@ function CadastrarAlimentosEmpresaPage() {
             .join(', ');
     };
 
-    // --- NOVAS: Funções de Manipulação para Unidade de Medida ---
-    const handleUnidadeChange = (unidadeId) => {
-        setIdUnidadeSelecionada(unidadeId);
-        setIsUnidadeOpen(false); // Fecha o dropdown ao selecionar
+    // --- REFATORADO: Funções de Manipulação para Tipo de Peso ---
+    const handleTipoPesoChange = (tipoPesoId) => {
+        setIdTipoPeso(tipoPesoId);
+        setIsTipoPesoOpen(false); // Fecha o dropdown ao selecionar
     };
 
-    const getUnidadeDisplayText = () => {
-        if (!idUnidadeSelecionada) return 'Selecione uma unidade';
-        const selecionada = listaUnidades.find(u => u.id === idUnidadeSelecionada);
-        return selecionada ? selecionada.nome : 'Selecione uma unidade';
+    const getTipoPesoDisplayText = () => {
+        if (!idTipoPeso) return 'Selecione um tipo';
+        const selecionado = listaTiposPeso.find(u => u.id === idTipoPeso);
+        return selecionado ? selecionado.nome : 'Selecione um tipo';
     };
 
     // --- Funções para Upload (sem alteração) ---
@@ -272,7 +268,7 @@ function CadastrarAlimentosEmpresaPage() {
         setErrors(prev => ({ ...prev, imagem: 'A foto é obrigatória.' }));
     };
 
-    // --- Funções de Validação ---
+    // --- Funções de Validação (sem alteração) ---
     const handleBlur = (event) => {
         const { name, value } = event.target;
         const error = validateField(name, value);
@@ -288,9 +284,9 @@ function CadastrarAlimentosEmpresaPage() {
         const newErrors = {
             nome: validateField('nome', nome),
             dataDeValidade: validateField('dataDeValidade', dataDeValidade),
-            // --- REMOVIDO: peso, quantidade ---
-            valorMedida: validateField('valorMedida', valorMedida), // --- ADICIONADO ---
-            idUnidadeSelecionada: validateField('idUnidadeSelecionada', idUnidadeSelecionada), // --- ADICIONADO ---
+            // --- ALTERADO ---
+            peso: validateField('peso', peso),
+            idTipoPeso: validateField('idTipoPeso', idTipoPeso),
             descricao: validateField('descricao', descricao),
             imagem: validateField('imagem', imagem),
             categorias: validateField('categorias', categoriasSelecionadas)
@@ -299,7 +295,7 @@ function CadastrarAlimentosEmpresaPage() {
         return Object.values(newErrors).every(error => error === "");
     };
 
-    // --- SUBMISSÃO DO FORMULÁRIO (REFATORADO) ---
+    // --- SUBMISSÃO DO FORMULÁRIO (REFATORADO E CORRIGIDO) ---
     const handleSubmit = async (event) => {
 
         event.preventDefault();
@@ -311,7 +307,7 @@ function CadastrarAlimentosEmpresaPage() {
         }
 
         setCategoriaInteracted(true);
-        setUnidadeInteracted(true); // --- ADICIONADO ---
+        setTipoPesoInteracted(true); 
 
         if (!handleValidation()) {
             setMensagem("Por favor, corrija os erros no formulário.");
@@ -325,7 +321,7 @@ function CadastrarAlimentosEmpresaPage() {
             .filter(id => selectedCategorias[id] === true)
             .map(id => ({ id: Number(id) }));
 
-        // --- ALTERADO: O payload agora usa 'valorMedida' e 'idUnidadeSelecionada' ---
+        // --- Payload agora usa 'peso' e 'id_tipo_peso' ---
         const payload = {
             nome: nome,
             data_de_validade: dataDeValidade,
@@ -333,8 +329,8 @@ function CadastrarAlimentosEmpresaPage() {
             imagem: imagem,
             id_empresa: idEmpresa,
             categorias: categoriasFormatadas,
-            valor_medida: Number(valorMedida),
-            id_unidade_medida: idUnidadeSelecionada
+            peso: Number(peso), // --- ALTERADO ---
+            id_tipo_peso: idTipoPeso 
         }
         try {
             const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
@@ -344,20 +340,21 @@ function CadastrarAlimentosEmpresaPage() {
                 setMensagem('Alimento cadastrado com sucesso!');
                 setNome('');
                 setDataDeValidade('');
-                // --- REMOVIDO: setPeso, setQuantidade ---
-                // --- ADICIONADO ---
-                setValorMedida('');
-                setIdUnidadeSelecionada(null);
+                
+                // --- ALTERADO ---
+                setPeso('');
+                setIdTipoPeso(null);
 
                 setDescricao('');
                 setImagem('');
                 setPreviewUrl(null);
                 setSelectedCategorias({});
                 if (fileInputRef.current) fileInputRef.current.value = null;
+                
                 // --- ATUALIZADO: reset de erros ---
-                setErrors({ nome: '', dataDeValidade: '', valorMedida: '', idUnidadeSelecionada: '', descricao: '', imagem: '', categorias: '' });
+                setErrors({ nome: '', dataDeValidade: '', peso: '', idTipoPeso: '', descricao: '', imagem: '', categorias: '' });
                 setCategoriaInteracted(false);
-                setUnidadeInteracted(false); // --- ADICIONADO ---
+                setTipoPesoInteracted(false); 
             } else {
                 setMensagem(response.data.message || 'Ocorreu um erro ao cadastrar.');
             }
@@ -416,61 +413,61 @@ function CadastrarAlimentosEmpresaPage() {
                                     type="date"
                                     id="data_de_validade"
                                     name="dataDeValidade"
-                                    _ value={dataDeValidade}
+                                    value={dataDeValidade}
                                     onChange={(e) => setDataDeValidade(e.target.value)}
                                     onBlur={handleBlur}
                                 />
                                 <span className="validation-error">{errors.dataDeValidade}</span>
                             </fieldset>
 
-                            {/* --- LINHA REFATORADA (Peso e Quantidade -> Valor e Unidade) --- */}
+                            {/* --- LINHA REFATORADA (Peso e Tipo de Peso) --- */}
                             <div className="form-row">
-                                {/* --- CAMPO "VALOR" ADICIONADO --- */}
+                                {/* --- CAMPO "PESO" ADICIONADO --- */}
                                 <fieldset className="form-group">
-                                    <legend>valor de Medida:</legend>
+                                    <legend>Peso:</legend> 
                                     <input
                                         type="number"
-                                        name="valorMedida"
-                                        value={valorMedida}
+                                        name="peso" // --- ALTERADO ---
+                                        value={peso} // --- ALTERADO ---
                                         onChange={(e) => {
                                             if (e.target.value.length <= 5) {
-                                                setValorMedida(e.target.value);
+                                                setPeso(e.target.value); // --- ALTERADO ---
                                             }
                                         }}
                                         onBlur={handleBlur}
                                     />
-                                    <span className="validation-error">{errors.valorMedida}</span>
+                                    <span className="validation-error">{errors.peso}</span> {/* --- ALTERADO --- */}
                                 </fieldset>
 
-                                {/* --- CAMPO "UNIDADE" CUSTOMIZADO ADICIONADO --- */}
+                                {/* --- CAMPO "TIPO DE PESO" CUSTOMIZADO ADICIONADO --- */}
                                 <fieldset
                                     className="form-group categoria-custom-select"
                                     onClick={() => {
-                                        setIsUnidadeOpen(!isUnidadeOpen);
-                                        setUnidadeInteracted(true);
+                                        setIsTipoPesoOpen(!isTipoPesoOpen); 
+                                        setTipoPesoInteracted(true); 
                                     }}
                                 >
-                                    <legend>Unidade de Medida:</legend>
+                                    <legend>Tipo de Peso:</legend> 
                                     <div className="categoria-select-header" style={{ cursor: 'pointer' }}>
                                         <span className="categoria-display-text">
-                                            {getUnidadeDisplayText()}
+                                            {getTipoPesoDisplayText()} 
                                         </span>
-                                        <div className={`dropdown-arrow ${isUnidadeOpen ? 'open' : ''}`}></div>
+                                        <div className={`dropdown-arrow ${isTipoPesoOpen ? 'open' : ''}`}></div> 
                                     </div>
 
-                                    {isUnidadeOpen && (
+                                    {isTipoPesoOpen && ( 
                                         <div
                                             className="categoria-dropdown-list"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            {listaUnidades.length > 0 ? (
-                                                listaUnidades.map((unidade) => (
+                                            {listaTiposPeso.length > 0 ? ( 
+                                                listaTiposPeso.map((tipoPeso) => ( 
                                                     <div
-                                                        className="unidade-dropdown-item"
-                                                        key={unidade.id}
-                                                        onClick={() => handleUnidadeChange(unidade.id)}
+                                                        className="unidade-dropdown-item" 
+                                                        key={tipoPeso.id} 
+                                                        onClick={() => handleTipoPesoChange(tipoPeso.id)} 
                                                     >
-                                                        {unidade.nome}
+                                                        {tipoPeso.nome} 
                                                     </div>
                                                 ))
                                             ) : (
@@ -478,7 +475,7 @@ function CadastrarAlimentosEmpresaPage() {
                                             )}
                                         </div>
                                     )}
-                                    <span className="validation-error">{errors.idUnidadeSelecionada}</span>
+                                    <span className="validation-error">{errors.idTipoPeso}</span> 
                                 </fieldset>
                             </div>
                             {/* --- FIM DA LINHA REFATORADA --- */}
@@ -496,7 +493,7 @@ function CadastrarAlimentosEmpresaPage() {
                             </fieldset>
                         </div>
 
-                        {/* Coluna da Direita (Foto e Categoria) */}
+                        {/* Coluna da Direita (Foto e Categoria - sem alteração) */}
                         <div className="form-right-column">
                             <fieldset className="form-group foto">
                                 <legend>
@@ -524,17 +521,17 @@ function CadastrarAlimentosEmpresaPage() {
                                             className="remove-preview-btn"
                                             onClick={handleRemovePreview}
                                         >
-                                      
+                                          
                                         </button>
                                     )}
                                     {!previewUrl && (
                                         <div className="upload-placeholder">
-                                        {isUploading ? 'Enviando...' : 'Clique para adicionar foto'}
+                                            {isUploading ? 'Enviando...' : 'Clique para adicionar foto'}
                                         </div>
                                     )}
                                 </div>
                                 <span className="validation-error">{errors.imagem}</span>
-                                       </fieldset>
+                                     </fieldset>
 
                             <fieldset
                                 className="form-group categoria-custom-select"
@@ -576,12 +573,12 @@ function CadastrarAlimentosEmpresaPage() {
                         </div>
                     </div>
 
-                    {/* Mensagem de Feedback */}
+                    {/* Mensagem de Feedback (sem alteração) */}
                     {mensagem && (
                         <p className={`
-                                    feedback-message 
-                                    ${mensagem.startsWith('Erro') || mensagem.startsWith('Por favor') ? 'error' : 'success'}
-                                `}>
+                                 feedback-message 
+                                 ${mensagem.startsWith('Erro') || mensagem.startsWith('Por favor') ? 'error' : 'success'}
+                               `}>
                             {mensagem}
                         </p>
                     )}

@@ -202,3 +202,30 @@
   /* Garante que o box-sizing seja consistente */
   box-sizing: border-box; 
 }
+
+/* Estilo para mensagens de erro dos campos */
+.campo-erro {
+    color: #D8000C; /* Vermelho escuro */
+    font-size: 0.8rem;
+    padding-left: 5px; /* Alinha com o início do input/texto */
+    margin-top: 2px;
+    display: block; /* Garante que ocupe a própria linha */
+    text-align: left; /* Garante alinhamento à esquerda */
+    font-weight: 500;
+}
+
+/* Estilo para a mensagem de erro da foto */
+.campo-erro-foto {
+    color: #D8000C;
+    font-size: 0.85rem;
+    text-align: center;
+    display: block;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Adiciona uma borda vermelha ao input com erro */
+.campo-input.input-error {
+    border-bottom: 2px solid #D8000C;
+}
+
