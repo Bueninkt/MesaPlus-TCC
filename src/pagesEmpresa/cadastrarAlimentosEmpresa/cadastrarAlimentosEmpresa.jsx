@@ -15,14 +15,14 @@ const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=
 const uploadParaAzure = async (file, idEmpresa) => {
     const idUsuario = idEmpresa || 'id_desconhecido';
     const blobName = `${idUsuario}_${Date.now()}_${file.name}`;
-    const url = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
+    const url = `https://$${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
     const res = await fetch(url, {
         method: 'PUT',
         headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': file.type },
         body: file
     });
     if (!res.ok) throw new Error(`Azure retornou status ${res.status}`);
-    return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
+    return `https://$${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
 // --- Função de Validação (REFATORADA) ---
@@ -55,6 +55,15 @@ const validateField = (name, value) => {
         case "idTipoPeso":
             if (!value) return "Tipo de peso é obrigatório.";
             return "";
+        
+        // --- ADICIONADO: Validação de Quantidade ---
+        case "quantidade":
+            if (!value) return "Quantidade é obrigatória.";
+            const numQtde = Number(value);
+            if (isNaN(numQtde)) return "Quantidade deve ser um número.";
+            if (!Number.isInteger(numQtde)) return "Quantidade deve ser um número inteiro.";
+            if (numQtde <= 0) return "Quantidade deve ser maior que zero.";
+            return "";
 
         case "descricao":
             if (!value) return "Descrição é obrigatória.";
@@ -81,6 +90,7 @@ function CadastrarAlimentosEmpresaPage() {
     const [dataDeValidade, setDataDeValidade] = useState('');
     const [descricao, setDescricao] = useState('');
     const [imagem, setImagem] = useState('');
+    const [quantidade, setQuantidade] = useState(''); // --- ADICIONADO ---
 
     // --- REFATORADO: Novos estados para Valor e Tipo de Peso ---
     const [peso, setPeso] = useState(''); // Era valorPeso
@@ -107,6 +117,7 @@ function CadastrarAlimentosEmpresaPage() {
         dataDeValidade: '',
         peso: '', // --- ALTERADO ---
         idTipoPeso: '', // --- ALTERADO ---
+        quantidade: '', // --- ADICIONADO ---
         descricao: '',
         imagem: '',
         categorias: ''
@@ -287,6 +298,7 @@ function CadastrarAlimentosEmpresaPage() {
             // --- ALTERADO ---
             peso: validateField('peso', peso),
             idTipoPeso: validateField('idTipoPeso', idTipoPeso),
+            quantidade: validateField('quantidade', quantidade), // --- ADICIONADO ---
             descricao: validateField('descricao', descricao),
             imagem: validateField('imagem', imagem),
             categorias: validateField('categorias', categoriasSelecionadas)
@@ -307,7 +319,7 @@ function CadastrarAlimentosEmpresaPage() {
         }
 
         setCategoriaInteracted(true);
-        setTipoPesoInteracted(true); 
+        setTipoPesoInteracted(true);
 
         if (!handleValidation()) {
             setMensagem("Por favor, corrija os erros no formulário.");
@@ -330,7 +342,8 @@ function CadastrarAlimentosEmpresaPage() {
             id_empresa: idEmpresa,
             categorias: categoriasFormatadas,
             peso: Number(peso), // --- ALTERADO ---
-            id_tipo_peso: idTipoPeso 
+            id_tipo_peso: idTipoPeso,
+            quantidade: Number(quantidade) // --- ADICIONADO ---
         }
         try {
             const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
@@ -340,21 +353,22 @@ function CadastrarAlimentosEmpresaPage() {
                 setMensagem('Alimento cadastrado com sucesso!');
                 setNome('');
                 setDataDeValidade('');
-                
+
                 // --- ALTERADO ---
                 setPeso('');
                 setIdTipoPeso(null);
+                setQuantidade(''); // --- ADICIONADO ---
 
                 setDescricao('');
                 setImagem('');
                 setPreviewUrl(null);
                 setSelectedCategorias({});
                 if (fileInputRef.current) fileInputRef.current.value = null;
-                
+
                 // --- ATUALIZADO: reset de erros ---
-                setErrors({ nome: '', dataDeValidade: '', peso: '', idTipoPeso: '', descricao: '', imagem: '', categorias: '' });
+                setErrors({ nome: '', dataDeValidade: '', peso: '', idTipoPeso: '', quantidade: '', descricao: '', imagem: '', categorias: '' });
                 setCategoriaInteracted(false);
-                setTipoPesoInteracted(false); 
+                setTipoPesoInteracted(false);
             } else {
                 setMensagem(response.data.message || 'Ocorreu um erro ao cadastrar.');
             }
@@ -424,7 +438,7 @@ function CadastrarAlimentosEmpresaPage() {
                             <div className="form-row">
                                 {/* --- CAMPO "PESO" ADICIONADO --- */}
                                 <fieldset className="form-group">
-                                    <legend>Peso:</legend> 
+                                    <legend>Peso:</legend>
                                     <input
                                         type="number"
                                         name="peso" // --- ALTERADO ---
@@ -443,31 +457,31 @@ function CadastrarAlimentosEmpresaPage() {
                                 <fieldset
                                     className="form-group categoria-custom-select"
                                     onClick={() => {
-                                        setIsTipoPesoOpen(!isTipoPesoOpen); 
-                                        setTipoPesoInteracted(true); 
+                                        setIsTipoPesoOpen(!isTipoPesoOpen);
+                                        setTipoPesoInteracted(true);
                                     }}
                                 >
-                                    <legend>Tipo de Peso:</legend> 
+                                    <legend>Tipo de Peso:</legend>
                                     <div className="categoria-select-header" style={{ cursor: 'pointer' }}>
                                         <span className="categoria-display-text">
-                                            {getTipoPesoDisplayText()} 
+                                            {getTipoPesoDisplayText()}
                                         </span>
-                                        <div className={`dropdown-arrow ${isTipoPesoOpen ? 'open' : ''}`}></div> 
+                                        <div className={`dropdown-arrow ${isTipoPesoOpen ? 'open' : ''}`}></div>
                                     </div>
 
-                                    {isTipoPesoOpen && ( 
+                                    {isTipoPesoOpen && (
                                         <div
                                             className="categoria-dropdown-list"
                                             onClick={(e) => e.stopPropagation()}
                                         >
-                                            {listaTiposPeso.length > 0 ? ( 
-                                                listaTiposPeso.map((tipoPeso) => ( 
+                                            {listaTiposPeso.length > 0 ? (
+                                                listaTiposPeso.map((tipoPeso) => (
                                                     <div
-                                                        className="unidade-dropdown-item" 
-                                                        key={tipoPeso.id} 
-                                                        onClick={() => handleTipoPesoChange(tipoPeso.id)} 
+                                                        className="unidade-dropdown-item"
+                                                        key={tipoPeso.id}
+                                                        onClick={() => handleTipoPesoChange(tipoPeso.id)}
                                                     >
-                                                        {tipoPeso.nome} 
+                                                        {tipoPeso.nome}
                                                     </div>
                                                 ))
                                             ) : (
@@ -475,7 +489,7 @@ function CadastrarAlimentosEmpresaPage() {
                                             )}
                                         </div>
                                     )}
-                                    <span className="validation-error">{errors.idTipoPeso}</span> 
+                                    <span className="validation-error">{errors.idTipoPeso}</span>
                                 </fieldset>
                             </div>
                             {/* --- FIM DA LINHA REFATORADA --- */}
@@ -491,6 +505,27 @@ function CadastrarAlimentosEmpresaPage() {
                                 ></textarea>
                                 <span className="validation-error">{errors.descricao}</span>
                             </fieldset>
+
+                            {/* --- CAMPO QUANTIDADE ADICIONADO --- */}
+                            <fieldset className="form-group">
+                                <legend>Quantidade:</legend>
+                                <input
+                                    type="number"
+                                    name="quantidade"
+                                    value={quantidade}
+                                    onChange={(e) => {
+                                        // Limita a entrada a 5 dígitos e remove não-inteiros
+                                        const val = e.target.value.replace(/[^0-9]/g, '');
+                                        if (val.length <= 5) {
+                                            setQuantidade(val);
+                                        }
+                                    }}
+                                    onBlur={handleBlur}
+                                    step="1" // Garante que os botões de seta do navegador pulem de 1 em 1
+                                />
+                                <span className="validation-error">{errors.quantidade}</span>
+                            </fieldset>
+                            
                         </div>
 
                         {/* Coluna da Direita (Foto e Categoria - sem alteração) */}
@@ -521,7 +556,7 @@ function CadastrarAlimentosEmpresaPage() {
                                             className="remove-preview-btn"
                                             onClick={handleRemovePreview}
                                         >
-                                          
+                                        
                                         </button>
                                     )}
                                     {!previewUrl && (
@@ -531,7 +566,7 @@ function CadastrarAlimentosEmpresaPage() {
                                     )}
                                 </div>
                                 <span className="validation-error">{errors.imagem}</span>
-                                     </fieldset>
+                                    </fieldset>
 
                             <fieldset
                                 className="form-group categoria-custom-select"
@@ -576,9 +611,9 @@ function CadastrarAlimentosEmpresaPage() {
                     {/* Mensagem de Feedback (sem alteração) */}
                     {mensagem && (
                         <p className={`
-                                 feedback-message 
-                                 ${mensagem.startsWith('Erro') || mensagem.startsWith('Por favor') ? 'error' : 'success'}
-                               `}>
+                                feedback-message 
+                                ${mensagem.startsWith('Erro') || mensagem.startsWith('Por favor') ? 'error' : 'success'}
+                                `}>
                             {mensagem}
                         </p>
                     )}
