@@ -11,7 +11,7 @@ import eyeclosed from "../../assets/icons/eye-closed.png";
 const mockProfileData = {
     nome: "MC Donald's",
     senha: "Mcdonals@157", 
-    endereco: "Rua Teste, 2000 - Jardim Teste, um lugar muito distante com um nome de rua muito longo",
+    endereco: "Rua Teste, 2000 - Jardim Tte, um lugar muito distante com um nome de rua muito longo",
     email: "mcdonals@gmail.com",
     telefone: "(11) 97890-0009",
     cnpj: "05.311.244/0001-09"
