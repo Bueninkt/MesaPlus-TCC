@@ -141,12 +141,14 @@
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+
 }
 
 .btn-editar {
     background-color: var(--white);
     color: var(--green-dark);
-    border: 1px solid var(--green-dark);
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
 
 .btn-editar:hover {
