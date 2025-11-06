@@ -169,9 +169,9 @@ function CadastrarAlimentosEmpresaPage() {
     useEffect(() => {
         const fetchTiposPeso = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/v1/mesa-plus/tipos-peso');
-                if (response.data && response.data.tiposPeso) {
-                    setListaTiposPeso(response.data.tiposPeso);
+                const response = await axios.get('http://localhost:8080/v1/mesa-plus/tipoPeso');
+                if (response.data && response.data.tipos) {
+                    setListaTiposPeso(response.data.tipos);
                 }
             } catch (error) {
                 console.error("Erro ao buscar tipos de peso:", error);
@@ -229,7 +229,7 @@ function CadastrarAlimentosEmpresaPage() {
     const getTipoPesoDisplayText = () => {
         if (!idTipoPeso) return 'Selecione um tipo';
         const selecionado = listaTiposPeso.find(u => u.id === idTipoPeso);
-        return selecionado ? selecionado.nome : 'Selecione um tipo';
+        return selecionado ? selecionado.tipo: 'Selecione um tipo';
     };
 
     // --- Funções para Upload (sem alteração) ---
@@ -481,7 +481,7 @@ function CadastrarAlimentosEmpresaPage() {
                                                         key={tipoPeso.id}
                                                         onClick={() => handleTipoPesoChange(tipoPeso.id)}
                                                     >
-                                                        {tipoPeso.nome}
+                                                        {tipoPeso.tipo}
                                                     </div>
                                                 ))
                                             ) : (
