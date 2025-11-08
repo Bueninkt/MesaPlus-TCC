@@ -6,9 +6,9 @@ import './cadastrarAlimentosEmpresa.css';
 import logo from "../../assets/icons/mesaLogo.png";
 
 // --- Constantes do Azure (sem alteração) ---
-const AZURE_ACCOUNT = 'mesapluspj';
+const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
-const SAS_TOKEN = 'sp=racwl&st=2025-11-06T17:42:52Z&se=2025-11-28T01:57:52Z&sv=2024-11-04&sr=c&sig=zxBfzgzVJXveHPfnw4r5G%2FG2NtfkPJ66NBUO6UVu9jY%3D'
+const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D'
 
 
 // --- Função de Upload (sem alteração) ---
@@ -22,7 +22,7 @@ const uploadParaAzure = async (file, idEmpresa) => {
         body: file
     });
     if (!res.ok) throw new Error(`Azure retornou status ${res.status}`);
-    return `https://$${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
+    return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
 // --- Função de Validação (REFATORADA) ---
