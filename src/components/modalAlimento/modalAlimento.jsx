@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import './ModalAlimento.css'; // CSS específico para o modal
 
 function ModalAlimento({ alimento, onClose }) {
