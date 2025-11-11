@@ -1,0 +1,80 @@
+/* Estilo do Card (Bege)
+   Usa as variáveis do seu global.css (ex: --beige, --green-dark)
+*/
+
+.card-container {
+    display: flex;
+    cursor: pointer;
+    gap: 15px; /* Espaço entre imagem, info e qnt */
+    /* Cores do seu global.css */
+    background-color: var(--beige); 
+    border-radius: 12px;
+    padding: 10px 15px;
+    height: 159px;
+    width: 95%;
+    transition: all 0.3s ease;
+}
+
+/* Efeito de foco/hover (como na 2ª imagem que você mandou) */
+.card-container:hover {
+    border-color: var(--green-light, #B9CE5D); /* Usa o verde-claro para o hover */
+    /* Você pode adicionar um 'box-shadow' se quiser */
+    /* box-shadow: 0 0 10px rgba(185, 206, 93, 0.5); */
+    transform: translateY(-2px); /* Efeito leve de "levantar" */
+}
+
+/* 1. Imagem (Esquerda) */
+.imagem-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.imagem-container img {
+    width:  125px;
+    height: 130px;
+  
+}
+
+/* 2. Informações (Centro) */
+.info-container {
+    flex-grow: 1; /* Ocupa o espaço restante */
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-container h3 {
+    font-size: 1.8rem; /* 18px */
+    font-weight: 600;
+    /* Usa o tom mais escuro para o título (do seu global.css) */
+    color: var(--green-dark-2, #12341F); 
+}
+
+.info-container p {
+    font-size: 1rem; /* 14px */
+}
+
+.empresa-info {
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    margin-top: 4px;
+}
+
+.empresa-info img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.empresa-info span {
+    font-size: 1.0em;
+}
+
+/* 3. Quantidade (Direita) */
+.quantidade-container {
+    flex-shrink: 0; 
+    font-size: 1.2rem;
+    font-weight: 500;
+}

@@ -1,14 +1,56 @@
-// Arquivo: AlimentoCard.js (Corrigido)
-
 import React from 'react';
-import './alimentoCard.css'; // (CSS que você já tem)
+import './alimentoCard.css'; // Importa o CSS do card
 
+function AlimentoCard({ alimento }) {
 
+    // Formata a data de "AAAA-MM-DDTHH:mm:ss.sssZ" para "DD/MM/AA"
+    const formatarData = (dataISO) => {
+        try {
+            const [dataParte] = dataISO.split('T'); // Pega "AAAA-MM-DD"
+            const [ano, mes, dia] = dataParte.split('-');
+            return `${dia}/${mes}/${ano.slice(-2)}`; // Retorna "DD/MM/AA"
+        } catch (e) {
+            console.error("Erro ao formatar data:", dataISO, e);
+            return "Data inválida";
+        }
+    };
 
-function AlimentoCard() {
+    const prazoFormatado = formatarData(alimento.data_de_validade);
+
+    // Assume que 'alimento.empresa.logo_url' é o campo para a logo (ex: Atacadão)
+    // Se o nome do campo for outro (ex: 'logo'), ajuste em 'src' abaixo
+    
     return (
-        <>
-        </>
+        <div className="card-container">
+            
+            {/* 1. Imagem (Esquerda) */}
+            <div className="imagem-container">
+                <img src={alimento.imagem} alt={`Imagem de ${alimento.nome}`} />
+            </div>
+
+            {/* 2. Informações (Centro) */}
+            <div className="info-container">
+                <h3>{alimento.nome}</h3>
+                <p>Prazo: {prazoFormatado}</p>
+                
+                {/* Só renderiza se a info da empresa existir */}
+                {alimento.empresa && (
+                    <div className="empresa-info">
+                        <img 
+                            src={alimento.empresa.logo_url} // Ajuste este campo se necessário
+                            alt={`Logo ${alimento.empresa.nome}`} 
+                        />
+                        <span>{alimento.empresa.nome}</span>
+                    </div>
+                )}
+            </div>
+            
+            {/* 3. Quantidade (Direita) */}
+            <div className="quantidade-container">
+                <p>Qnt: {alimento.quantidade}</p>
+            </div>
+
+        </div>
     );
 }
 
