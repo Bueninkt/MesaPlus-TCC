@@ -371,7 +371,6 @@ function MeuPerfilEmpresaPage() {
                             label="CNPJ"
                             name="cnpj"
                             valor={formData.cnpj}
-                            isEditing={isEditing} 
                             onChange={handleChange}
                             error={errors.cnpj}
                         />
