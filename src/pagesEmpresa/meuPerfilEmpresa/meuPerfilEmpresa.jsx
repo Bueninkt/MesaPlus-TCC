@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './MeuPerfilEmpresa.css';
 import NavbarEmpresa from '../../components/navbarEmpresa/navbarEmpresa';
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
-
+import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 // 1. Imports dos ícones adicionados
 import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
@@ -11,7 +11,7 @@ import eyeclosed from "../../assets/icons/eye-closed.png";
 const mockProfileData = {
     nome: "MC Donald's",
     senha: "Mcdonals@157", 
-    endereco: "Rua Teste, 2000 - Jardim Tte, um lugar muito distante com um nome de rua muito longo",
+    endereco: "",
     email: "mcdonals@gmail.com",
     telefone: "(11) 97890-0009",
     cnpj: "05.311.244/0001-09"
@@ -391,11 +391,17 @@ function MeuPerfilEmpresaPage() {
                             </button>
                         </div>
                     </div>
-
+                                    
                 </div>
             </div>
+
+
+                        
         </>
     );
+
+
+    
 }
 
 export default MeuPerfilEmpresaPage;

@@ -1,15 +1,39 @@
-import React from 'react'
-import './ModalAlimento.css'; // CSS específico para o modal
+import React, { useState } from 'react'; // Adicionei useState para gerenciar a quantidade
+import './ModalAlimento.css'; 
+
+// Importações dos ícones (Assumindo que eles estão no caminho: ../../assets/icons/)
+import cart from "../../assets/icons/cart.png";
+import menos from "../../assets/icons/menos.png";
+import mais from "../../assets/icons/mais.png";
 
 function ModalAlimento({ alimento, onClose }) {
 
-    // Formata a data para "DD/MM/AAAA" (como na imagem de referência)
+    // Estado local para a quantidade a ser adicionada ao carrinho
+    const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1); 
+
+    // Limite máximo é a quantidade disponível do alimento
+    const quantidadeDisponivel = alimento.quantidade || 0; 
+
+    // Funções para manipular a quantidade
+    const handleIncrement = () => {
+        if (quantidadeSelecionada < quantidadeDisponivel) {
+            setQuantidadeSelecionada(prev => prev + 1);
+        }
+    };
+
+    const handleDecrement = () => {
+        if (quantidadeSelecionada > 1) { // Garante que a quantidade mínima seja 1
+            setQuantidadeSelecionada(prev => prev - 1);
+        }
+    };
+
+    // Formata a data para "DD/MM/AAAA"
     const formatarDataModal = (dataISO) => {
         if (!dataISO) return "Data inválida";
         try {
             const [dataParte] = dataISO.split('T'); 
             const [ano, mes, dia] = dataParte.split('-');
-            return `${dia}/${mes}/${ano}`; // Retorna "DD/MM/AAAA"
+            return `${dia}/${mes}/${ano}`; 
         } catch (e) {
             console.error("Erro ao formatar data:", dataISO, e);
             return "Data inválida";
@@ -18,47 +42,47 @@ function ModalAlimento({ alimento, onClose }) {
 
     const prazoFormatado = formatarDataModal(alimento.data_de_validade);
 
-    // Função para parar a propagação e não fechar o modal ao clicar dentro dele
     const handleModalClick = (e) => {
         e.stopPropagation();
     };
-
-    // Mapeia as categorias (garante que seja um array)
+    
     const categoriasTags = Array.isArray(alimento.categorias) ? alimento.categorias : [];
+    
+    const tipoPeso = alimento.tipoPeso && alimento.tipoPeso[0] ? alimento.tipoPeso[0].tipo : 'N/A';
+    const pesoCompleto = `${alimento.peso || 'N/A'} ${tipoPeso}`;
+
+    // Ação fictícia do carrinho (você implementará a lógica real depois)
+    const handleAddToCart = () => {
+        console.log(`Adicionando ${quantidadeSelecionada}x de ${alimento.nome} ao carrinho.`);
+        // Lógica de adição ao carrinho real aqui
+    };
 
     return (
-        // O Overlay que fecha o modal ao clicar
         <div className="modal-overlay" onClick={onClose}>
             
-            {/* O contêiner do modal que previne o fechamento */}
             <div className="modal-container" onClick={handleModalClick}>
                 
-                {/* Botão de Fechar */}
                 <button className="modal-close-button" onClick={onClose}>
-                    &times; {/* Um 'X' simples */}
+                    &times;
                 </button>
 
-                {/* Título */}
                 <header className="modal-header">
                     <h2>{alimento.nome}</h2>
                 </header>
 
-                {/* Corpo principal (dividido) */}
                 <main className="modal-body">
                     
-                    {/* Coluna da Imagem */}
                     <div className="modal-imagem-col">
                         <img src={alimento.imagem} alt={`Imagem de ${alimento.nome}`} />
                     </div>
 
-                    {/* Coluna de Informações */}
                     <div className="modal-info-col">
                         
                         {/* Bloco da Empresa */}
                         {alimento.empresa && (
                             <div className="modal-empresa-info">
                                 <img 
-                                    src={alimento.empresa.logo_url} 
+                                    src={alimento.empresa.foto || alimento.empresa.logo_url}
                                     alt={`Logo ${alimento.empresa.nome}`} 
                                 />
                                 <span>{alimento.empresa.nome}</span>
@@ -69,7 +93,8 @@ function ModalAlimento({ alimento, onClose }) {
                         <div className="modal-detalhes">
                             <h3>Detalhes</h3>
                             <p><strong>Data de Validade:</strong> {prazoFormatado}</p>
-                            <p><strong>Quantidade:</strong> {alimento.quantidade}</p>
+                            <p><strong>Quantidade Disponível:</strong> {quantidadeDisponivel}</p>
+                            <p><strong>Peso:</strong> {pesoCompleto}</p>
                         </div>
 
                         {/* Bloco de Descrição */}
@@ -80,17 +105,46 @@ function ModalAlimento({ alimento, onClose }) {
                     </div>
                 </main>
 
-                {/* Rodapé com Categorias */}
+                {/* Rodapé com Categorias e Carrinho */}
                 <footer className="modal-footer">
-                    <h3>Categoria</h3>
-                    <div className="tags-container">
-                        {categoriasTags.length > 0 ? (
-                            categoriasTags.map((cat, index) => (
-                                <span key={cat.id || index} className="tag">{cat.nome}</span>
-                            ))
-                        ) : (
-                            <span className="tag-none">Não categorizado</span>
-                        )}
+                    
+                    {/* Coluna da Categoria */}
+                    <div className="footer-col categoria-col">
+                        <h3>Categoria</h3>
+                        <div className="tags-container">
+                            {categoriasTags.length > 0 ? (
+                                categoriasTags.map((cat, index) => (
+                                    <span key={cat.id || index} className="tag">{cat.nome}</span>
+                                ))
+                            ) : (
+                                <span className="tag-none">Não categorizado</span>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Coluna do Carrinho (NOVO BLOCO) */}
+                    <div className="footer-col carrinho-col">
+                        <button className="add-to-cart-button" onClick={handleAddToCart}>
+                            <img src={cart} alt="Carrinho" className="cart-icon" />
+                            Adicionar ao carrinho
+                        </button>
+                        <div className="quantity-controls">
+                            <button 
+                                className="quantity-button" 
+                                onClick={handleDecrement}
+                                disabled={quantidadeSelecionada === 1} // Desabilita se for 1
+                            >
+                                <img src={menos} alt="Menos" />
+                            </button>
+                            <span className="quantity-display">{quantidadeSelecionada}</span>
+                            <button 
+                                className="quantity-button" 
+                                onClick={handleIncrement}
+                                disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0} // Desabilita se for o limite
+                            >
+                                <img src={mais} alt="Mais" />
+                            </button>
+                        </div>
                     </div>
                 </footer>
 
