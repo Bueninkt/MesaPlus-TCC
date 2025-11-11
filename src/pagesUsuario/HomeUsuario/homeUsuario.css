@@ -39,7 +39,8 @@
 .coluna-titulo {
     color: var(--white);
     font-weight: 600;
-    font-size: 1.75rem; 
+    font-size: 2.4rem; 
+    margin-top: 15px;
     margin-bottom: 0px;
 }
 
