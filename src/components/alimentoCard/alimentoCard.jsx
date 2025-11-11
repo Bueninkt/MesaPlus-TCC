@@ -1,7 +1,8 @@
 import React from 'react';
 import './alimentoCard.css'; // Importa o CSS do card
 
-function AlimentoCard({ alimento }) {
+// Recebe a nova prop 'onCardClick'
+function AlimentoCard({ alimento, onCardClick }) {
 
     // Formata a data de "AAAA-MM-DDTHH:mm:ss.sssZ" para "DD/MM/AA"
     const formatarData = (dataISO) => {
@@ -16,12 +17,10 @@ function AlimentoCard({ alimento }) {
     };
 
     const prazoFormatado = formatarData(alimento.data_de_validade);
-
-    // Assume que 'alimento.empresa.logo_url' é o campo para a logo (ex: Atacadão)
-    // Se o nome do campo for outro (ex: 'logo'), ajuste em 'src' abaixo
     
     return (
-        <div className="card-container">
+        // Adiciona o onClick e passa o 'alimento'
+        <div className="card-container" onClick={() => onCardClick(alimento)}>
             
             {/* 1. Imagem (Esquerda) */}
             <div className="imagem-container">

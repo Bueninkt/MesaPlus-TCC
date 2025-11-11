@@ -6,14 +6,13 @@ import Filtrar from "../../components/filtros/filtrar";
 import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 import Paginacao from '../../components/paginacaoCard/Paginacao';
 import CarrosselEmpresa from '../../components/carrosselEmpresa/carrosselEmpresa';
+import ModalAlimento from '../../components/modalAlimento/modalAlimento'; // <-- IMPORTADO
 
 // Importação do CSS da página
 import './HomeUsuario.css'; 
 
 function HomeUsuarioPage() {
     
-    // [Seus estados e lógicas de fetch/paginação permanecem os mesmos]
-    // ... (Estados, useEffect, renderContent)
     // Estados da API
     const [alimentos, setAlimentos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,7 +22,11 @@ function HomeUsuarioPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 4; 
 
-    // Lógica para buscar dados (sem alteração)
+    // ESTADOS DO MODAL (NOVOS)
+    const [modalOpen, setModalOpen] = useState(false);
+    const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
+
+    // Lógica para buscar dados (Seu useEffect original)
     useEffect(() => {
         const fetchAlimentos = async () => {
             try {
@@ -47,13 +50,24 @@ function HomeUsuarioPage() {
         fetchAlimentos();
     }, []); 
 
-    // LÓGICA PARA CALCULAR ITENS DA PÁGINA ATUAL (sem alteração)
+    // LÓGICA PARA CALCULAR ITENS DA PÁGINA ATUAL
     const totalPages = Math.ceil(alimentos.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentAlimentos = alimentos.slice(startIndex, endIndex);
 
-    // Função auxiliar para renderizar o conteúdo da direita (sem alteração)
+    // FUNÇÕES DO MODAL (NOVAS)
+    const handleCardClick = (alimento) => {
+        setAlimentoSelecionado(alimento);
+        setModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setAlimentoSelecionado(null);
+    };
+
+    // Função auxiliar para renderizar o conteúdo da direita (modificada)
     const renderContent = () => {
         if (loading) {
             return <div className="feedback-message">Carregando alimentos...</div>;
@@ -73,23 +87,19 @@ function HomeUsuarioPage() {
                     <AlimentoCard 
                         key={alimento.id} 
                         alimento={alimento} 
+                        onCardClick={handleCardClick} // <-- PROP ADICIONADA
                     />
                 ))}
             </div>
         );
     };
-    // ...
-    // [Fim dos seus estados e lógicas]
-
-
+    
     return (
         <>
             <NavbarUsuario />
             
-            {/* ESTE É O WRAPPER QUE CONTÉM O FUNDO VERDE */}
             <div className="home-usuario-page-wrapper">
 
-                {/* 1. CONTEÚDO PRINCIPAL (FILTROS + CARDS) */}
                 <main className="home-usuario-container">
 
                     <aside className="coluna-filtros">
@@ -106,7 +116,6 @@ function HomeUsuarioPage() {
                     </section>
                 </main>
 
-                {/* 2. FOOTER COM A PAGINAÇÃO (DENTRO DO WRAPPER VERDE) */}
                 <footer className="home-usuario-footer">
                     <Paginacao
                         currentPage={currentPage}
@@ -115,7 +124,15 @@ function HomeUsuarioPage() {
                     />
                 </footer>
                 
-            </div> {/* Fim do home-usuario-page-wrapper */}
+            </div>
+
+            {/* RENDERIZAÇÃO CONDICIONAL DO MODAL (NOVO) */}
+            {modalOpen && alimentoSelecionado && (
+                <ModalAlimento 
+                    alimento={alimentoSelecionado} 
+                    onClose={handleCloseModal} 
+                />
+            )}
         </>
     );
 }

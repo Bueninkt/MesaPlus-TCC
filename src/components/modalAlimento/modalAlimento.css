@@ -1,0 +1,182 @@
+/* 1. Overlay (Fundo) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+/* 2. Contêiner Principal (O modal em si) */
+.modal-container {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--beige);
+    color: var(--green-dark);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px; /* Largura máxima do modal */
+    max-height: 90vh; /* Altura máxima */
+    overflow-y: auto; /* Permite scroll se o conteúdo for maior */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* 3. Botão de Fechar (X) */
+.modal-close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2.5rem; /* Tamanho do 'X' */
+    font-weight: 300;
+    color: var(--green-dark);
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* 4. Cabeçalho (Título) */
+.modal-header {
+    text-align: center;
+    border-bottom: 2px solid #E0D1B3; /* Cor derivada do beige */
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* 5. Corpo (Layout Flex) */
+.modal-body {
+    display: flex;
+    gap: 2rem;
+}
+
+/* 5a. Coluna da Imagem */
+.modal-imagem-col {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.modal-imagem-col img {
+    width: 100%;
+    max-width: 250px; /* Limita o tamanho da imagem */
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    background-color: var(--white);
+    padding: 10px;
+    border: 1px solid #E0D1B3;
+}
+
+/* 5b. Coluna de Informações */
+.modal-info-col {
+    flex: 2;
+}
+
+/* Bloco da Empresa (similar à imagem) */
+.modal-empresa-info {
+    background-color: #FFEACC; /* Tom pêssego/bege claro da imagem */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.modal-empresa-info img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: var(--white);
+}
+
+.modal-empresa-info span {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Blocos de Detalhes e Descrição */
+.modal-info-col h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.modal-info-col p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.modal-detalhes {
+    margin-bottom: 1.5rem;
+}
+
+/* 6. Rodapé (Categorias) */
+.modal-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #E0D1B3;
+}
+
+.modal-footer h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    background-color: #FFDDA9; /* Tom laranja/bege mais escuro */
+    color: var(--green-dark-2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.tag-none {
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+
+/* 7. Responsividade */
+@media (max-width: 768px) {
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .modal-imagem-col img {
+        max-width: 200px; /* Imagem menor em telas pequenas */
+        margin-bottom: 1rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .modal-info-col h3, .modal-footer h3 {
+        font-size: 1.2rem;
+    }
+}
