@@ -42,14 +42,36 @@ function ModalAlimento({ alimento, onClose }) {
 
     const prazoFormatado = formatarDataModal(alimento.data_de_validade);
 
+    // 🆕 Lógica para pegar os dados de AMBAS as respostas
+    const nomeAlimento = alimento.nome || alimento.nome_alimento;
+    const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
+    
+    // 🆕 O backend de filtro envia 'foto_empresa'. 
+    // O backend /alimentos envia 'empresa.foto' ou 'empresa.logo_url' (vou assumir 'foto' com base no seu código)
+    const fotoEmpresa = alimento.empresa ? (alimento.empresa.foto || alimento.empresa.logo_url) : alimento.foto_empresa;
+
+
+
     const handleModalClick = (e) => {
         e.stopPropagation();
     };
     
-    const categoriasTags = Array.isArray(alimento.categorias) ? alimento.categorias : [];
-    
-    const tipoPeso = alimento.tipoPeso && alimento.tipoPeso[0] ? alimento.tipoPeso[0].tipo : 'N/A';
-    const pesoCompleto = `${alimento.peso || 'N/A'} ${tipoPeso}`;
+   let categoriasTags = [];
+    if (Array.isArray(alimento.categorias)) {
+        // Fonte 1: API /alimentos (ex: [{id: 1, nome: 'Perecível'}])
+        categoriasTags = alimento.categorias;
+    } else if (alimento.nome_categoria) {
+        // Fonte 2: API /filtroCat (ex: "nome_categoria": "Perecível")
+        // Nós transformamos a string em um array para o JSX funcionar
+        categoriasTags = [{ id: 1, nome: alimento.nome_categoria }];
+    }
+
+    // 2. CORREÇÃO DO PESO
+    // O seu código já tentava fazer isso, mas vamos garantir.
+    // Ele busca por 'alimento.tipoPeso' (da API /alimentos)
+    // Se não achar, ele mostra 'N/A' (como na sua screenshot)
+    const tipoPesoNome = alimento.tipoPeso && alimento.tipoPeso[0] ? alimento.tipoPeso[0].tipo : 'N/A';
+    const pesoCompleto = `${alimento.peso || 'N/A'} ${tipoPesoNome}`;
 
     // Ação fictícia do carrinho (você implementará a lógica real depois)
     const handleAddToCart = () => {
@@ -67,7 +89,7 @@ function ModalAlimento({ alimento, onClose }) {
                 </button>
 
                 <header className="modal-header">
-                    <h2>{alimento.nome}</h2>
+                    <h2>{nomeAlimento}</h2>
                 </header>
 
                 <main className="modal-body">
@@ -79,13 +101,13 @@ function ModalAlimento({ alimento, onClose }) {
                     <div className="modal-info-col">
                         
                         {/* Bloco da Empresa */}
-                        {alimento.empresa && (
+                        {nomeEmpresa && (
                             <div className="modal-empresa-info">
                                 <img 
-                                    src={alimento.empresa.foto || alimento.empresa.logo_url}
-                                    alt={`Logo ${alimento.empresa.nome}`} 
+                                    src={fotoEmpresa}
+                                    alt={`Logo ${alimento.nomeEmpresa}`} 
                                 />
-                                <span>{alimento.empresa.nome}</span>
+                                <span>{nomeEmpresa}</span>
                             </div>
                         )}
 

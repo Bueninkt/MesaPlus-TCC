@@ -16,36 +16,41 @@ function AlimentoCard({ alimento, onCardClick }) {
         }
     };
 
+    
+    // 🆕 Usa 'data_de_validade' (que é igual em ambas as rotas)
     const prazoFormatado = formatarData(alimento.data_de_validade);
     
+    // 🆕 Lógica para pegar os dados da empresa de AMBAS as respostas
+    const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
+    const logoEmpresa = alimento.empresa ? alimento.empresa.logo_url : alimento.foto_empresa;
+    
     return (
-        // Adiciona o onClick e passa o 'alimento'
         <div className="card-container" onClick={() => onCardClick(alimento)}>
             
-            {/* 1. Imagem (Esquerda) */}
             <div className="imagem-container">
-                <img src={alimento.imagem} alt={`Imagem de ${alimento.nome}`} />
+                {/* 🆕 Usa 'imagem' (que é igual em ambas as rotas) */}
+                <img src={alimento.imagem} alt={`Imagem de ${alimento.nome || alimento.nome_alimento}`} />
             </div>
 
-            {/* 2. Informações (Centro) */}
             <div className="info-container">
-                <h3>{alimento.nome}</h3>
+                {/* 🆕 CORREÇÃO DE DADOS: Lê 'nome' OU 'nome_alimento' */}
+                <h3>{alimento.nome || alimento.nome_alimento}</h3>
                 <p>Prazo: {prazoFormatado}</p>
                 
-                {/* Só renderiza se a info da empresa existir */}
-                {alimento.empresa && (
+                {/* 🆕 CORREÇÃO DE DADOS: Verifica se 'nomeEmpresa' existe */}
+                {nomeEmpresa && (
                     <div className="empresa-info">
                         <img 
-                            src={alimento.empresa.logo_url} // Ajuste este campo se necessário
-                            alt={`Logo ${alimento.empresa.nome}`} 
+                            src={logoEmpresa}
+                            alt={`Logo ${nomeEmpresa}`} 
                         />
-                        <span>{alimento.empresa.nome}</span>
+                        <span>{nomeEmpresa}</span>
                     </div>
                 )}
             </div>
             
-            {/* 3. Quantidade (Direita) */}
             <div className="quantidade-container">
+                {/* 🆕 Usa 'quantidade' (que é igual em ambas as rotas) */}
                 <p>Qnt: {alimento.quantidade}</p>
             </div>
 

@@ -1,52 +1,78 @@
 import React, { useState, useEffect } from 'react';
-
 import './filtrar.css';
 import seta from '../../assets/icons/seta.png'; // Ajuste o caminho se necessário
 
-// 1. NOME DO COMPONENTE: Começa com letra maiúscula
-function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange' como prop
-  const [secaoAberta, setSecaoAberta] = useState(null); // 'categoria', 'data', 'empresa' ou null
-
-  // 3. ESTADO DOS FILTROS: Armazena os valores selecionados
-  const [categorias, setCategorias] = useState({
-    massas: false,
-    laticinios: false,
-    naoPerecivel: false, // IDs/names não devem ter espaços
-    legumes: false,
-    frutas: false,
-  });
+// ❗️ Renomeie seu arquivo/componente para 'Filtrar' (com F maiúsculo)
+// para seguir o padrão do React
+function Filtrar({ onFilterChange }) { 
+  const [secaoAberta, setSecaoAberta] = useState(null);
+  const [listaCategorias, setListaCategorias] = useState([]);
+  
+  // 🆕 1. ESTADO MUDADO
+  // Trocamos o objeto 'categoriasSelecionadas' por um ID único ou null
+  const [categoriaAtiva, setCategoriaAtiva] = useState(null); 
+  
   const [dataVencimento, setDataVencimento] = useState('');
   const [empresa, setEmpresa] = useState('');
 
-  // 4. EFEITO: Comunica as mudanças para o componente pai
+  // 🆕 2. EFEITO PARA CARREGAR CATEGORIAS (Otimizado)
   useEffect(() => {
-    // Transforma o objeto de categorias em um array de strings ativas
-    const categoriasAtivas = Object.keys(categorias).filter(
-      (key) => categorias[key]
-    );
+    const buscarCategorias = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/v1/mesa-plus/categoria');
+        
+        if (!response.ok) {
+          console.error(`Erro ao buscar categorias: ${response.status}`);
+          return; 
+        }
 
-    // Chama a função do componente pai sempre que um filtro mudar
+        const data = await response.json();
+        
+        if (data.status && data.categorias) {
+          setListaCategorias(data.categorias);
+          // Não precisamos mais inicializar o estado de 'categoriasSelecionadas'
+        } else {
+          console.error("Formato de resposta da API inesperado.", data);
+        }
+      } catch (error) {
+        console.error('Erro de rede ao buscar categorias:', error);
+      }
+    };
+
+    buscarCategorias();
+  }, []); // Roda só uma vez
+
+  // 🆕 3. EFEITO ATUALIZADO (Comunica a mudança para o PAI)
+  // Este useEffect agora é 'seguro' e não causará loops
+  // desde que 'onFilterChange' seja memorizado no componente pai (HomeUsuarioPage)
+  useEffect(() => {
     if (onFilterChange) {
       onFilterChange({
-        categorias: categoriasAtivas,
+        categoriaId: categoriaAtiva, // Envia o ID ativo (ou null)
         dataVencimento,
         empresa,
       });
     }
-  }, [categorias, dataVencimento, empresa, onFilterChange]); // Array de dependências
+  }, [categoriaAtiva, dataVencimento, empresa, onFilterChange]);
 
   // Handler para alternar a visibilidade da seção
   const handleToggleSecao = (secao) => {
     setSecaoAberta(secaoAberta === secao ? null : secao);
   };
 
-  // 5. HANDLERS: Funções para atualizar o estado dos filtros
+  // 🆕 4. HANDLER ATUALIZADO (Lógica para 'radio button')
   const handleCategoriaChange = (event) => {
-    const { name, checked } = event.target;
-    setCategorias((prevCategorias) => ({
-      ...prevCategorias,
-      [name]: checked,
-    }));
+    const id = parseInt(event.target.value);
+    
+    // Se clicar no rádio que já está marcado, ele desmarca (seta para null)
+    // Se clicar em um rádio diferente, ele marca o novo
+    setCategoriaAtiva(prevId => (prevId === id ? null : id));
+  };
+
+  // 🆕 5. HANDLER NOVO (Para limpar o filtro de rádio)
+  const handleLimparFiltro = (e) => {
+    e.stopPropagation(); // Impede o 'handleToggleSecao' de fechar a aba
+    setCategoriaAtiva(null);
   };
 
   return (
@@ -65,57 +91,37 @@ function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange
         </button>
         {secaoAberta === 'categoria' && (
           <div className="filtro-conteudo categoria">
-            {/* 6. INPUTS CONTROLADOS: 'checked' e 'onChange' conectados ao estado */}
-            <label htmlFor="massas">
-              <input
-                type="checkbox"
-                id="massas"
-                name="massas"
-                checked={categorias.massas}
-                onChange={handleCategoriaChange}
-              /> Massas
-            </label>
-            <label htmlFor="laticinios">
-              <input
-                type="checkbox"
-                id="laticinios"
-                name="laticinios"
-                checked={categorias.laticinios}
-                onChange={handleCategoriaChange}
-              /> Laticinios
-            </label>
-            <label htmlFor="naoPerecivel">
-              <input
-                type="checkbox"
-                id="naoPerecivel"
-                name="naoPerecivel"
-                checked={categorias.naoPerecivel}
-                onChange={handleCategoriaChange}
-              /> Nao Perecivel
-            </label>
-            <label htmlFor="legumes">
-              <input
-                type="checkbox"
-                id="legumes"
-                name="legumes"
-                checked={categorias.legumes}
-                onChange={handleCategoriaChange}
-              /> Legumes
-            </label>
-            <label htmlFor="frutas">
-              <input
-                type="checkbox"
-                id="frutas"
-                name="frutas"
-                checked={categorias.frutas}
-                onChange={handleCategoriaChange}
-              /> Frutas
-            </label>
+            {listaCategorias.length > 0 ? (
+              listaCategorias.map((cat) => (
+                <div key={cat.id} className="filtro-item">
+                  
+                  {/* 🆕 6. MUDANÇA DE CHECKBOX PARA RADIO */}
+                  <input
+                    type="radio" // <-- MUDOU
+                    id={`cat-${cat.id}`}
+                    name="categoria_filtro" // <-- Todos os rádios no mesmo grupo
+                    value={cat.id}
+                    checked={categoriaAtiva === cat.id} // <-- Verifica se este rádio é o ativo
+                    onChange={handleCategoriaChange}
+                  />
+                  <label htmlFor={`cat-${cat.id}`}>{cat.nome}</label>
+                </div>
+              ))
+            ) : (
+              <p>Carregando categorias...</p>
+            )}
+            
+            {/* 🆕 7. BOTÃO PARA LIMPAR (só aparece se um filtro estiver ativo) */}
+            {categoriaAtiva && (
+                 <button onClick={handleLimparFiltro} className="filtro-limpar-btn">
+                    Limpar filtro
+                </button>
+            )}
           </div>
         )}
       </div>
 
-      {/* Seção Data de Vencimento */}
+      {/* Seção Data de Vencimento (sem mudanças) */}
       <div className="filtro-secao">
         <button className="filtro-barra" onClick={() => handleToggleSecao('data')}>
           <span>Data de Vencimento:</span>
@@ -127,7 +133,6 @@ function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange
         </button>
         {secaoAberta === 'data' && (
           <div className="filtro-conteudo data">
-            {/* 6. INPUTS CONTROLADOS: 'value' e 'onChange' conectados ao estado */}
             <input
               type="date"
               className="filtro-input-data"
@@ -138,7 +143,7 @@ function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange
         )}
       </div>
 
-      {/* Seção Empresas */}
+      {/* Seção Empresas (sem mudanças) */}
       <div className="filtro-secao">
         <button className="filtro-barra" onClick={() => handleToggleSecao('empresa')}>
           <span>Empresas:</span>
@@ -150,7 +155,6 @@ function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange
         </button>
         {secaoAberta === 'empresa' && (
           <div className="filtro-conteudo empresa">
-            {/* 6. INPUTS CONTROLADOS: 'value' e 'onChange' conectados ao estado */}
             <input
               type="text"
               placeholder="Digite o nome da empresa..."
@@ -165,5 +169,4 @@ function filtrar({ onFilterChange }) { // 2. Recebe uma função 'onFilterChange
   );
 }
 
-// 1. NOME DA EXPORTAÇÃO: Corresponde ao componente
-export default filtrar;
+export default Filtrar;
