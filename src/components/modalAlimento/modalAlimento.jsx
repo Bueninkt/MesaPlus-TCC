@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; // Adicionei useState para gerenciar a quantidade
 import './ModalAlimento.css';
 
-// Importações dos ícones (Assumindo que eles estão no caminho: ../../assets/icons/)
+// Importações dos ícones (Assumindo que eles estão no ca
 import cart from "../../assets/icons/cart.png";
 import menos from "../../assets/icons/menos.png";
 import mais from "../../assets/icons/mais.png";
