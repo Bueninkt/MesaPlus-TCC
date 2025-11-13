@@ -1,118 +1,137 @@
-/* Estilos do Container Principal */
+
+
+	/* Estilos do Container Principal */
 .filtrar-container {
-  background-color: #1B4227; /* Verde escuro */
+  background-color: var(--green-dark); /* Fundo verde escuro */
   padding: 20px;
   border-radius: 8px;
   max-width: 400px;
   margin: auto;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', sans-serif; /* 🔄 Usando a fonte do seu @import */
+
+  /* 🆕 Novo: Usa flexbox para espaçar os 'cards' */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 🆕 Espaço entre cada card de filtro */
 }
 
 .filtrar-titulo {
-  color: #FFFFFF; /* Branco */
+  color: var(--white); /* Branco */
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 5px; /* 🔄 Diminuído (o 'gap' já espaça) */
 }
 
-/* Seção de cada filtro (barra + conteúdo) */
+/* 🔄 Seção de filtro (AGORA É O CARD) */
 .filtro-secao {
-  margin-bottom: 10px;
+  background-color: var(--beige); /* 🆕 A seção inteira é o card bege */
+  border-radius: 8px; /* 🆕 Cantos arredondados para o card */
+  overflow: hidden; /* 🆕 Para o conteúdo não vazar do radius */
+  
 }
 
-/* Barra clicável (ex: "Categoria:") */
+/* 🔄 Barra clicável (AGORA É O CABEÇALHO DO CARD) */
 .filtro-barra {
-  background-color: #FFF1D4; /* Bege */
-  color: #000000; /* Preto */
+  background-color: transparent; /* 🔄 Sem fundo (já está no card) */
+  color: var(--green-dark-2); /* 🔄 Cor do texto escura */
   border: none;
-  border-radius: 8px;
+  border-radius: 0; /* 🔄 Sem radius (é o topo do card) */
   padding: 15px 20px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem; /* 🔄 Um pouco maior */
   font-weight: 600;
   text-align: left;
 }
 
-/* Seta */
+.filtro-item{
+  display: flex;
+  gap: 11px;
+}
+
+/* 🔄 Seta (precisa ser escura no fundo bege) */
 .filtro-seta {
   width: 18px;
   height: 18px;
   transition: transform 0.2s ease;
+  /* 🆕 Filtro para 'inverter' a cor da seta (se ela for branca) */
+  /* Se sua seta já for escura, remova a linha 'filter' */
+  filter: brightness(0.2) sepia(100%) hue-rotate(-80deg) saturate(500%);
 }
 
 .filtro-seta.aberta {
   transform: rotate(180deg);
 }
 
-/* --- ESTILOS ATUALIZADOS DO CONTEÚDO --- */
+/* --- 🔄 ESTILOS DO CONTEÚDO (DENTRO DO CARD) --- */
 
-/* Estilo BASE para todo conteúdo de filtro (o painel que abre) */
+/* Estilo BASE para todo conteúdo de filtro */
 .filtro-conteudo {
-  background-color: #FFF1D4; /* Fundo bege para TODOS */
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 5px; /* Pequeno espaço da barra */
+  background-color: transparent; /* 🔄 Sem fundo (já está no card) */
+  padding-left: 20px;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
+  
+  /* 🆕 Linha sutil para separar o cabeçalho do conteúdo */
+  border-top: 1px solid rgba(27, 66, 39, 0.2); 
 }
 
-/* Estilo ESPECIAL para o filtro de Categoria (baseado na nova imagem) */
-.filtro-conteudo.categoria {
-  border: 2px solid #1B4227; /* Borda verde escura */
-  gap: 15px; /* Espaço entre os itens do checkbox */
+/* Estilo para Categoria e Empresa (as listas) */
+.filtro-conteudo.categoria,
+.filtro-conteudo.empresa, 
+.filtro-conteudo.data {
+  border: none; /* 🔄 Sem borda (já está no card) */
+  gap: 10px; /* Espaço entre os itens */
+  margin-right: 19px;
+  max-height: 181px;
+  overflow-y: auto;
+  padding-right: 1px;
+  margin-bottom: 9px;
 }
 
-.filtro-conteudo.categoria label {
+
+
+.filtro-conteudo.categoria label,
+.filtro-conteudo.empresa label,
+.filtro-conteudo.data label {
   display: flex;
   align-items: center;
-  gap: 10px; /* Espaço entre o checkbox e o texto */
+  gap: 10px;
   font-size: 1rem;
   color: #000000; /* Preto */
   cursor: pointer;
 }
 
-/* Customização do Checkbox (como na imagem) */
-.filtro-conteudo.categoria input[type="checkbox"] {
-  /* Remove o estilo padrão */
+/* 🔄 Customização do RÁDIO (Mantendo seu estilo, mas usando 'radio') */
+.filtro-conteudo.categoria input[type="radio"],
+.filtro-conteudo.empresa input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  
-  /* Tamanho */
   width: 20px;
   height: 20px;
-  
-  /* Borda */
-  border: 2px solid #1B4227; /* Borda verde escura */
-  border-radius: 4px; /* Cantos levemente arredondados */
-  
-  /* Fundo */
-  background-color: #FFFFFF; /* Fundo branco */
-  
+  border: 2px solid var(--green-dark); /* Borda verde escura */
+  border-radius: 4px;
+  background-color: var(--white); /* 🆕 Fundo branco explícito */
   cursor: pointer;
   position: relative;
-  flex-shrink: 0; /* Impede que o checkbox encolha */
+  flex-shrink: 0;
 }
 
-/* Checkbox quando marcado */
-.filtro-conteudo.categoria input[type="checkbox"]:checked {
-  background-color: #1B4227; /* Fundo verde escuro */
-  border-color: #1B4227;
+/* Rádio quando marcado */
+.filtro-conteudo.categoria input[type="radio"]:checked,
+.filtro-conteudo.empresa input[type="radio"]:checked {
+  background-color: var(--green-dark); /* Fundo verde escuro */
+  border-color: var(--green-dark);
 }
 
- .filtro-conteudo input[type="date"]::-webkit-calendar-picker-indicator {
-    /* pode ocultar ou estilizar aqui */
-    opacity: 0.5;
-    cursor: pointer;
-  }
-
-
-/* Adiciona a marca de "check" branca */
-.filtro-conteudo.categoria input[type="checkbox"]:checked::after {
+/* "Check" para o rádio marcado */
+.filtro-conteudo.categoria input[type="radio"]:checked::after,
+.filtro-conteudo.empresa input[type="radio"]:checked::after {
   content: '';
   display: block;
   width: 5px;
@@ -125,18 +144,70 @@
   top: 2px;
 }
 
-/* --- Estilos para os outros filtros (Data e Empresa) --- */
+/* --- Estilos para os outros filtros (Data) --- */
 
-/* Inputs de Data e Texto */
+/* Inputs de Data e Texto (se houver) */
 .filtro-input-data,
 .filtro-input-texto {
   width: 100%;
   padding: 10px 15px;
   font-size: 1rem;
   outline: none;
-  border: 2px solid #1B4227; /* Borda verde para consistência */
+  border: 2px solid var(--green-dark);
   border-radius: 4px;
-  box-sizing: border-box; 
-  background-color: transparent; /* Fundo branco */
-  cursor:text;
+  box-sizing: border-box;
+  background-color: transparent; /* 🆕 Fundo branco explícito */
+  cursor: text;
+}
+
+.filtro-conteudo input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+/* 🆕 ESTILO PARA O BOTÃO LIMPAR (Obrigatório) */
+.filtro-limpar-btn {
+  background-color: var(--green-dark); /* Fundo verde */
+  color: var(--white); /* Texto branco */
+  border: 1px solid var(--green-dark);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  align-self: flex-start; /* Alinha à esquerda */
+  transition: all 0.2s ease;
+}
+
+.filtro-limpar-btn:hover {
+  background-color: var(--green-dark-2); /* Verde mais escuro */
+  border-color: var(--green-dark-2);
+}
+
+
+
+
+/* Estilização da barra de rolagem (para .filtro-conteudo.empresa) */
+
+/* Define a largura da barra de rolagem */
+.filtro-conteudo.empresa::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Define o fundo da "trilha" por onde a barra corre */
+.filtro-conteudo.empresa::-webkit-scrollbar-track {
+  background: rgba(27, 66, 39, 0.1); /* Um verde bem claro, quase transparente */
+  border-radius: 4px;
+}
+
+/* Define o estilo da própria barra (o "polegar") */
+.filtro-conteudo.empresa::-webkit-scrollbar-thumb {
+  background-color: var(--green-light); /* Cor verde escura */
+  border-radius: 4px;
+}
+
+/* Estilo da barra ao passar o mouse */
+.filtro-conteudo.empresa::-webkit-scrollbar-thumb:hover {
+  background-color: var(--green-dark); /* Cor verde ma */
 }
