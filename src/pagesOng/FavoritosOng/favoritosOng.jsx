@@ -1,5 +1,13 @@
+import NavbarOng from "../../components/navbarOng/navbarOng";
+
+
 function favoritosOngPage(params) {
-    return null
+    return (
+        <>
+            <NavbarOng/>
+
+        </>
+    )
 }
 
 export default favoritosOngPage

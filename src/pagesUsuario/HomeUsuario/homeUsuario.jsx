@@ -1,19 +1,18 @@
-// 🆕 1. Importe o 'useCallback'
+// 🔄 Arquivo: HomeUsuarioPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 
 // Importação dos componentes
 import NavbarUsuario from "../../components/navbarUsuario/navbarUsuario";
-import Filtrar from "../../components/filtros/filtrar"; // Certifique-se que este é o 'Filtrar.jsx' com RADIO buttons
+import Filtrar from "../../components/filtros/filtrar";
 import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 import Paginacao from '../../components/paginacaoCard/Paginacao';
 import CarrosselEmpresa from '../../components/carrosselEmpresa/carrosselEmpresa';
 import ModalAlimento from '../../components/modalAlimento/modalAlimento';
 
-// Importação do CSS da página
-import './HomeUsuario.css'; 
+import './HomeUsuario.css';
 
 function HomeUsuarioPage() {
-    
+
     // Estados da API
     const [alimentos, setAlimentos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,7 +20,7 @@ function HomeUsuarioPage() {
 
     // ESTADOS DA PAGINAÇÃO
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 4; 
+    const ITEMS_PER_PAGE = 4;
 
     // ESTADOS DO MODAL
     const [modalOpen, setModalOpen] = useState(false);
@@ -30,69 +29,80 @@ function HomeUsuarioPage() {
     // ESTADO PARA GUARDAR OS FILTROS ATIVOS
     const [filtrosAtivos, setFiltrosAtivos] = useState({
         categoriaId: null,
+        empresaId: null, // 🆕 NOVO: 'Ouvindo' o filtro de empresa
         // ... (outros filtros aqui)
     });
 
-    // 🆕 2. FUNÇÃO "OUVINTE" MEMORIZADA COM 'useCallback'
-    // Isso previne o loop infinito
+    // 2. FUNÇÃO "OUVINTE" (sem mudanças, já está correta com useCallback)
     const handleFiltroChange = useCallback((filtros) => {
         setFiltrosAtivos(filtros);
         setCurrentPage(1); // Reseta a paginação ao mudar o filtro
-    }, []); // O array de dependências vazio garante que esta função NUNCA mude
+    }, []);
 
-    
-    // 🆕 3. USEEFFECT ATUALIZADO: "AGENTE" + "TRADUTOR"
+
+    // 🔄 3. USEEFFECT ATUALIZADO (Lógica de API com Prioridade)
     useEffect(() => {
         const fetchAlimentos = async () => {
             setLoading(true);
             setError(null);
 
             let url = '';
+            // 🆕 Lê os dois IDs
             const categoriaID = filtrosAtivos.categoriaId;
+            const empresaID = filtrosAtivos.empresaId; // 🆕
 
-            if (categoriaID) {
-                // Se tem um ID de categoria, usa o endpoint de filtro
+            // 🆕 Lógica de prioridade
+            if (empresaID) {
+                // 1. Prioridade: Filtro de Empresa
+                url = `http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaID}`;
+            } else if (categoriaID) {
+                // 2. Se não, filtro de Categoria
                 url = `http://localhost:8080/v1/mesa-plus/filtroCat/${categoriaID}`;
             } else {
-                // Se não tem (é null), busca todos os alimentos
+                // 3. Se não, busca todos
                 url = 'http://localhost:8080/v1/mesa-plus/alimentos';
             }
 
             try {
-                const response = await fetch(url); 
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`Erro HTTP: ${response.status}`);
                 }
                 const data = await response.json();
-                
-                if (data.status === true) {
-                    
-                    if (categoriaID && Array.isArray(data.resultFiltro)) {
-                        // Resposta do /filtroCat/:id
-                        // ❗️ AQUI É A "TRADUÇÃO" (Incompatibilidade de Dados Corrigida) ❗️
-                        // Normalizamos os dados do filtro para o formato que o Card espera
-                        const alimentosNormalizados = data.resultFiltro.map(item => ({
-                            // Convertendo do formato do filtro (ex: 'nome_alimento')
-                            // para o formato do Card (ex: 'nome')
-                            id: item.id_alimento,                 // f0
-                            nome: item.nome_alimento,             // f1
-                            quantidade: item.quantidade,          // f2
-                            peso: item.peso,                      // f3
-                            id_tipo_peso: item.id_tipo_peso,      // f4
-                            data_de_validade: item.data_de_validade, // f5
-                            descricao: item.descricao,            // f6
-                            imagem: item.imagem,                  // f7
-                            
-                            // Criando o objeto 'empresa' que o Card/Modal espera
-                            empresa: { 
-                                id: item.id_empresa,              // f8
-                                nome: item.nome_empresa,          // f9
-                                logo_url: item.foto_empresa       // f10
-                            }
-                        }));
-                        setAlimentos(alimentosNormalizados); // Salva os dados já formatados
 
-                    } else if (!categoriaID && Array.isArray(data.alimentos)) {
+                if (data.status === true) {
+
+                    // 🔄 CONDIÇÃO DE "TRADUÇÃO" ATUALIZADA
+                    // Agora, se *qualquer* filtro (Cat ou Empresa) estiver ativo
+                    // e a resposta for 'resultFiltro', ele normaliza.
+                    // Isso funciona porque AMBOS os seus endpoints de filtro (filtroCat e empresaAlimento)
+                    // retornam os dados como f0, f1, f2...
+                    if ((categoriaID || empresaID) && Array.isArray(data.resultFiltro)) {
+                        // Resposta do /filtroCat/:id OU /empresaAlimento/:id
+                        const alimentosNormalizados = data.resultFiltro.map(item => ({
+                            id: item.id_alimento, // f0
+                            nome: item.nome_alimento, // f1
+                            quantidade: item.quantidade, // f2
+                            peso: item.peso, // f3
+                            id_tipo_peso: item.id_tipo_peso, // f4
+                            tipo_peso_nome: item.tipo, // f5 (seu SQL chama de tipoPeso, mas o f5 é 'tipo')
+                            data_de_validade: item.data_de_validade, // f6
+                            descricao: item.descricao, // f7
+                            imagem: item.imagem, // f8
+                            empresa: {
+                                id: item.id_empresa, // f9
+                                nome: item.nome_empresa, // f10
+                                logo_url: item.foto_empresa // f11
+                            },
+                            // f12 (nome_categoria) só vem do /filtroCat,
+                            // mas não tem problema estar null se for filtro de empresa
+                            nome_categoria: item.nome_categoria // f12
+                        }));
+                        setAlimentos(alimentosNormalizados);
+
+                        // 🔄 CONDIÇÃO "TODOS" ATUALIZADA
+                        // Só entra aqui se NENHUM filtro estiver ativo
+                    } else if (!categoriaID && !empresaID && Array.isArray(data.alimentos)) {
                         // Resposta do /alimentos (já está no formato correto)
                         setAlimentos(data.alimentos);
                     } else {
@@ -106,6 +116,7 @@ function HomeUsuarioPage() {
                 console.error("Falha ao buscar dados da API:", e);
             } finally {
                 setLoading(false);
+                
             }
         };
         fetchAlimentos();
@@ -146,35 +157,32 @@ function HomeUsuarioPage() {
         return (
             <div className="lista-alimentos-grid">
                 {currentAlimentos.map(alimento => (
-                    // 🆕 4. AGORA ISSO FUNCIONA SEMPRE!
-                    // 'alimento.id' sempre existirá, pois normalizamos os dados.
-                    <AlimentoCard 
-                        key={alimento.id} 
-                        alimento={alimento} 
+                    <AlimentoCard
+                        key={alimento.id}
+                        alimento={alimento}
                         onCardClick={handleCardClick}
                     />
                 ))}
             </div>
         );
     };
-    
+
     return (
         <>
             <NavbarUsuario />
-            
+
             <div className="home-usuario-page-wrapper">
                 <main className="home-usuario-container">
                     <aside className="coluna-filtros">
-                        {/* 🆕 5. Passa a função 'memorizada' para o filho */}
                         <Filtrar onFilterChange={handleFiltroChange} />
-                    </aside>
+                                 </aside>
 
                     <section className="coluna-conteudo">
                         <h2 className="coluna-titulo">Empresas:</h2>
                         <CarrosselEmpresa />
                         {renderContent()}
                     </section>
-                </main>
+                     </main>
 
                 <footer className="home-usuario-footer">
                     <Paginacao
@@ -185,15 +193,15 @@ function HomeUsuarioPage() {
                 </footer>
             </div>
 
-            {/* 🆕 6. O MODAL TAMBÉM FUNCIONA!
-              Como normalizamos os dados antes, o ModalAlimento receberá
-              'alimento.nome' e 'alimento.empresa', como ele espera.
-              Você não precisa modificar o Modal.
-            */}
+            {/*               O Modal, AlimentoCard e o SQL já estão corretos. 
+              A "normalização" que fizemos na HomeUsuarioPage garante que 
+              os dados cheguem no formato que eles esperam, 
+              independentemente da rota da API (filtros ou /alimentos).
+            */}
             {modalOpen && alimentoSelecionado && (
-                <ModalAlimento 
-                    alimento={alimentoSelecionado} 
-                    onClose={handleCloseModal} 
+                <ModalAlimento
+                    alimento={alimentoSelecionado}
+                    onClose={handleCloseModal}
                 />
             )}
         </>

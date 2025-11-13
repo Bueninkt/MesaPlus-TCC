@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Adicionei useState para gerenciar a quantidade
-import './ModalAlimento.css'; 
+import './ModalAlimento.css';
 
 // Importações dos ícones (Assumindo que eles estão no caminho: ../../assets/icons/)
 import cart from "../../assets/icons/cart.png";
@@ -9,10 +9,10 @@ import mais from "../../assets/icons/mais.png";
 function ModalAlimento({ alimento, onClose }) {
 
     // Estado local para a quantidade a ser adicionada ao carrinho
-    const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1); 
+    const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
 
     // Limite máximo é a quantidade disponível do alimento
-    const quantidadeDisponivel = alimento.quantidade || 0; 
+    const quantidadeDisponivel = alimento.quantidade || 0;
 
     // Funções para manipular a quantidade
     const handleIncrement = () => {
@@ -31,9 +31,9 @@ function ModalAlimento({ alimento, onClose }) {
     const formatarDataModal = (dataISO) => {
         if (!dataISO) return "Data inválida";
         try {
-            const [dataParte] = dataISO.split('T'); 
+            const [dataParte] = dataISO.split('T');
             const [ano, mes, dia] = dataParte.split('-');
-            return `${dia}/${mes}/${ano}`; 
+            return `${dia}/${mes}/${ano}`;
         } catch (e) {
             console.error("Erro ao formatar data:", dataISO, e);
             return "Data inválida";
@@ -45,7 +45,7 @@ function ModalAlimento({ alimento, onClose }) {
     // 🆕 Lógica para pegar os dados de AMBAS as respostas
     const nomeAlimento = alimento.nome || alimento.nome_alimento;
     const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
-    
+
     // 🆕 O backend de filtro envia 'foto_empresa'. 
     // O backend /alimentos envia 'empresa.foto' ou 'empresa.logo_url' (vou assumir 'foto' com base no seu código)
     const fotoEmpresa = alimento.empresa ? (alimento.empresa.foto || alimento.empresa.logo_url) : alimento.foto_empresa;
@@ -55,8 +55,8 @@ function ModalAlimento({ alimento, onClose }) {
     const handleModalClick = (e) => {
         e.stopPropagation();
     };
-    
-   let categoriasTags = [];
+
+    let categoriasTags = [];
     if (Array.isArray(alimento.categorias)) {
         // Fonte 1: API /alimentos (ex: [{id: 1, nome: 'Perecível'}])
         categoriasTags = alimento.categorias;
@@ -70,7 +70,10 @@ function ModalAlimento({ alimento, onClose }) {
     // O seu código já tentava fazer isso, mas vamos garantir.
     // Ele busca por 'alimento.tipoPeso' (da API /alimentos)
     // Se não achar, ele mostra 'N/A' (como na sua screenshot)
-    const tipoPesoNome = alimento.tipoPeso && alimento.tipoPeso[0] ? alimento.tipoPeso[0].tipo : 'N/A';
+    const tipoPesoNome = (alimento.tipoPeso && alimento.tipoPeso[0])
+        ? alimento.tipoPeso[0].tipo // Formato /alimentos
+        : (alimento.tipo_peso_nome || 'N/A'); // Formato /filtroCat
+
     const pesoCompleto = `${alimento.peso || 'N/A'} ${tipoPesoNome}`;
 
     // Ação fictícia do carrinho (você implementará a lógica real depois)
@@ -81,9 +84,9 @@ function ModalAlimento({ alimento, onClose }) {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            
+
             <div className="modal-container" onClick={handleModalClick}>
-                
+
                 <button className="modal-close-button" onClick={onClose}>
                     &times;
                 </button>
@@ -93,19 +96,19 @@ function ModalAlimento({ alimento, onClose }) {
                 </header>
 
                 <main className="modal-body">
-                    
+
                     <div className="modal-imagem-col">
                         <img src={alimento.imagem} alt={`Imagem de ${alimento.nome}`} />
                     </div>
 
                     <div className="modal-info-col">
-                        
+
                         {/* Bloco da Empresa */}
                         {nomeEmpresa && (
                             <div className="modal-empresa-info">
-                                <img 
+                                <img
                                     src={fotoEmpresa}
-                                    alt={`Logo ${alimento.nomeEmpresa}`} 
+                                    alt={`Logo ${alimento.nomeEmpresa}`}
                                 />
                                 <span>{nomeEmpresa}</span>
                             </div>
@@ -129,7 +132,7 @@ function ModalAlimento({ alimento, onClose }) {
 
                 {/* Rodapé com Categorias e Carrinho */}
                 <footer className="modal-footer">
-                    
+
                     {/* Coluna da Categoria */}
                     <div className="footer-col categoria-col">
                         <h3>Categoria</h3>
@@ -151,16 +154,16 @@ function ModalAlimento({ alimento, onClose }) {
                             Adicionar ao carrinho
                         </button>
                         <div className="quantity-controls">
-                            <button 
-                                className="quantity-button" 
+                            <button
+                                className="quantity-button"
                                 onClick={handleDecrement}
                                 disabled={quantidadeSelecionada === 1} // Desabilita se for 1
                             >
                                 <img src={menos} alt="Menos" />
                             </button>
                             <span className="quantity-display">{quantidadeSelecionada}</span>
-                            <button 
-                                className="quantity-button" 
+                            <button
+                                className="quantity-button"
                                 onClick={handleIncrement}
                                 disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0} // Desabilita se for o limite
                             >

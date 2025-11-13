@@ -1,5 +1,14 @@
+import NavbarOng from "../../components/navbarOng/navbarOng";
+
+
 function meusAlimentosOngPage(params) {
-    return null
+    return (
+        <>
+            <NavbarOng />
+            
+            
+        </>
+    );
 }
 
 export default meusAlimentosOngPage
