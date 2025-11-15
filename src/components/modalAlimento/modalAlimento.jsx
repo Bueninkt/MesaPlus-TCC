@@ -1,28 +1,73 @@
-import React, { useState } from 'react'; // Adicionei useState para gerenciar a quantidade
+import React, { useState, useEffect } from 'react'; // Importei o useEffect
+import axios from 'axios'; // Importei o axios para a chamada da API
 import './ModalAlimento.css';
 
-// Importações dos ícones (Assumindo que eles estão no ca
+// Importações dos ícones
 import cart from "../../assets/icons/cart.png";
 import menos from "../../assets/icons/menos.png";
 import mais from "../../assets/icons/mais.png";
 
-function ModalAlimento({ alimento, onClose }) {
+// Recebemos 'alimento' (que usaremos como 'alimentoBase') e 'onClose'
+function ModalAlimento({ alimento: alimentoBase, onClose }) {
 
-    // Estado local para a quantidade a ser adicionada ao carrinho
+    // --- NOVOS ESTADOS ---
+    // 'alimentoCompleto' guardará os dados "frescos" vindos da API
+    const [alimentoCompleto, setAlimentoCompleto] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    // --- FIM DOS NOVOS ESTADOS ---
+
+    // Estado local para a quantidade (já existia)
     const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
 
-    // Limite máximo é a quantidade disponível do alimento
-    const quantidadeDisponivel = alimento.quantidade || 0;
+    // --- NOVO useEffect ---
+    // Isso roda assim que o modal é montado (pois 'alimentoBase.id' existe)
+    useEffect(() => {
+        const fetchAlimento = async () => {
+            if (!alimentoBase || !alimentoBase.id) {
+                setError("Erro: ID do alimento não encontrado.");
+                setLoading(false);
+                return;
+            }
+
+            setLoading(true);
+            setError(null);
+            try {
+                // 1. CHAMA O ENDPOINT QUE VOCÊ PERGUNTOU
+                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/alimento/${alimentoBase.id}`);
+                
+                // 2. VERIFICA A RESPOSTA
+                // A sua controller (controllerAlimentos.js) retorna { "alimento": [...] }
+                if (response.data && response.data.status_code === 200 && response.data.alimento && response.data.alimento.length > 0) {
+                    // 3. SALVA OS DADOS "FRESCOS" NO ESTADO
+                    // Pegamos o primeiro item do array
+                    setAlimentoCompleto(response.data.alimento[0]);
+                } else {
+                    throw new Error(response.data.message || "Alimento não encontrado.");
+                }
+            } catch (err) {
+                console.error("Erro ao buscar alimento:", err);
+                setError(err.message || "Falha ao carregar dados.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAlimento();
+    }, [alimentoBase.id]); // Roda toda vez que o ID do alimento mudar
+
+    // --- Funções de Formatação e Ação (adaptadas) ---
 
     // Funções para manipular a quantidade
     const handleIncrement = () => {
+        const quantidadeDisponivel = alimentoCompleto?.quantidade || 0;
         if (quantidadeSelecionada < quantidadeDisponivel) {
             setQuantidadeSelecionada(prev => prev + 1);
         }
     };
 
     const handleDecrement = () => {
-        if (quantidadeSelecionada > 1) { // Garante que a quantidade mínima seja 1
+        if (quantidadeSelecionada > 1) {
             setQuantidadeSelecionada(prev => prev - 1);
         }
     };
@@ -35,81 +80,122 @@ function ModalAlimento({ alimento, onClose }) {
             const [ano, mes, dia] = dataParte.split('-');
             return `${dia}/${mes}/${ano}`;
         } catch (e) {
-            console.error("Erro ao formatar data:", dataISO, e);
             return "Data inválida";
         }
     };
-
-    const prazoFormatado = formatarDataModal(alimento.data_de_validade);
-
-    // 🆕 Lógica para pegar os dados de AMBAS as respostas
-    const nomeAlimento = alimento.nome || alimento.nome_alimento;
-    const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
-
-    // 🆕 O backend de filtro envia 'foto_empresa'. 
-    // O backend /alimentos envia 'empresa.foto' ou 'empresa.logo_url' (vou assumir 'foto' com base no seu código)
-    const fotoEmpresa = alimento.empresa ? (alimento.empresa.foto || alimento.empresa.logo_url) : alimento.foto_empresa;
-
-
 
     const handleModalClick = (e) => {
         e.stopPropagation();
     };
 
-    let categoriasTags = [];
-    if (Array.isArray(alimento.categorias)) {
-        // Fonte 1: API /alimentos (ex: [{id: 1, nome: 'Perecível'}])
-        categoriasTags = alimento.categorias;
-    } else if (alimento.nome_categoria) {
-        // Fonte 2: API /filtroCat (ex: "nome_categoria": "Perecível")
-        // Nós transformamos a string em um array para o JSX funcionar
-        categoriasTags = [{ id: 1, nome: alimento.nome_categoria }];
+    // Ação carrinho
+  const handleAddToCart = async () => {
+        try {
+            // 1. Pegar os dados do usuário do localStorage
+            const userString = localStorage.getItem("user");
+            const userType = localStorage.getItem("userType");
+            
+            if (!userString || userType !== 'pessoa') {
+                alert("Erro: Você precisa estar logado como usuário para adicionar ao carrinho.");
+                return;
+            }
+            
+            const usuario = JSON.parse(userString);
+            
+            // 2. Montar o payload (o que vamos enviar para a API)
+            const payload = {
+                id_usuario: usuario.id,
+                id_alimento: alimentoCompleto.id,
+                quantidade: quantidadeSelecionada
+            };
+
+            // 3. Chamar o endpoint POST para criar o pedido
+            const response = await axios.post('http://localhost:8080/v1/mesa-plus/pedidoUsuario', payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // 4. Lidar com a resposta
+            if (response.data && response.data.status_code === 201) {
+                alert("Alimento adicionado com sucesso!");
+                onClose(); // Fecha o modal
+            } else {
+                throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
+            }
+
+        } catch (error) {
+            console.error("Erro no handleAddToCart:", error);
+            alert(`Erro: ${error.message || "Não foi possível adicionar ao carrinho."}`);
+        }
+    };
+
+    // --- RENDERIZAÇÃO COM LOADING E ERRO ---
+
+    // 1. TELA DE LOADING ENQUANTO BUSCA NA API
+    if (loading) {
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+                <div className="modal-container" onClick={handleModalClick} style={{justifyContent: 'center', alignItems: 'center'}}>
+                    <div className="modal-loading-feedback">Carregando dados atualizados...</div>
+                </div>
+            </div>
+        );
     }
 
-    // 2. CORREÇÃO DO PESO
-    // O seu código já tentava fazer isso, mas vamos garantir.
-    // Ele busca por 'alimento.tipoPeso' (da API /alimentos)
-    // Se não achar, ele mostra 'N/A' (como na sua screenshot)
-    const tipoPesoNome = (alimento.tipoPeso && alimento.tipoPeso[0])
-        ? alimento.tipoPeso[0].tipo // Formato /alimentos
-        : (alimento.tipo_peso_nome || 'N/A'); // Formato /filtroCat
+    // 2. TELA DE ERRO SE A API FALHAR
+    if (error) {
+        return (
+            <div className="modal-overlay" onClick={onClose}>
+                <div className="modal-container" onClick={handleModalClick} style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
+                    <div className="modal-loading-feedback error">
+                        <p>Erro ao carregar o alimento: {error}</p>
+                        <button onClick={onClose} className="modal-close-button" style={{position: 'static', marginTop: '20px', background: '#8B0000', color: 'white'}}>Fechar</button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-    const pesoCompleto = `${alimento.peso || 'N/A'} ${tipoPesoNome}`;
+    // 3. RENDERIZAÇÃO NORMAL (só acontece após o loading)
+    // Se chegou aqui, 'alimentoCompleto' não é null
+    
+    // Variáveis agora usam 'alimentoCompleto'
+    const quantidadeDisponivel = alimentoCompleto.quantidade || 0;
+    const prazoFormatado = formatarDataModal(alimentoCompleto.data_de_validade);
+    const nomeAlimento = alimentoCompleto.nome;
+    
+    // A sua API /alimento/:id retorna a empresa aninhada
+    const nomeEmpresa = alimentoCompleto.empresa ? alimentoCompleto.empresa.nome : 'Empresa não informada';
+    const fotoEmpresa = alimentoCompleto.empresa ? (alimentoCompleto.empresa.foto || alimentoCompleto.empresa.logo_url) : ''; // Ajuste conforme o nome do campo
 
-    // Ação fictícia do carrinho (você implementará a lógica real depois)
-    const handleAddToCart = () => {
-        console.log(`Adicionando ${quantidadeSelecionada}x de ${alimento.nome} ao carrinho.`);
-        // Lógica de adição ao carrinho real aqui
-    };
+    // A sua API /alimento/:id retorna 'categorias' como um array
+    const categoriasTags = alimentoCompleto.categorias || [];
+    
+    // A sua API /alimento/:id retorna 'tipoPeso' como um array
+    const tipoPesoNome = (alimentoCompleto.tipoPeso && alimentoCompleto.tipoPeso[0])
+                         ? alimentoCompleto.tipoPeso[0].tipo
+                         : 'N/A';
+    const pesoCompleto = `${alimentoCompleto.peso || 'N/A'} ${tipoPesoNome}`;
+
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-
             <div className="modal-container" onClick={handleModalClick}>
-
-                <button className="modal-close-button" onClick={onClose}>
-                    &times;
-                </button>
-
+                
+                <button className="modal-close-button" onClick={onClose}>&times;</button>
                 <header className="modal-header">
                     <h2>{nomeAlimento}</h2>
                 </header>
 
                 <main className="modal-body">
-
                     <div className="modal-imagem-col">
-                        <img src={alimento.imagem} alt={`Imagem de ${alimento.nome}`} />
+                        <img src={alimentoCompleto.imagem} alt={`Imagem de ${nomeAlimento}`} />
                     </div>
 
                     <div className="modal-info-col">
-
                         {/* Bloco da Empresa */}
                         {nomeEmpresa && (
                             <div className="modal-empresa-info">
-                                <img
-                                    src={fotoEmpresa}
-                                    alt={`Logo ${alimento.nomeEmpresa}`}
-                                />
+                                <img src={fotoEmpresa} alt={`Logo ${nomeEmpresa}`} />
                                 <span>{nomeEmpresa}</span>
                             </div>
                         )}
@@ -125,14 +211,12 @@ function ModalAlimento({ alimento, onClose }) {
                         {/* Bloco de Descrição */}
                         <div className="modal-descricao">
                             <h3>Descrição</h3>
-                            <p>{alimento.descricao || "Nenhuma descrição fornecida."}</p>
+                            <p>{alimentoCompleto.descricao || "Nenhuma descrição fornecida."}</p>
                         </div>
                     </div>
                 </main>
 
-                {/* Rodapé com Categorias e Carrinho */}
                 <footer className="modal-footer">
-
                     {/* Coluna da Categoria */}
                     <div className="footer-col categoria-col">
                         <h3>Categoria</h3>
@@ -147,7 +231,7 @@ function ModalAlimento({ alimento, onClose }) {
                         </div>
                     </div>
 
-                    {/* Coluna do Carrinho (NOVO BLOCO) */}
+                    {/* Coluna do Carrinho */}
                     <div className="footer-col carrinho-col">
                         <button className="add-to-cart-button" onClick={handleAddToCart}>
                             <img src={cart} alt="Carrinho" className="cart-icon" />
@@ -157,7 +241,7 @@ function ModalAlimento({ alimento, onClose }) {
                             <button
                                 className="quantity-button"
                                 onClick={handleDecrement}
-                                disabled={quantidadeSelecionada === 1} // Desabilita se for 1
+                                disabled={quantidadeSelecionada === 1}
                             >
                                 <img src={menos} alt="Menos" />
                             </button>
@@ -165,7 +249,7 @@ function ModalAlimento({ alimento, onClose }) {
                             <button
                                 className="quantity-button"
                                 onClick={handleIncrement}
-                                disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0} // Desabilita se for o limite
+                                disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0}
                             >
                                 <img src={mais} alt="Mais" />
                             </button>
