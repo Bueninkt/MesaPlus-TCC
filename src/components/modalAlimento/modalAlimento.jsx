@@ -32,7 +32,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
             setError(null);
             try {
                 const response = await axios.get(`http://localhost:8080/v1/mesa-plus/alimento/${alimentoBase.id}`);
-                
+
                 if (response.data && response.data.status_code === 200 && response.data.alimento && response.data.alimento.length > 0) {
                     setAlimentoCompleto(response.data.alimento[0]);
                 } else {
@@ -47,25 +47,20 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         };
 
         fetchAlimento();
-    }, [alimentoBase.id]); 
+    }, [alimentoBase.id]);
 
-    // --- Funções de Formatação e Ação (adaptadas) ---
-
-    // Funções para manipular a quantidade (sem mudança)
+    // --- Funções de Formatação e Ação (sem mudança) ---
     const handleIncrement = () => {
         const quantidadeDisponivel = alimentoCompleto?.quantidade || 0;
         if (quantidadeSelecionada < quantidadeDisponivel) {
             setQuantidadeSelecionada(prev => prev + 1);
         }
     };
-
     const handleDecrement = () => {
         if (quantidadeSelecionada > 1) {
             setQuantidadeSelecionada(prev => prev - 1);
         }
     };
-
-    // Formata a data (sem mudança)
     const formatarDataModal = (dataISO) => {
         if (!dataISO) return "Data inválida";
         try {
@@ -76,42 +71,58 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
             return "Data inválida";
         }
     };
-
     const handleModalClick = (e) => {
         e.stopPropagation();
     };
 
-    // 🆕 Ação carrinho (ATUALIZADA)
-  const handleAddToCart = async () => {
+    // ❗️ Ação carrinho (ATUALIZADA PARA 'pessoa' e 'ong')
+    const handleAddToCart = async () => {
         try {
-            // 1. Pegar os dados do usuário (sem mudança)
+            // 1. Pegar os dados do usuário
             const userString = localStorage.getItem("user");
             const userType = localStorage.getItem("userType");
-            
-            if (!userString || userType !== 'pessoa') {
-                alert("Erro: Você precisa estar logado como usuário para adicionar ao carrinho.");
+
+            // ❗️ MUDANÇA 1: Permitir 'pessoa' OU 'ong'
+            if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
+                alert("Erro: Você precisa estar logado para adicionar ao carrinho.");
                 return;
             }
-            
-            const usuario = JSON.parse(userString);
-            
-            // 2. Montar o payload (sem mudança)
-            const payload = {
-                id_usuario: usuario.id,
-                id_alimento: alimentoCompleto.id,
-                quantidade: quantidadeSelecionada
-            };
 
-            // 3. Chamar o endpoint POST (sem mudança)
-            const response = await axios.post('http://localhost:8080/v1/mesa-plus/pedidoUsuario', payload, {
+            const usuario = JSON.parse(userString);
+
+            // ❗️ MUDANÇA 2: Preparar Payload dinâmico
+            let payload = {};
+            // O destino é o mesmo para ambos, como você confirmou
+            let redirectUrl = '/meusAlimentosUsuario';
+            // O endpoint é o mesmo, pois seu Controller é inteligente
+            const url = 'http://localhost:8080/v1/mesa-plus/pedidoUsuario';
+
+            if (userType === 'pessoa') {
+                // Payload para Usuário
+                payload = {
+                    id_usuario: usuario.id,
+                    id_alimento: alimentoCompleto.id,
+                    quantidade: quantidadeSelecionada
+                };
+            } else if (userType === 'ong') {
+                // Payload para ONG
+                payload = {
+                    id_ong: usuario.id, // (Envia 'id_ong' em vez de 'id_usuario')
+                    id_alimento: alimentoCompleto.id,
+                    quantidade: quantidadeSelecionada
+                };
+            }
+
+            // 3. Chamar a API (com a URL única e payload dinâmico)
+            const response = await axios.post(url, payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            // 4. Lidar com a resposta (ATUALIZADO)
-            if (response.data && response.data.status_code === 201) {
+            // 4. Lidar com a resposta
+            // (Seu controller retorna 201, mas verificamos 200 também por segurança)
+            if (response.data && (response.data.status_code === 201 || response.data.status_code === 200)) {
                 alert("Alimento adicionado com sucesso!");
-                // 🆕 REDIRECIONA PARA A PÁGINA DE PEDIDOS
-                navigate('/meusAlimentosUsuario'); 
+                navigate(redirectUrl);
             } else {
                 throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
             }
@@ -126,7 +137,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
     if (loading) {
         return (
             <div className="modal-overlay" onClick={onClose}>
-                <div className="modal-container" onClick={handleModalClick} style={{justifyContent: 'center', alignItems: 'center'}}>
+                <div className="modal-container" onClick={handleModalClick} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <div className="modal-loading-feedback">Carregando dados atualizados...</div>
                 </div>
             </div>
@@ -136,10 +147,10 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
     if (error) {
         return (
             <div className="modal-overlay" onClick={onClose}>
-                <div className="modal-container" onClick={handleModalClick} style={{justifyContent: 'center', alignItems: 'center', textAlign: 'center'}}>
+                <div className="modal-container" onClick={handleModalClick} style={{ justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
                     <div className="modal-loading-feedback error">
                         <p>Erro ao carregar o alimento: {error}</p>
-                        <button onClick={onClose} className="modal-close-button" style={{position: 'static', marginTop: '20px', background: '#8B0000', color: 'white'}}>Fechar</button>
+                        <button onClick={onClose} className="modal-close-button" style={{ position: 'static', marginTop: '20px', background: '#8B0000', color: 'white' }}>Fechar</button>
                     </div>
                 </div>
             </div>
@@ -151,18 +162,18 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
     const prazoFormatado = formatarDataModal(alimentoCompleto.data_de_validade);
     const nomeAlimento = alimentoCompleto.nome;
     const nomeEmpresa = alimentoCompleto.empresa ? alimentoCompleto.empresa.nome : 'Empresa não informada';
-    const fotoEmpresa = alimentoCompleto.empresa ? (alimentoCompleto.empresa.foto || alimentoCompleto.empresa.logo_url) : ''; 
+    const fotoEmpresa = alimentoCompleto.empresa ? (alimentoCompleto.empresa.foto || alimentoCompleto.empresa.logo_url) : '';
     const categoriasTags = alimentoCompleto.categorias || [];
     const tipoPesoNome = (alimentoCompleto.tipoPeso && alimentoCompleto.tipoPeso[0])
-                           ? alimentoCompleto.tipoPeso[0].tipo
-                           : 'N/A';
+        ? alimentoCompleto.tipoPeso[0].tipo
+        : 'N/A';
     const pesoCompleto = `${alimentoCompleto.peso || 'N/A'} ${tipoPesoNome}`;
 
 
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-container" onClick={handleModalClick}>
-                
+
                 <button className="modal-close-button" onClick={onClose}>&times;</button>
                 <header className="modal-header">
                     <h2>{nomeAlimento}</h2>

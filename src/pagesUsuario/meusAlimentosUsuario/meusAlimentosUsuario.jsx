@@ -3,7 +3,7 @@ import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
 import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 import ModalAlimento from '../../components/modalAlimento/modalAlimento';
-import '../homeUsuario/HomeUsuario.css'; 
+
 
 function MeusAlimentosUsuarioPage() {
     
