@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // 🆕 Importando o useNavigate
+import { useNavigate } from 'react-router-dom';
 import './ModalAlimento.css';
 
 // Importações dos ícones
@@ -8,10 +8,9 @@ import cart from "../../assets/icons/cart.png";
 import menos from "../../assets/icons/menos.png";
 import mais from "../../assets/icons/mais.png";
 
-// 🆕 Recebemos a nova prop 'isPedidoPage'
 function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }) {
 
-    const navigate = useNavigate(); // 🆕 Instanciando o navigate
+    const navigate = useNavigate();
 
     // --- ESTADOS (sem mudança) ---
     const [alimentoCompleto, setAlimentoCompleto] = useState(null);
@@ -75,14 +74,13 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         e.stopPropagation();
     };
 
-    // ❗️ Ação carrinho (ATUALIZADA PARA 'pessoa' e 'ong')
+    // ❗️ Ação carrinho (ATUALIZADA com redirecionamento dinâmico)
     const handleAddToCart = async () => {
         try {
             // 1. Pegar os dados do usuário
             const userString = localStorage.getItem("user");
             const userType = localStorage.getItem("userType");
 
-            // ❗️ MUDANÇA 1: Permitir 'pessoa' OU 'ong'
             if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
                 alert("Erro: Você precisa estar logado para adicionar ao carrinho.");
                 return;
@@ -90,11 +88,9 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
 
             const usuario = JSON.parse(userString);
 
-            // ❗️ MUDANÇA 2: Preparar Payload dinâmico
+            // 2. Preparar Payload, URL e Redirecionamento
             let payload = {};
-            // O destino é o mesmo para ambos, como você confirmou
-            let redirectUrl = '/meusAlimentosUsuario';
-            // O endpoint é o mesmo, pois seu Controller é inteligente
+            let redirectUrl = ''; // ❗️ Definido dinamicamente abaixo
             const url = 'http://localhost:8080/v1/mesa-plus/pedidoUsuario';
 
             if (userType === 'pessoa') {
@@ -104,24 +100,29 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
                     id_alimento: alimentoCompleto.id,
                     quantidade: quantidadeSelecionada
                 };
+                // ❗️ Redirecionamento de Usuário
+                redirectUrl = '/meusAlimentosUsuario';
+
             } else if (userType === 'ong') {
                 // Payload para ONG
                 payload = {
-                    id_ong: usuario.id, // (Envia 'id_ong' em vez de 'id_usuario')
+                    id_ong: usuario.id,
                     id_alimento: alimentoCompleto.id,
                     quantidade: quantidadeSelecionada
                 };
+                // ❗️ Redirecionamento de ONG
+                redirectUrl = '/MeusAlimentosOng';
             }
 
-            // 3. Chamar a API (com a URL única e payload dinâmico)
+            // 3. Chamar a API
             const response = await axios.post(url, payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
 
             // 4. Lidar com a resposta
-            // (Seu controller retorna 201, mas verificamos 200 também por segurança)
             if (response.data && (response.data.status_code === 201 || response.data.status_code === 200)) {
                 alert("Alimento adicionado com sucesso!");
+                // ❗️ Usa a URL dinâmica
                 navigate(redirectUrl);
             } else {
                 throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
@@ -242,7 +243,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
                                 </button>
                                 <span className="quantity-display">{quantidadeSelecionada}</span>
                                 <button
-                                    className="quantity-button"
+                                    source className="quantity-button"
                                     onClick={handleIncrement}
                                     disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0}
                                 >
