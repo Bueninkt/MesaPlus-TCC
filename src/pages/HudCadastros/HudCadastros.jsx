@@ -53,10 +53,7 @@ function HudCadastrosPage() {
         </div>
       </main>
 
-      <footer className='rodapeHud'>
-        <p>&copy; 2025 Todos os Direitos reservados</p>
-      </footer>
-
+    
     </>
   );
 }

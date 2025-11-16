@@ -1,140 +1,174 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NavbarOng from '../../components/navbarOng/navbarOng'; // Assumindo que a Navbar é a mesma
+import NavbarOng from '../../components/navbarOng/navbarOng';
 import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 import ModalAlimento from '../../components/modalAlimento/modalAlimento';
+import Paginacao from '../../components/paginacaoCard/paginacao'; // 🆕 IMPORTADO
 
 // ❗️ O nome do arquivo/função ainda é 'MeusAlimentosongPage', 
 // mas a lógica agora é para ONGs.
 function MeusAlimentosOngPage() {
-    
-    const [meusPedidos, setMeusPedidos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
 
-    // ❗️ useEffect MODIFICADO para ONGs
-    useEffect(() => {
-        const fetchMeusPedidos = async () => {
-            try {
-                const userString = localStorage.getItem("user");
-                const userType = localStorage.getItem("userType");
-                
-                // ❗️ MUDANÇA 1: Verificando se é 'ong'
-                if (!userString || userType !== 'ong') { 
-                    throw new Error("ONG não autenticada."); // Mensagem atualizada
-                }
-                const usuario = JSON.parse(userString); // 'ong' aqui é o objeto da ONG
+    const [meusPedidos, setMeusPedidos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
 
-                // ❗️ MUDANÇA 2: Usando o endpoint 'id_ong'
-                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/pedido?id_ong=${usuario.id}`);
+    // 🆕 ESTADOS DA PAGINAÇÃO
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 4; // Define 4 itens por página
 
-                if (response.data && response.data.status_code === 200) {
-                    setMeusPedidos(response.data.result); 
-                } else {
-                    throw new Error(response.data.message || "Não foi possível buscar os pedidos.");
-                }
-            } catch (err) {
-                setError(err.message);
-                setMeusPedidos([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchMeusPedidos();
-    }, []); // Roda apenas uma vez
+    // ❗️ useEffect MODIFICADO para ONGs
+    useEffect(() => {
+        const fetchMeusPedidos = async () => {
+            try {
+                const userString = localStorage.getItem("user");
+                const userType = localStorage.getItem("userType");
 
-    // Funções do Modal (sem mudança)
-    const handleCardClick = (alimento) => {
-        const alimentoParaModal = {
-            id: alimento.id_alimento, 
-            ...alimento 
-        };
-        setAlimentoSelecionado(alimentoParaModal);
-        setModalOpen(true);
-    };
+                // ❗️ MUDANÇA 1: Verificando se é 'ong'
+                if (!userString || userType !== 'ong') {
+                    throw new Error("ONG não autenticada."); // Mensagem atualizada
+                }
+                const usuario = JSON.parse(userString); // 'ong' aqui é o objeto da ONG
 
-    const handleCloseModal = () => {
-        setModalOpen(false);
-        setAlimentoSelecionado(null);
-    };
+                // ❗️ MUDANÇA 2: Usando o endpoint 'id_ong'
+                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/pedido?id_ong=${usuario.id}`);
 
-    // FUNÇÃO PARA EXCLUIR O PEDIDO (sem mudança, já estava correta)
-    const handleDeletePedido = async (idPedido) => {
-        if (!window.confirm("Tem certeza que deseja remover este alimento dos seus pedidos?")) {
-            return;
-        }
+                if (response.data && response.data.status_code === 200) {
+                    setMeusPedidos(response.data.result);
+                } else {
+                    throw new Error(response.data.message || "Não foi possível buscar os pedidos.");
+                }
+            } catch (err) {
+                setError(err.message);
+                setMeusPedidos([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMeusPedidos();
+    }, []); // Roda apenas uma vez
 
-        try {
-            // Esta API é genérica e funciona para ONGs e Usuários
-            const response = await axios.delete(`http://localhost:8080/v1/mesa-plus/pedido/${idPedido}`);
+    // Funções do Modal (sem mudança)
+    const handleCardClick = (alimento) => {
+        const alimentoParaModal = {
+            id: alimento.id_alimento,
+            ...alimento
+        };
+        setAlimentoSelecionado(alimentoParaModal);
+        setModalOpen(true);
+    };
 
-            if (response.data && response.data.status_code === 200) {
-                alert("Pedido removido com sucesso!");
-                setMeusPedidos(pedidosAtuais => 
-                    pedidosAtuais.filter(pedido => pedido.id_pedido !== idPedido)
-                );
-            } else {
-                throw new Error(response.data.message || "Erro ao excluir.");
-            }
-        } catch (err) {
-            console.error("Erro ao excluir pedido:", err);
-            alert(`Erro: ${err.message || "Não foi possível remover o pedido."}`);
-        }
-    };
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setAlimentoSelecionado(null);
+    };
 
-    // Função de renderização (sem mudança)
-    const renderContent = () => {
-        if (loading) {
-            return <div className="feedback-message">Carregando meus alimentos...</div>;
-        }
-        if (error) {
-            return <div className="feedback-message">Erro ao carregar dados: {error}</div>;
-        }
-        if (meusPedidos.length === 0) {
-            return <div className="feedback-message">Você ainda não adicionou nenhum alimento.</div>;
-        }
+    // 🆕 FUNÇÃO PARA EXCLUIR O PEDIDO (ATUALIZADA)
+    const handleDeletePedido = async (idPedido) => {
+        if (!window.confirm("Tem certeza que deseja remover este alimento dos seus pedidos?")) {
+            return;
+        }
 
-        return (
-            <div className="lista-alimentos-grid">
-                {meusPedidos.map(pedido => (
-                    <AlimentoCard
-                        key={pedido.id_pedido}
-                        alimento={pedido} 
-                        onCardClick={handleCardClick}
-                        onDeleteClick={handleDeletePedido} // Passando a função de excluir
-                    />
-                ))}
-           </div>
-        );
-    };
+        try {
+            const response = await axios.delete(`http://localhost:8080/v1/mesa-plus/pedido/${idPedido}`);
 
-    // Return (JSX) (sem mudança)
-    return (
-        <>
-            <NavbarOng />
-            <div className="home-ong-page-wrapper" style={{ minHeight: 'calc(100vh - 80px)' }}>
-                <main className="home-ong-container" style={{ display: 'block', width: '90%', margin: '20px auto' }}>
-                    <section className="coluna-conteudo" style={{ width: '100%' }}>
-                        <h1 className="coluna-titulo" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '30px' }}>
-                    Meus Alimentos:
-                        </h1>
-                        {renderContent()}
-                    </section>
-                </main>
-            </div>
+            if (response.data && response.data.status_code === 200) {
+                alert("Pedido removido com sucesso!");
 
-            {/* Modal (sem mudança) */}
-            {modalOpen && alimentoSelecionado && (
-                <ModalAlimento
-                    alimento={alimentoSelecionado}
-                    onClose={handleCloseModal}
-                  auto  isPedidoPage={true} 
-                />
-            )}
-        </>
-    );
+                // 2. Atualiza a tela E checa a paginação
+                setMeusPedidos(pedidosAtuais => {
+                    const novosPedidos = pedidosAtuais.filter(pedido => pedido.id_pedido !== idPedido);
+
+                    // 🆕 Checagem de paginação após exclusão
+                    const newTotalPages = Math.ceil(novosPedidos.length / ITEMS_PER_PAGE);
+                    if (currentPage > newTotalPages && newTotalPages > 0) {
+                        setCurrentPage(newTotalPages); // Volta para a última página válida
+                    } else if (novosPedidos.length === 0) {
+                        setCurrentPage(1); // Volta para a página 1 se tudo for excluído
+                    }
+
+                    return novosPedidos; // Atualiza o estado
+                });
+            } else {
+                throw new Error(response.data.message || "Erro ao excluir.");
+            }
+        } catch (err) {
+            console.error("Erro ao excluir pedido:", err);
+            alert(`Erro: ${err.message || "Não foi possível remover o pedido."}`);
+        }
+    };
+
+    // 🆕 LÓGICA PARA CALCULAR ITENS DA PÁGINA ATUAL
+    const totalPages = Math.ceil(meusPedidos.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    // 🆕 Slice da lista de pedidos para a página atual
+    const currentPedidos = meusPedidos.slice(startIndex, endIndex);
+
+
+    // 🆕 Função de renderização (ATUALIZADA)
+    const renderContent = () => {
+        if (loading) {
+            return <div className="feedback-message">Carregando meus alimentos...</div>;
+        }
+        if (error) {
+            return <div className="feedback-message">Erro ao carregar dados: {error}</div>;
+        }
+        if (meusPedidos.length === 0) {
+            return <div className="feedback-message">Você ainda não adicionou nenhum alimento.</div>;
+        }
+
+        return (
+            <div className="lista-alimentos-grid">
+                {/* ❗️ Mapeia 'currentPedidos' em vez de 'meusPedidos' */}
+                {currentPedidos.map(pedido => (
+                    <AlimentoCard
+                        key={pedido.id_pedido}
+                        alimento={pedido}
+                        onCardClick={handleCardClick}
+                        onDeleteClick={handleDeletePedido} // Passando a função de excluir
+                    />
+                ))}
+            </div>
+        );
+    };
+
+    // Return (JSX)
+    return (
+        <>
+            <NavbarOng />
+            <div className="home-ong-page-wrapper" style={{ minHeight: 'calc(100vh - 80px)' }}>
+                <main className="home-ong-container" style={{ display: 'block', width: '90%', margin: '20px auto' }}>
+                    <section className="coluna-conteudo" style={{ width: '100%' }}>
+                        <h1 className="coluna-titulo" style={{ fontSize: '2.5rem', color: 'white', marginBottom: '30px' }}>
+                            Meus Alimentos:
+                        </h1>
+                        {renderContent()}
+                    </section>
+                </main>
+
+                {/* 🆕 ÁREA DE PAGINAÇÃO ADICIONADA */}
+                <footer className="home-ong-footer" style={{ padding: '20px 0' }}>
+                    <Paginacao
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </footer>
+            </div>
+
+            {/* Modal (sem mudança) */}
+            {modalOpen && alimentoSelecionado && (
+                <ModalAlimento
+                    alimento={alimentoSelecionado}
+                    onClose={handleCloseModal}
+                    auto isPedidoPage={true}
+                />
+            )}
+        </>
+    );
 }
 
 export default MeusAlimentosOngPage;
