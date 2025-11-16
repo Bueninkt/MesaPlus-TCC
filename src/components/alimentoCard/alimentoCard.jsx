@@ -1,43 +1,46 @@
 import React from 'react';
-import './alimentoCard.css'; // Importa o CSS do card
+import './alimentoCard.css'; 
 
-// Recebe a nova prop 'onCardClick'
-function AlimentoCard({ alimento, onCardClick }) {
+// 🆕 Importe um ícone de lixeira (ou use um emoji/texto)
+import trash from '../../assets/icons/trash.png'; // 🆕 (Exemplo, ajuste o caminho)
 
-    // Formata a data de "AAAA-MM-DDTHH:mm:ss.sssZ" para "DD/MM/AA"
+// 🆕 Recebe a nova prop 'onDeleteClick'
+function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
+
+    // ... (função formatarData continua igual)
     const formatarData = (dataISO) => {
         try {
-            const [dataParte] = dataISO.split('T'); // Pega "AAAA-MM-DD"
+            const [dataParte] = dataISO.split('T'); 
             const [ano, mes, dia] = dataParte.split('-');
-            return `${dia}/${mes}/${ano.slice(-2)}`; // Retorna "DD/MM/AA"
+            return `${dia}/${mes}/${ano.slice(-2)}`; 
         } catch (e) {
-            console.error("Erro ao formatar data:", dataISO, e);
             return "Data inválida";
         }
     };
-
     
-    // 🆕 Usa 'data_de_validade' (que é igual em ambas as rotas)
     const prazoFormatado = formatarData(alimento.data_de_validade);
-    
-    // 🆕 Lógica para pegar os dados da empresa de AMBAS as respostas
     const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
     const logoEmpresa = alimento.empresa ? alimento.empresa.logo_url : alimento.foto_empresa;
+
+    // 🆕 Função de clique para parar a propagação
+    // Evita que ao clicar na lixeira, o modal abra.
+    const handleDelete = (e) => {
+        e.stopPropagation(); // Para o clique aqui
+        onDeleteClick(alimento.id_pedido); // Chama a função de excluir
+    };
     
     return (
+        // 🆕 Passa o clique do card para a div principal
         <div className="card-container" onClick={() => onCardClick(alimento)}>
             
             <div className="imagem-container">
-                {/* 🆕 Usa 'imagem' (que é igual em ambas as rotas) */}
                 <img src={alimento.imagem} alt={`Imagem de ${alimento.nome || alimento.nome_alimento}`} />
             </div>
 
             <div className="info-container">
-                {/* 🆕 CORREÇÃO DE DADOS: Lê 'nome' OU 'nome_alimento' */}
                 <h3>{alimento.nome || alimento.nome_alimento}</h3>
                 <p>Prazo: {prazoFormatado}</p>
                 
-                {/* 🆕 CORREÇÃO DE DADOS: Verifica se 'nomeEmpresa' existe */}
                 {nomeEmpresa && (
                     <div className="empresa-info">
                         <img 
@@ -50,9 +53,20 @@ function AlimentoCard({ alimento, onCardClick }) {
             </div>
             
             <div className="quantidade-container">
-                {/* 🆕 Usa 'quantidade' (que é igual em ambas as rotas) */}
-                <p>Qnt: {alimento.quantidade}</p>
+                {/* Esta é a correção que fizemos antes, mostrando a 
+                  quantidade do PEDIDO (ex: 2) ou o estoque (ex: 45) 
+                */}
+                <p>Qnt: {alimento.quantidade_pedido || alimento.quantidade}</p>
             </div>
+
+            {/* 🆕 BOTÃO DE EXCLUIR CONDICIONAL */}
+            {/* Ele só aparece se a prop 'onDeleteClick' for passada */}
+            {onDeleteClick && (
+                <button className="card-delete-button" onClick={handleDelete}>
+                    {/* Use um ícone ou um "X" */}
+                    <img src={trash} alt="Excluir Pedido" />
+                </button>
+            )}
 
         </div>
     );

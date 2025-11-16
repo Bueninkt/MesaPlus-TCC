@@ -1,4 +1,4 @@
-// 🔄 Arquivo: HomeUsuarioPage.jsx
+// 🔄 Arquivo: HomeUsuarioPage.jsx (Atualizado com formatação de data no Frontend)
 import React, { useState, useEffect, useCallback } from 'react';
 
 // Importação dos componentes
@@ -29,37 +29,42 @@ function HomeUsuarioPage() {
     // ESTADO PARA GUARDAR OS FILTROS ATIVOS
     const [filtrosAtivos, setFiltrosAtivos] = useState({
         categoriaId: null,
-        empresaId: null, // 🆕 NOVO: 'Ouvindo' o filtro de empresa
-        // ... (outros filtros aqui)
+        empresaId: null,
+        dataVencimento: '',
     });
 
-    // 2. FUNÇÃO "OUVINTE" (sem mudanças, já está correta com useCallback)
+    // 2. FUNÇÃO "OUVINTE" 
     const handleFiltroChange = useCallback((filtros) => {
         setFiltrosAtivos(filtros);
-        setCurrentPage(1); // Reseta a paginação ao mudar o filtro
+        setCurrentPage(1);
     }, []);
 
 
-    // 🔄 3. USEEFFECT ATUALIZADO (Lógica de API com Prioridade)
+    // 🔄 3. USEEFFECT ATUALIZADO (Com formatação de data)
     useEffect(() => {
         const fetchAlimentos = async () => {
             setLoading(true);
             setError(null);
 
             let url = '';
-            // 🆕 Lê os dois IDs
-            const categoriaID = filtrosAtivos.categoriaId;
-            const empresaID = filtrosAtivos.empresaId; // 🆕
 
-            // 🆕 Lógica de prioridade
+            const { categoriaId: categoriaID, empresaId: empresaID, dataVencimento } = filtrosAtivos;
+
+            // ❗️ INÍCIO DA MODIFICAÇÃO SOLICITADA ❗️
+            let dataFormatadaParaAPI = '';
+            if (dataVencimento) { // Ex: "2027-05-31"
+                const [ano, mes, dia] = dataVencimento.split('-');
+                dataFormatadaParaAPI = `${dia}-${mes}-${ano}`; // Ex: "31-05-2027"
+            }
+            // ❗️ FIM DA MODIFICAÇÃO ❗️
+
             if (empresaID) {
-                // 1. Prioridade: Filtro de Empresa
                 url = `http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaID}`;
             } else if (categoriaID) {
-                // 2. Se não, filtro de Categoria
                 url = `http://localhost:8080/v1/mesa-plus/filtroCat/${categoriaID}`;
+            } else if (dataFormatadaParaAPI) { // ❗️ Usa a data formatada
+                url = `http://localhost:8080/v1/mesa-plus/filtroData?data=${dataFormatadaParaAPI}`;
             } else {
-                // 3. Se não, busca todos
                 url = 'http://localhost:8080/v1/mesa-plus/alimentos';
             }
 
@@ -72,37 +77,29 @@ function HomeUsuarioPage() {
 
                 if (data.status === true) {
 
-                    // 🔄 CONDIÇÃO DE "TRADUÇÃO" ATUALIZADA
-                    // Agora, se *qualquer* filtro (Cat ou Empresa) estiver ativo
-                    // e a resposta for 'resultFiltro', ele normaliza.
-                    // Isso funciona porque AMBOS os seus endpoints de filtro (filtroCat e empresaAlimento)
-                    // retornam os dados como f0, f1, f2...
-                    if ((categoriaID || empresaID) && Array.isArray(data.resultFiltro)) {
-                        // Resposta do /filtroCat/:id OU /empresaAlimento/:id
+                    // ❗️ A condição de normalização foi atualizada
+                    if ((categoriaID || empresaID || dataFormatadaParaAPI) && Array.isArray(data.resultFiltro)) {
+                        // Resposta de um dos filtros (formato "achatado")
                         const alimentosNormalizados = data.resultFiltro.map(item => ({
-                            id: item.id_alimento, // f0
-                            nome: item.nome_alimento, // f1
-                            quantidade: item.quantidade, // f2
-                            peso: item.peso, // f3
-                            id_tipo_peso: item.id_tipo_peso, // f4
-                            tipo_peso_nome: item.tipo, // f5 (seu SQL chama de tipoPeso, mas o f5 é 'tipo')
-                            data_de_validade: item.data_de_validade, // f6
-                            descricao: item.descricao, // f7
-                            imagem: item.imagem, // f8
+                            id: item.id_alimento,
+                            nome: item.nome_alimento,
+                            quantidade: item.quantidade,
+                            peso: item.peso,
+                            id_tipo_peso: item.id_tipo_peso,
+                            tipo_peso_nome: item.tipo,
+                            data_de_validade: item.data_de_validade,
+                            descricao: item.descricao,
+                            imagem: item.imagem,
                             empresa: {
-                                id: item.id_empresa, // f9
-                                nome: item.nome_empresa, // f10
-                                logo_url: item.foto_empresa // f11
+                                id: item.id_empresa,
+                                nome: item.nome_empresa,
+                                logo_url: item.foto_empresa
                             },
-                            // f12 (nome_categoria) só vem do /filtroCat,
-                            // mas não tem problema estar null se for filtro de empresa
-                            nome_categoria: item.nome_categoria // f12
+                            nome_categoria: item.nome_categoria
                         }));
                         setAlimentos(alimentosNormalizados);
 
-                        // 🔄 CONDIÇÃO "TODOS" ATUALIZADA
-                        // Só entra aqui se NENHUM filtro estiver ativo
-                    } else if (!categoriaID && !empresaID && Array.isArray(data.alimentos)) {
+                    } else if (!categoriaID && !empresaID && !dataFormatadaParaAPI && Array.isArray(data.alimentos)) {
                         // Resposta do /alimentos (já está no formato correto)
                         setAlimentos(data.alimentos);
                     } else {
@@ -116,7 +113,6 @@ function HomeUsuarioPage() {
                 console.error("Falha ao buscar dados da API:", e);
             } finally {
                 setLoading(false);
-                
             }
         };
         fetchAlimentos();
@@ -175,14 +171,14 @@ function HomeUsuarioPage() {
                 <main className="home-usuario-container">
                     <aside className="coluna-filtros">
                         <Filtrar onFilterChange={handleFiltroChange} />
-                                 </aside>
+                    </aside>
 
                     <section className="coluna-conteudo">
                         <h2 className="coluna-titulo">Empresas:</h2>
                         <CarrosselEmpresa />
                         {renderContent()}
                     </section>
-                     </main>
+                </main>
 
                 <footer className="home-usuario-footer">
                     <Paginacao
@@ -193,11 +189,6 @@ function HomeUsuarioPage() {
                 </footer>
             </div>
 
-            {/*               O Modal, AlimentoCard e o SQL já estão corretos. 
-              A "normalização" que fizemos na HomeUsuarioPage garante que 
-              os dados cheguem no formato que eles esperam, 
-              independentemente da rota da API (filtros ou /alimentos).
-            */}
             {modalOpen && alimentoSelecionado && (
                 <ModalAlimento
                     alimento={alimentoSelecionado}
