@@ -1,12 +1,19 @@
-/* ===== Container da Página ===== */
+/* =========================================
+   CONTAINER DA PÁGINA
+   ========================================= */
 .perfil-pagina-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 1rem 1rem;
+    justify-content: flex-start;
+    padding: 2rem 1rem;
+    gap: 3rem;
+    min-height: 100vh;
 }
 
-/* ===== Card Principal ===== */
+/* =========================================
+   CARD PRINCIPAL
+   ========================================= */
 .perfil-card {
     background-color: var(--beige);
     border-radius: 20px;
@@ -19,7 +26,9 @@
     width: 100%;
 }
 
-/* ===== Seção da Foto (Coluna Esquerda) ===== */
+/* =========================================
+   SEÇÃO DA FOTO
+   ========================================= */
 .perfil-foto-container {
     display: flex;
     flex-direction: column;
@@ -51,7 +60,9 @@
     display: none;
 }
 
-/* ===== Seção dos Dados (Coluna Direita) ===== */
+/* =========================================
+   SEÇÃO DOS DADOS
+   ========================================= */
 .perfil-dados-container {
     flex-basis: 500px;
     flex-grow: 9;
@@ -60,7 +71,7 @@
     gap: 1.5rem 2.5rem;
 }
 
-/* ===== Campos Individuais (Label + Valor) ===== */
+/* ===== Campos Individuais ===== */
 .campo-container {
     display: flex;
     flex-direction: column;
@@ -75,95 +86,76 @@
     text-transform: capitalize;
 }
 
-/* ===== O CONTÊINER COM ROLAGEM (WRAPPER PADRÃO) ===== */
-.campo-valor-wrapper.password-field-wrapper,
-.campo-valor-wrapper { /* Aplica a todos para manter padrão */
+.campo-valor-wrapper {
     display: flex;
     align-items: center;
     position: relative;
-    overflow: hidden; /* O Pai não rola */
+    overflow: hidden;
     padding-right: 0;
     padding-bottom: 0;
-    border-bottom: 2px solid var(--green-dark-2); /* Borda fixa no container */
+    border-bottom: 2px solid var(--green-dark-2);
 }
 
-/* 2. A NOVA DIV MÁGICA (Ela é quem ganha a barra de rolagem) */
 .campo-scroll-container {
-    flex: 1;                 /* Ocupa todo o espaço disponível até o olho */
-    min-width: 0;            /* Permite encolher */
-    overflow-x: auto;        /* Habilita SCROLL aqui */
-    white-space: nowrap;     /* Garante linha única */
-    
-    padding-bottom: 4px;     /* Espaço para a barra verde */
-    margin-right: 5px;       /* Espaço antes de chegar no olho */
-    
-    /* Estilo da Barra Verde */
-    &::-webkit-scrollbar { height: 6px; }
-    &::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
-    &::-webkit-scrollbar-thumb { background-color: var(--green-light); border-radius: 10px; }
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 4px;
+    margin-right: 5px;
 }
 
-/* 3. O Input e o Span (Agora eles ficam "soltos" dentro do scroll container) */
+.campo-scroll-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.campo-scroll-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.campo-scroll-container::-webkit-scrollbar-thumb {
+    background-color: var(--green-light);
+    border-radius: 10px;
+}
+
 .campo-input,
 .campo-texto {
-    display: inline-block;   /* Importante para o size funcionar */
+    display: inline-block;
     border: none;
     background: transparent;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     color: #333;
-    outline: none;           /* Remove borda azul padrão */
-    
-    /* Removemos o scroll daqui, pois a div pai (scroll-container) já faz isso */
+    outline: none;
 }
 
-/* Estilo específico do Input Editável */
-.campo-input {
-    /* O outline dashed aparece no input, que vai rolar junto */
-    outline: dashed 1.5px var(--green-light);
-    background-color: #12341f05;
-    padding: 0.25rem 0;
-    min-width: 100%; /* Garante que ocupe pelo menos o espaço visível */
-}
-
-/* 4. Ícone do Olho (Fixo fora da rolagem) */
-.password-toggle-icon {
-    position: static;
-    flex-shrink: 0;
-    margin-left: 2px;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    z-index: 10;
-}
-/* --- Fim CSS Senha --- */
-
-/* Texto no modo de visualização */
 .campo-texto {
     display: block;
-    white-space: nowrap;
-    color: #333;
-    font-size: 1rem;
     padding: 0.25rem 0;
 }
 
-/* Input no modo de edição */
 .campo-input {
-    border: none;
     outline: dashed 1.5px var(--green-light);
     background-color: #12341f05;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: #333;
-    min-width: 100%;
     padding: 0.25rem 0;
+    min-width: 100%;
 }
 
-.senha{
-    
+.campo-input.input-disabled {
+    outline: none;
+    background-color: transparent;
+    cursor: not-allowed;
+    color: #666;
 }
 
-/* ===== Botões e Erros ===== */
+.campo-input.input-error {
+    border-bottom: 2px solid #D8000C;
+}
+
+/* =========================================
+   BOTÕES E ERROS
+   ========================================= */
 .perfil-botoes {
     grid-column: 1 / -1;
     display: flex;
@@ -173,7 +165,8 @@
     flex-wrap: wrap;
 }
 
-.btn-editar, .btn-atualizar {
+.btn-editar,
+.btn-atualizar {
     padding: 0.7rem 1.5rem;
     border: none;
     border-radius: 8px;
@@ -189,17 +182,20 @@
     background-color: var(--white);
     color: var(--green-dark);
 }
-.btn-editar:hover { background-color: #f7f7f7; }
+
+.btn-editar:hover {
+    background-color: #f7f7f7;
+}
 
 .btn-atualizar {
     background-color: var(--green-light);
     color: var(--green-dark-2);
     border: 1px solid var(--green-light);
 }
-.btn-atualizar:hover { filter: brightness(1.05); }
 
-
-/* Adicione isso junto com os estilos de botão no final do arquivo */
+.btn-atualizar:hover {
+    filter: brightness(1.05);
+}
 
 .btn-cancelar {
     padding: 0.7rem 1.5rem;
@@ -212,7 +208,7 @@
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
-    margin-right: 10px; /* Espaço entre cancelar e atualizar */
+    margin-right: 10px;
 }
 
 .btn-cancelar:hover {
@@ -244,6 +240,81 @@
     font-weight: 500;
 }
 
-.campo-input.input-error {
-    border-bottom: 2px solid #D8000C;
+/* =========================================
+   SEÇÃO MEUS ALIMENTOS
+   ========================================= */
+.meus-alimentos-wrapper-empresa {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.titulo-secao {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+}
+
+/* Grid Flexível */
+.alimentos-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 43px;
+    width: 100%;
+}
+
+/* Limitar largura dos cards */
+.alimentos-grid > * {
+    flex: 0 1 700px;
+    width: 100%;
+}
+
+.loading-msg,
+.sem-alimentos-msg {
+    color: #ccc;
+    text-align: center;
+    font-size: 1.1rem;
+    border: 1px dashed #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+/* =========================================
+   RODAPÉ DA PAGINAÇÃO
+   ========================================= */
+.paginacao-footer-perfil-empresa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 56px;
+    flex-shrink: 0;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 768px) {
+    .perfil-card {
+        align-items: center;
+    }
+
+    .perfil-dados-container {
+        grid-template-columns: 1fr;
+    }
+
+    .alimentos-grid {
+        justify-content: center;
+    }
+
+    .alimentos-grid > * {
+        max-width: 100%;
+    }
 }

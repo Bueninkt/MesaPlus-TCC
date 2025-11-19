@@ -14,7 +14,6 @@ import "./recuperarNovaSenha.css";
 import navbarRegister from "../../components/navbar/navbarRegister";
 const Navbar = navbarRegister;
 
-// Componente para exibir os critérios de validação da senha
 const PasswordCriteria = ({ criteria }) => (
   <div className="password-criteria">
     <p className={criteria.length ? 'valid' : 'invalid'}>
@@ -34,7 +33,6 @@ const PasswordCriteria = ({ criteria }) => (
     </p>
   </div>
 );
-
 
 function RecuperarNovaSenha() {
   const navigate = useNavigate();
@@ -72,62 +70,86 @@ function RecuperarNovaSenha() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Verifica se todos os critérios são verdadeiros
     const isFormValid = Object.values(validationCriteria).every(Boolean);
 
     if (!isFormValid) {
-      setApiMessage({ type: 'error', text: 'Por favor, preencha a senha corretamente.' });
+      setApiMessage({ type: 'error', text: 'Por favor, preencha a senha corretamente seguindo os critérios.' });
       return;
     }
 
     setIsLoading(true);
-    setApiMessage({ type: '', text: '' }); // Limpa mensagens anteriores
+    setApiMessage({ type: '', text: '' });
 
     try {
-      // Obtenção de dados do localStorage
-      // --- CORREÇÃO APLICADA AQUI ---
-      const email = localStorage.getItem('email'); // Corrigido de 'userEmail' para 'email'
-      const tipo = localStorage.getItem('userType');
+      // --- CORREÇÃO ROBUSTA DO LOCALSTORAGE ---
+      
+      // 1. Tenta obter o objeto 'user' completo (padrão do sistema)
+      const userStorage = localStorage.getItem('user');
+      const userObj = userStorage ? JSON.parse(userStorage) : null;
 
-      if (!email || !tipo) {
-        throw new Error("Dados de recuperação não encontrados. Por favor, inicie o processo novamente.");
+      // 2. Define Email: Tenta no objeto user, senão tenta buscar item solto
+      const email = userObj?.email || localStorage.getItem('email');
+
+      // 3. Define ID (Opcional, mas seu controller aceita):
+      const id = userObj?.id || localStorage.getItem('id');
+
+      // 4. Define Tipo: Verifica chaves comuns (tipo, type, userType)
+      // Nota: Se seu JSON de login usa outro nome para o tipo, ajuste aqui.
+      const tipo = userObj?.tipo || userObj?.userType || localStorage.getItem('userType');
+
+      // Validação de segurança antes de enviar
+      if ((!email && !id) || !tipo) {
+        // Se não temos nem email nem ID, ou faltou o tipo, não dá para prosseguir
+        console.error("Dados de sessão faltantes:", { email, id, tipo, userObj });
+        throw new Error("Sessão inválida. Por favor, faça login novamente.");
       }
 
+      // Monta o payload
+      // O controller aceita 'id' OU 'email'. Mandar o ID é geralmente mais seguro se disponível.
       const payload = {
         senha: password,
-        email: email,
-        tipo: tipo
+        tipo: tipo, // 'empresa', 'cliente', etc.
+        email: email, // Opcional se tiver ID, mas bom manter
+        id: id        // Opcional se tiver email, mas garante integridade
       };
 
-      // Envio da requisição para a API
+      console.log("Enviando payload:", { ...payload, senha: "***" }); // Debug seguro
+
       await axios.put('http://localhost:8080/v1/mesa-plus/nova-senha/', payload, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
 
-      // Feedback de Sucesso e Redirecionamento
       setApiMessage({ type: 'success', text: 'Nova Senha Criada com sucesso!' });
 
       setTimeout(() => {
+        // Se o usuário veio da página de perfil, talvez queira voltar pra lá
+        // Mas como alterou a senha, login é o mais seguro.
         navigate('/login');
-      }, 2500); // 2,5 segundos
+      }, 2500);
 
     } catch (error) {
-      let userMessage = 'Ocorreu um erro ao atualizar a senha. Por favor, tente novamente.';
+      let userMessage = 'Ocorreu um erro ao atualizar a senha.';
 
-      // Se a API retornou uma mensagem de erro específica, use-a.
-      if (error.response && error.response.data && error.response.data.message) {
-        // Exemplo: se o erro for seguro de exibir, como "Token expirado"
-        if (error.response.status === 401) {
-          userMessage = 'Seu link de recuperação expirou. Por favor, solicite um novo.';
+      if (error.response) {
+        // Erros vindos do Backend
+        if (error.response.data && error.response.data.message) {
+             userMessage = error.response.data.message;
+        } else if (error.response.status === 404) {
+             userMessage = 'Usuário não encontrado.';
+        } else if (error.response.status === 400) {
+             userMessage = 'Dados inválidos enviados.';
         }
+      } else if (error.message) {
+        // Erros lançados manualmente (ex: Sessão inválida)
+        userMessage = error.message;
       }
 
-      // Para o desenvolvedor, sempre logue o erro completo no console
-      console.error('API Error:', error.response || error.message);
-
+      console.error('Erro ao atualizar:', error);
       setApiMessage({ type: 'error', text: userMessage });
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -200,10 +222,8 @@ function RecuperarNovaSenha() {
             </button>
           </label>
 
-          {/* Renderização da validação em tempo real */}
-          {password && <PasswordCriteria criteria={validationCriteria} />}
+          <PasswordCriteria criteria={validationCriteria} />
 
-          {/* Renderização das mensagens da API */}
           {apiMessage.text && (
             <div className={`api-message ${apiMessage.type}`}>
               {apiMessage.text}
@@ -213,7 +233,7 @@ function RecuperarNovaSenha() {
           <button
             className="btnRecuperarNovaSenha btn--submitRecuperarNovaSenha"
             type="submit"
-            disabled={isLoading || !Object.values(validationCriteria).every(Boolean)} // Melhoria na UI/UX
+            disabled={isLoading || !Object.values(validationCriteria).every(Boolean)}
           >
             {isLoading ? 'Salvando...' : 'Recuperar Senha'}
           </button>
@@ -223,4 +243,4 @@ function RecuperarNovaSenha() {
   );
 }
 
-export default RecuperarNovaSenha;
+export default RecuperarNovaSenha;  

@@ -12,13 +12,13 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
 
     const navigate = useNavigate();
 
-    // --- ESTADOS (sem mudança) ---
+    // --- ESTADOS ---
     const [alimentoCompleto, setAlimentoCompleto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
 
-    // --- useEffect (sem mudança) ---
+    // --- useEffect ---
     useEffect(() => {
         const fetchAlimento = async () => {
             if (!alimentoBase || !alimentoBase.id) {
@@ -48,7 +48,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         fetchAlimento();
     }, [alimentoBase.id]);
 
-    // --- Funções de Formatação e Ação (sem mudança) ---
+    // --- Funções de Ação ---
     const handleIncrement = () => {
         const quantidadeDisponivel = alimentoCompleto?.quantidade || 0;
         if (quantidadeSelecionada < quantidadeDisponivel) {
@@ -74,10 +74,8 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         e.stopPropagation();
     };
 
-    // ❗️ Ação carrinho (ATUALIZADA com redirecionamento dinâmico)
     const handleAddToCart = async () => {
         try {
-            // 1. Pegar os dados do usuário
             const userString = localStorage.getItem("user");
             const userType = localStorage.getItem("userType");
 
@@ -87,42 +85,33 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
             }
 
             const usuario = JSON.parse(userString);
-
-            // 2. Preparar Payload, URL e Redirecionamento
             let payload = {};
-            let redirectUrl = ''; // ❗️ Definido dinamicamente abaixo
+            let redirectUrl = '';
             const url = 'http://localhost:8080/v1/mesa-plus/pedidoUsuario';
 
             if (userType === 'pessoa') {
-                // Payload para Usuário
                 payload = {
                     id_usuario: usuario.id,
                     id_alimento: alimentoCompleto.id,
                     quantidade: quantidadeSelecionada
                 };
-                // ❗️ Redirecionamento de Usuário
                 redirectUrl = '/meusAlimentosUsuario';
 
             } else if (userType === 'ong') {
-                // Payload para ONG
                 payload = {
                     id_ong: usuario.id,
                     id_alimento: alimentoCompleto.id,
                     quantidade: quantidadeSelecionada
                 };
-                // ❗️ Redirecionamento de ONG
                 redirectUrl = '/MeusAlimentosOng';
             }
 
-            // 3. Chamar a API
             const response = await axios.post(url, payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            // 4. Lidar com a resposta
             if (response.data && (response.data.status_code === 201 || response.data.status_code === 200)) {
                 alert("Alimento adicionado com sucesso!");
-                // ❗️ Usa a URL dinâmica
                 navigate(redirectUrl);
             } else {
                 throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
@@ -134,7 +123,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         }
     };
 
-    // --- RENDERIZAÇÃO COM LOADING E ERRO (sem mudança) ---
+    // --- RENDERIZAÇÃO LOADING/ERRO ---
     if (loading) {
         return (
             <div className="modal-overlay" onClick={onClose}>
@@ -158,7 +147,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
         );
     }
 
-    // --- RENDERIZAÇÃO NORMAL (sem mudança) ---
+    // --- RENDERIZAÇÃO NORMAL ---
     const quantidadeDisponivel = alimentoCompleto.quantidade || 0;
     const prazoFormatado = formatarDataModal(alimentoCompleto.data_de_validade);
     const nomeAlimento = alimentoCompleto.nome;
@@ -210,24 +199,27 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
                     </div>
                 </main>
 
-                {/* 🆕 RENDERIZAÇÃO CONDICIONAL DO RODAPÉ */}
-                {!isPedidoPage && (
-                    <footer className="modal-footer">
-                        {/* Coluna da Categoria */}
-                        <div className="footer-col categoria-col">
-                            <h3>Categoria</h3>
-                            <div className="tags-container">
-                                {categoriasTags.length > 0 ? (
-                                    categoriasTags.map((cat, index) => (
-                                        <span key={cat.id || index} className="tag">{cat.nome}</span>
-                                    ))
-                                ) : (
-                                    <span className="tag-none">Não categorizado</span>
-                                )}
-                            </div>
+                {/* ATUALIZAÇÃO AQUI:
+                   Removemos a condição {!isPedidoPage && ...} que envolvia TODO o footer.
+                   Agora o footer sempre aparece, mas o carrinho só aparece se NÃO for page de pedido/empresa.
+                */}
+                <footer className="modal-footer">
+                    {/* Coluna da Categoria (SEMPRE VISÍVEL) */}
+                    <div className="footer-col categoria-col">
+                        <h3>Categoria</h3>
+                        <div className="tags-container">
+                            {categoriasTags.length > 0 ? (
+                                categoriasTags.map((cat, index) => (
+                                    <span key={cat.id || index} className="tag">{cat.nome}</span>
+                                ))
+                            ) : (
+                                <span className="tag-none">Não categorizado</span>
+                            )}
                         </div>
+                    </div>
 
-                        {/* Coluna do Carrinho */}
+                    {/* Coluna do Carrinho (VISÍVEL APENAS SE NÃO FOR PEDIDO/EMPRESA) */}
+                    {!isPedidoPage && (
                         <div className="footer-col carrinho-col">
                             <button className="add-to-cart-button" onClick={handleAddToCart}>
                                 <img src={cart} alt="Carrinho" className="cart-icon" />
@@ -243,7 +235,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
                                 </button>
                                 <span className="quantity-display">{quantidadeSelecionada}</span>
                                 <button
-                                    source className="quantity-button"
+                                    className="quantity-button"
                                     onClick={handleIncrement}
                                     disabled={quantidadeSelecionada === quantidadeDisponivel || quantidadeDisponivel === 0}
                                 >
@@ -251,8 +243,8 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
                                 </button>
                             </div>
                         </div>
-                    </footer>
-                )}
+                    )}
+                </footer>
             </div>
         </div>
     );

@@ -87,6 +87,29 @@
     flex-shrink: 0;
 }
 
+/* ... restante do seu CSS anterior ... */
+
+/* === RODAPÉ DA PAGINAÇÃO (Estilo igual HomeUsuarioPage) === */
+.paginacao-footer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    padding: 20px 0; /* Espaçamento interno */
+    margin-top: 20px; /* Afasta um pouco do grid de alimentos */
+    
+    /* Garante que não encolha se o conteudo for grande */
+    flex-shrink: 0;
+}
+
+/* Ajuste opcional para garantir que a seção 'meus-alimentos-wrapper' ocupe espaço */
+.meus-alimentos-wrapper {
+    /* Se quiser que o footer vá para o final da tela se tiver poucos itens */
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
 
 /* --- RESPONSIVIDADE --- */
 
