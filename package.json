@@ -16,7 +16,7 @@
     "react": "^19.1.1",
     "react-day-picker": "^9.11.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.5",
+    "react-router-dom": "^7.9.6",
     "react-slick": "^0.31.0",
     "slick-carousel": "^1.8.1",
     "yup": "^1.7.1"

@@ -56,7 +56,7 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
                             // 3. MELHORIA NO ONERROR:
                             // Em vez de 'display: none' (que faz sumir), coloca a imagem padrão
                             onError={(e) => { 
-                                e.target.onerror = null; // Previne loop infinito
+                                e.target.onerror = null; // Previne loop infinit
                                 e.target.src = userDefaultEmpresa; 
                             }}
                         />
