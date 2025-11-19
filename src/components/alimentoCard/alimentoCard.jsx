@@ -1,15 +1,14 @@
 import React from 'react';
 import './alimentoCard.css'; 
+import trash from '../../assets/icons/trash.png'; 
+// 1. Importe a imagem padrão (igual você fez no modal)
+import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; 
 
-// 🆕 Importe um ícone de lixeira (ou use um emoji/texto)
-import trash from '../../assets/icons/trash.png'; // 🆕 (Exemplo, ajuste o caminho)
-
-// 🆕 Recebe a nova prop 'onDeleteClick'
 function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
 
-    // ... (função formatarData continua igual)
     const formatarData = (dataISO) => {
         try {
+            if (!dataISO) return "---"; // Proteção contra null
             const [dataParte] = dataISO.split('T'); 
             const [ano, mes, dia] = dataParte.split('-');
             return `${dia}/${mes}/${ano.slice(-2)}`; 
@@ -19,18 +18,25 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
     };
     
     const prazoFormatado = formatarData(alimento.data_de_validade);
-    const nomeEmpresa = alimento.empresa ? alimento.empresa.nome : alimento.nome_empresa;
-    const logoEmpresa = alimento.empresa ? alimento.empresa.logo_url : alimento.foto_empresa;
 
-    // 🆕 Função de clique para parar a propagação
-    // Evita que ao clicar na lixeira, o modal abra.
+    // 2. CORREÇÃO AQUI: 
+    // Verifique 'foto', 'logo_url', 'foto_empresa' e 'imagem'. 
+    // O operador ?. (optional chaining) evita erro se 'empresa' for null.
+    const nomeEmpresa = alimento.empresa?.nome || alimento.nome_empresa;
+    
+    const logoEmpresa = 
+        alimento.empresa?.foto ||       // Tenta .foto (usado no Modal)
+        alimento.empresa?.logo_url ||   // Tenta .logo_url
+        alimento.foto_empresa ||        // Tenta foto_empresa (flat)
+        userDefaultEmpresa;             // Se nada existir, usa o padrão
+
+
     const handleDelete = (e) => {
-        e.stopPropagation(); // Para o clique aqui
-        onDeleteClick(alimento.id_pedido); // Chama a função de excluir
+        e.stopPropagation(); 
+        onDeleteClick(alimento.id_pedido); 
     };
     
     return (
-        // 🆕 Passa o clique do card para a div principal
         <div className="card-container" onClick={() => onCardClick(alimento)}>
             
             <div className="imagem-container">
@@ -39,13 +45,20 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
 
             <div className="info-container">
                 <h3>{alimento.nome || alimento.nome_alimento}</h3>
-                <p>Prazo: {prazoFormatado}</p>
+                
+                <p>Validade: {prazoFormatado}</p>
                 
                 {nomeEmpresa && (
                     <div className="empresa-info">
                         <img 
                             src={logoEmpresa}
                             alt={`Logo ${nomeEmpresa}`} 
+                            // 3. MELHORIA NO ONERROR:
+                            // Em vez de 'display: none' (que faz sumir), coloca a imagem padrão
+                            onError={(e) => { 
+                                e.target.onerror = null; // Previne loop infinito
+                                e.target.src = userDefaultEmpresa; 
+                            }}
                         />
                         <span>{nomeEmpresa}</span>
                     </div>
@@ -53,17 +66,11 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
             </div>
             
             <div className="quantidade-container">
-                {/* Esta é a correção que fizemos antes, mostrando a 
-                  quantidade do PEDIDO (ex: 2) ou o estoque (ex: 45) 
-                */}
                 <p>Qnt: {alimento.quantidade_pedido || alimento.quantidade}</p>
             </div>
 
-            {/* 🆕 BOTÃO DE EXCLUIR CONDICIONAL */}
-            {/* Ele só aparece se a prop 'onDeleteClick' for passada */}
             {onDeleteClick && (
                 <button className="card-delete-button" onClick={handleDelete}>
-                    {/* Use um ícone ou um "X" */}
                     <img src={trash} alt="Excluir Pedido" />
                 </button>
             )}

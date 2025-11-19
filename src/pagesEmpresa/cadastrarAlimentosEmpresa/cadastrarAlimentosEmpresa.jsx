@@ -417,6 +417,7 @@ function CadastrarAlimentosEmpresaPage() {
                                     value={nome}
                                     onChange={(e) => setNome(e.target.value)}
                                     onBlur={handleBlur}
+                                    maxLength={30}
                                 />
                                 <span className="validation-error">{errors.nome}</span>
                             </fieldset>
@@ -502,6 +503,7 @@ function CadastrarAlimentosEmpresaPage() {
                                     value={descricao}
                                     onChange={(e) => setDescricao(e.target.value)}
                                     onBlur={handleBlur}
+                                    maxLength={500}
                                 ></textarea>
                                 <span className="validation-error">{errors.descricao}</span>
                             </fieldset>

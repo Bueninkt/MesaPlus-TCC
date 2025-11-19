@@ -172,7 +172,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false }
 
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay-alimento" onClick={onClose}>
             <div className="modal-container" onClick={handleModalClick}>
 
                 <button className="modal-close-button" onClick={onClose}>&times;</button>

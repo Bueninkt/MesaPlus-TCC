@@ -3,7 +3,7 @@ import axios from 'axios';
 import NavbarOng from '../../components/navbarOng/navbarOng';
 import AlimentoCard from '../../components/alimentoCard/alimentoCard';
 import ModalAlimento from '../../components/modalAlimento/modalAlimento';
-import Paginacao from '../../components/paginacaoCard/paginacao'; // 🆕 IMPORTADO
+import Paginacao from '../../components/paginacaoCard/Paginacao'; // 🆕 IMPORTADO
 
 // ❗️ O nome do arquivo/função ainda é 'MeusAlimentosongPage', 
 // mas a lógica agora é para ONGs.

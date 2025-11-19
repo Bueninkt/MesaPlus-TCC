@@ -1,0 +1,205 @@
+/* Fundo escuro (Overlay) */
+.modal-overlay-empresa {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px); /* Desfoque suave no fundo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Container do conteúdo */
+.modal-content {
+    background-color: var(--beige, #fcf8e8);
+    padding: 0;
+    border-radius: 15px;
+    width: 95%;
+    max-width: 800px; /* Largura ideal para leitura */
+    max-height: 90vh; /* IMPORTANTE: Limita a altura à tela para permitir scroll interno */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-in-out;
+    overflow: hidden; 
+}
+
+/* Botão de Fechar */
+.btn-close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--text-secondary);
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+    color: #e93f3f;
+}
+
+/* Cabeçalho Fixo */
+.modal-header-empresa {
+    background-color: var(--green-light, #aacc33);
+    padding: 2.5rem 1rem 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    flex-shrink: 0; /* Garante que o cabeçalho não encolha */
+}
+
+.modal-empresa-foto {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #fff;
+    border: 4px solid #fff; /* Borda branca para destacar do fundo verde */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.modal-empresa-nome {
+    font-size: 1.6rem;
+    color: #1a1a1a;
+    margin: 0;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Área de Rolagem (Corpo do modal) */
+.modal-scroll-area {
+    padding: 2rem;
+    overflow-y: auto; /* Habilita rolagem apenas aqui */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex-grow: 1; /* Ocupa o espaço restante */
+}
+
+/* Estilização da Scrollbar (Chrome/Safari/Edge) */
+.modal-scroll-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+}
+
+.modal-scroll-area::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-thumb:hover {
+    background-color: #bbb;
+}
+
+/* Seções */
+.modal-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-section-title {
+    font-size: 1rem;
+    color: var(--green-dark, #2e4a22);
+    border-bottom: 2px solid var(--green-light, #aacc33);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Grid de Informações de Contato */
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colunas no desktop */
+    gap: 1.5rem;
+}
+
+.modal-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-label {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-value {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 500;
+    word-break: break-word;
+}
+
+/* Lista de Alimentos */
+.modal-alimentos-list {
+    display: flex;
+    flex-direction: column; /* Empilha um abaixo do outro (Lista) */
+    gap: 1rem;
+    margin-bottom: 1.5rem; /* Espaço para a paginação abaixo */
+}
+
+/* Ajuste defensivo para o card importado */
+.modal-alimentos-list > * {
+    width: 100%; /* Garante que o card ocupe a largura disponível */
+}
+
+/* Mensagem de Vazio */
+.modal-empty-msg {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 2rem;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 8px;
+}
+
+/* Ajuste para centralizar a Paginação */
+.modal-section .paginacao-container {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+    }
+
+    .modal-info-grid {
+        grid-template-columns: 1fr; /* 1 coluna no celular */
+        gap: 1rem;
+    }
+    
+    .modal-empresa-nome {
+        font-size: 1.3rem;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

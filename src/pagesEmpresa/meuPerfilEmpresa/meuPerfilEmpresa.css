@@ -1,5 +1,3 @@
-
-
 /* ===== Container da Página ===== */
 .perfil-pagina-container {
     display: flex;
@@ -14,8 +12,8 @@
     border-radius: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-wrap: wrap; /* Permite quebrar em telas menores */
-    gap: 2rem 3rem; /* Espaçamento entre foto e dados */
+    flex-wrap: wrap;
+    gap: 2rem 3rem;
     padding: 2.5rem;
     max-width: 1000px;
     width: 100%;
@@ -27,7 +25,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    flex-basis: 200px; /* Largura base da coluna da foto */
+    flex-basis: 200px;
     flex-grow: 1;
 }
 
@@ -55,11 +53,11 @@
 
 /* ===== Seção dos Dados (Coluna Direita) ===== */
 .perfil-dados-container {
-    flex-basis: 500px; /* Largura base da coluna de dados */
+    flex-basis: 500px;
     flex-grow: 9;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem 2.5rem; /* gap de linha e coluna */
+    gap: 1.5rem 2.5rem;
 }
 
 /* ===== Campos Individuais (Label + Valor) ===== */
@@ -67,7 +65,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    min-width: 0; /* Essencial para o overflow funcionar em flex/grid */
+    min-width: 0;
 }
 
 .campo-label {
@@ -77,36 +75,76 @@
     text-transform: capitalize;
 }
 
-/* ===== O CONTÊINER COM ROLAGEM (A MÁGICA) ===== */
-.campo-valor-wrapper {
-    overflow-x: auto; /* 'auto' é melhor que 'scroll' (só aparece se precisar) */
-    padding-bottom: 8px; /* Espaço para a barra de rolagem não colar */
-    border-bottom: 2px solid var(--green-dark-2);
-
-    /* Estilização da barra de rolagem (WebKit) */
-    &::-webkit-scrollbar {
-        height: 6px;
-    }
-    &::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 10px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: var(--green-light);
-        border-radius: 10px;
-    }
-    /* Estilização da barra de rolagem (Firefox) */
-    scrollbar-width: thin;
-    scrollbar-color: var(--green-light) rgba(0, 0, 0, 0.05);
+/* ===== O CONTÊINER COM ROLAGEM (WRAPPER PADRÃO) ===== */
+.campo-valor-wrapper.password-field-wrapper,
+.campo-valor-wrapper { /* Aplica a todos para manter padrão */
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden; /* O Pai não rola */
+    padding-right: 0;
+    padding-bottom: 0;
+    border-bottom: 2px solid var(--green-dark-2); /* Borda fixa no container */
 }
+
+/* 2. A NOVA DIV MÁGICA (Ela é quem ganha a barra de rolagem) */
+.campo-scroll-container {
+    flex: 1;                 /* Ocupa todo o espaço disponível até o olho */
+    min-width: 0;            /* Permite encolher */
+    overflow-x: auto;        /* Habilita SCROLL aqui */
+    white-space: nowrap;     /* Garante linha única */
+    
+    padding-bottom: 4px;     /* Espaço para a barra verde */
+    margin-right: 5px;       /* Espaço antes de chegar no olho */
+    
+    /* Estilo da Barra Verde */
+    &::-webkit-scrollbar { height: 6px; }
+    &::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 10px; }
+    &::-webkit-scrollbar-thumb { background-color: var(--green-light); border-radius: 10px; }
+}
+
+/* 3. O Input e o Span (Agora eles ficam "soltos" dentro do scroll container) */
+.campo-input,
+.campo-texto {
+    display: inline-block;   /* Importante para o size funcionar */
+    border: none;
+    background: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #333;
+    outline: none;           /* Remove borda azul padrão */
+    
+    /* Removemos o scroll daqui, pois a div pai (scroll-container) já faz isso */
+}
+
+/* Estilo específico do Input Editável */
+.campo-input {
+    /* O outline dashed aparece no input, que vai rolar junto */
+    outline: dashed 1.5px var(--green-light);
+    background-color: #12341f05;
+    padding: 0.25rem 0;
+    min-width: 100%; /* Garante que ocupe pelo menos o espaço visível */
+}
+
+/* 4. Ícone do Olho (Fixo fora da rolagem) */
+.password-toggle-icon {
+    position: static;
+    flex-shrink: 0;
+    margin-left: 2px;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    z-index: 10;
+}
+/* --- Fim CSS Senha --- */
 
 /* Texto no modo de visualização */
 .campo-texto {
-    display: block; /* Garante que o span ocupe o espaço */
-    white-space: nowrap; /* Impede a quebra de linha */
+    display: block;
+    white-space: nowrap;
     color: #333;
     font-size: 1rem;
-    padding: 0.25rem 0; /* Alinha altura com o input */
+    padding: 0.25rem 0;
 }
 
 /* Input no modo de edição */
@@ -119,12 +157,15 @@
     color: #333;
     min-width: 100%;
     padding: 0.25rem 0;
-    /* O próprio input terá rolagem interna se o texto for muito longo */
 }
 
-/* ===== Botões ===== */
+.senha{
+    
+}
+
+/* ===== Botões e Erros ===== */
 .perfil-botoes {
-    grid-column: 1 / -1; /* Ocupa todas as colunas do grid */
+    grid-column: 1 / -1;
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
@@ -142,81 +183,58 @@
     font-size: 0.9rem;
     transition: all 0.2s ease;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
-
 }
 
 .btn-editar {
     background-color: var(--white);
     color: var(--green-dark);
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
-
-.btn-editar:hover {
-    background-color: #f7f7f7;
-}
+.btn-editar:hover { background-color: #f7f7f7; }
 
 .btn-atualizar {
     background-color: var(--green-light);
     color: var(--green-dark-2);
     border: 1px solid var(--green-light);
 }
+.btn-atualizar:hover { filter: brightness(1.05); }
 
-.btn-atualizar:hover {
-    filter: brightness(1.05);
+
+/* Adicione isso junto com os estilos de botão no final do arquivo */
+
+.btn-cancelar {
+    padding: 0.7rem 1.5rem;
+    border: 1px solid #D8000C;
+    background-color: transparent;
+    color: #D8000C;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    margin-right: 10px; /* Espaço entre cancelar e atualizar */
 }
 
-
-/* --- CSS para Funcionalidade de Exibir/Ocultar Senha --- */
-
-/* 1. Torna o wrapper um container de posicionamento */
-.campo-valor-wrapper.password-field-wrapper {
-  position: relative;
-  /* Garante que o input/span se comporte como esperado dentro do wrapper */
-  /* (Pode precisar de ajustes dependendo do seu CSS original) */
+.btn-cancelar:hover {
+    background-color: #D8000C;
+    color: white;
 }
 
-/* 2. Estiliza o ícone de olho */
-.password-toggle-icon {
-  position: absolute;
-  right: 10px; /* Distância da borda direita do wrapper */
-  top: 50%;
-  transform: translateY(-50%); /* Centraliza verticalmente */
-  cursor: pointer;
-  width: 20px; /* Tamanho do ícone */
-  height: 20px; /* Tamanho do ícone */
-  z-index: 2; /* Garante que o ícone fique sobre o input */
+.btn-cancelar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-/* 3. Adiciona espaço no input para o ícone não sobrepor o texto */
-.password-field-wrapper .campo-input {
-  /* Adiciona padding para o texto não ficar embaixo do ícone */
-  padding-right: 40px !important; /* (largura do ícone + espaçamento) */
-  
-  /* Essencial para que o padding seja absorvido sem aumentar a largura total 
-     baseada no 'size' do input. */
-  box-sizing: border-box; 
-}
-
-/* 4. Adiciona espaço no texto (modo visualização) */
-.password-field-wrapper .campo-texto {
-  /* Também precisa de padding caso a senha seja exibida no modo de visualização */
-  padding-right: 40px;
-  /* Garante que o box-sizing seja consistente */
-  box-sizing: border-box; 
-}
-
-/* Estilo para mensagens de erro dos campos */
 .campo-erro {
-    color: #D8000C; /* Vermelho escuro */
+    color: #D8000C;
     font-size: 0.8rem;
-    padding-left: 5px; /* Alinha com o início do input/texto */
+    padding-left: 5px;
     margin-top: 2px;
-    display: block; /* Garante que ocupe a própria linha */
-    text-align: left; /* Garante alinhamento à esquerda */
+    display: block;
+    text-align: left;
     font-weight: 500;
 }
 
-/* Estilo para a mensagem de erro da foto */
 .campo-erro-foto {
     color: #D8000C;
     font-size: 0.85rem;
@@ -226,8 +244,6 @@
     font-weight: 500;
 }
 
-/* Adiciona uma borda vermelha ao input com erro */
 .campo-input.input-error {
     border-bottom: 2px solid #D8000C;
 }
-
