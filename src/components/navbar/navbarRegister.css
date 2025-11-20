@@ -7,7 +7,6 @@
     justify-content: center;
     align-items: center;
     padding: 15px 10px; /* Espaçamento interno para não colar nas bordas */
-    gap: 15px; /* Espaço entre o logo e o botão */
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
@@ -17,13 +16,15 @@
 }
 
 .logo_img {
-    width: 160px;
-    height: auto;
+    margin-top: 20px;
+    width: 140px;
+    height: 137px;
 }
 
 .container-topo .botaoRegister {
     background: var(--green-light); /* Usando um valor fixo para o exemplo */
     text-align: center;
+    margin-top: 18px;
     padding: 15px 90px;
     border-radius: 999px;
     text-decoration: none;
@@ -36,12 +37,12 @@
 }
 
 /* --- TABLETS (a partir de 768px) --- */
-@media (min-width: 768px) {
+@media (min-width: 808px) {
     .container-topo {
         flex-direction: row; /* Itens lado a lado */
         justify-content: space-between; /* Logo na esquerda, botão na direita */
         padding: 18px 30px; /* Ajusta o espaçamento lateral */
-        gap: 20px; /* Remove o gap vertical */
+        gap: 0px; /* Remove o gap vertical */
     }
 
     .container-topo .logo {
@@ -60,12 +61,13 @@
 }
 
 /* --- DESKTOPS (a partir de 1024px) --- */
-@media (min-width: 1024px) {
+@media (min-width: 804px) {
     .container-topo {
-        padding: 23px 50px; /* Aumenta o espaçamento para telas grandes */
+        padding: 0px 0px; /* Aumenta o espaçamento para telas grandes */
     }
 
     .logo_img {
+        margin-left: 90px;
         max-width: 210px; /* Tamanho original do seu código */
     }
 

@@ -89,8 +89,8 @@
 .empresa-nome {
     font-family: 'Poppins', sans-serif;
     color: var(--white, #ffffff);
-    font-size: 0.9rem;
-    font-weight: 400;
+    font-size: 1.0rem;
+    font-weight: 300;
     text-align: center;
     white-space: nowrap;
 }

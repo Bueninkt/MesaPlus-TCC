@@ -6,7 +6,6 @@ import React from "react";
 {/*PagesEmpresa*/ }
 import CadastrarAlimentosEmpresaPage from './pagesEmpresa/cadastrarAlimentosEmpresa/cadastrarAlimentosEmpresa.jsx'
 import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpresa.jsx'
-import MeusAlimentosEmpresaPage from './pagesEmpresa/MeusAlimentosEmpresa/MeusAlimentosEmpresa.jsx'
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
 
 {/*PagesOng */ }
@@ -57,7 +56,6 @@ function AppRoutes() {
         {/*RouteEmpresa*/}
         <Route path="/cadastrarAlimentosEmpresa" element={<CadastrarAlimentosEmpresaPage />}></Route>
         <Route path="/meuPerfilEmpresa" element={<MeuPerfilEmpresaPage />}></Route>
-        <Route path="/meusAlimentosEmpresa" element={<MeusAlimentosEmpresaPage />}></Route>
         <Route path="/sobreNosEmpresa" element={<SobreNosEmpresaPage />}></Route>
 
 

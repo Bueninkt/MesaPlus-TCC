@@ -1,0 +1,398 @@
+/* =========================================================
+   1. CONFIGURAÇÃO GLOBAL DA PÁGINA
+   ========================================================= */
+
+.page-usuario-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--green-dark); /* #1B4227 */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+    /* Garante que o conteúdo centralize se a tela for grande */
+    align-items: center; 
+}
+
+/* Container principal centralizado */
+.perfil-usuario-container {
+    width: 100%;
+    max-width: 1280px; /* Largura máxima para não esticar demais em telas wide */
+    padding: 2rem 4rem;
+    margin: 0 auto;
+    flex: 1;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start; /* Alinha ao topo para manter a foto fixa */
+    gap: 6rem; /* Espaço generoso entre a foto e o card, conforme imagem */
+    
+    margin-top: 5vh; /* Empurra um pouco para baixo */
+}
+
+/* =========================================================
+   2. COLUNA ESQUERDA: FOTO E SAUDAÇÃO
+   ========================================================= */
+
+.perfil-left-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    /* Fixa a largura para não "dançar" com o card */
+    flex-shrink: 0; 
+    width: 300px;
+}
+
+/* Wrapper da Foto - Círculo Perfeito */
+.foto-wrapper {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Importante: garante que os botões fiquem centralizados em relação à foto */
+    flex-direction: column; 
+}
+
+.foto-perfil-usuario {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: transparent; /* Caso a imagem seja png transparente */
+}
+
+/* --- NOVOS ESTILOS DOS BOTÕES DE FOTO (LADO A LADO) --- */
+
+/* Container que segura os dois botões (Alterar e Remover) */
+.botoes-foto-wrapper {
+    position: absolute;
+    top: 105%; /* Posiciona logo abaixo do círculo da foto */
+    display: flex;
+    flex-direction: row; /* MUDANÇA AQUI: Coloca em linha */
+    justify-content: center; /* Centraliza os dois */
+    align-items: center;
+    gap: 10px; /* Espaço entre os botões */
+    width: 300px; /* Um pouco maior que a foto para os botões caberem folgados */
+    z-index: 10;
+}
+
+/* Botão de editar foto (Verde) */
+.btn-editar-foto {
+    position: relative; 
+    background-color: var(--green-light);
+    color: var(--green-dark-2);
+    padding: 0.5rem 0; /* Padding vertical apenas, largura fixa define o resto */
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: rgba(121, 120, 120, 0.15) 0px 5px 15px 0px;
+    text-align: center;
+    width: 100px; /* Largura ajustada para caber lado a lado */
+    transition: transform 0.2s;
+}
+
+.btn-editar-foto:hover {
+    transform: scale(1.05);
+}
+
+/* Botão de remover foto (Vermelho/Laranja) */
+.btn-remover-foto {
+    background-color: #ffffff; /* Fundo vermelho bem claro */
+    color: #d32f2f; /* Texto vermelho escuro */
+    border: #ffffff;
+     padding: 0.5rem 0; /* Padding vertical */
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    width: 100px; /* Largura ajustada para caber lado a lado */
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn-remover-foto:hover {
+    transform: scale(1.07);
+    background-color: #d32f2f;
+    color: #fff;
+    border-color: #d32f2f;
+}
+
+/* --- FIM DOS BOTÕES DE FOTO --- */
+
+/* Saudação */
+.saudacao-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.titulo-ola {
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1;
+    margin: 0;
+}
+
+.nome-destaque {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--green-light);
+    line-height: 1.1;
+    margin: 0;
+    text-transform: capitalize;
+}
+/* =========================================================
+   3. COLUNA DIREITA: CARDS (DADOS E SENHA)
+   ========================================================= */
+
+.perfil-right-col {
+  flex: 1;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- CARD PRINCIPAL --- */
+.card-dados-usuario {
+    background-color: var(--beige); /* #FFF1D4 */
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    /* Garante altura mínima para ficar bonito */
+    min-height: 350px; 
+    position: relative;
+}
+
+.card-titulo {
+    font-size: 1.5rem;
+    font-weight: 700; /* Bold forte conforme imagem */
+    color: #000;
+    margin-bottom: 2rem;
+}
+
+/* GRID LAYOUT - O SEGREDO DA FIDELIDADE */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    column-gap: 4rem; /* Espaço grande entre "Nome" e "Telefone" */
+    row-gap: 1.5rem;  /* Espaço vertical entre linhas */
+    width: 100%;
+}
+
+/* Classes para posicionamento específico no Grid */
+/* Se precisar forçar elementos a ficarem em colunas específicas, 
+   o JSX deve seguir a ordem: Nome, Telefone, Email, Endereço, CPF. */
+
+/* Célula do Grid */
+.grid-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Permite que o flex item encolha para o scroll funcionar */
+}
+
+/* Grupo Input (Label + Valor na mesma linha ou bloco visual) */
+.input-group {
+    display: flex;
+    flex-direction: row; /* Label ao lado do Valor */
+    align-items: baseline; /* Alinha pela base do texto */
+    gap: 0.5rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden; /* Proteção extra */
+}
+
+.input-group label {
+    font-size: 1.12rem;
+    font-weight: 600; /* Semi-bold */
+    color: #000;
+    white-space: nowrap; /* O Label "Nome:" nunca quebra */
+    flex-shrink: 0; /* O Label não encolhe */
+}
+
+/* --- ESTILO DOS DADOS COM SCROLLBAR --- */
+/* O valor (ex: Mario James) */
+.data-text,
+.input-editable {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #000;
+    
+    /* A linha verde grossa embaixo */
+
+    /* Layout */
+    flex-grow: 1; /* Ocupa o espaço restante da linha */
+    display: block;
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    
+    /* --- A MÁGICA DO SCROLLBAR --- */
+    white-space: nowrap;       /* Texto em uma única linha */
+    overflow-x: auto;          /* Scroll horizontal se estourar */
+    overflow-y: hidden;
+    
+    /* Limite de largura visual para forçar o scroll se necessário */
+    /* Calc: 100% do pai menos margens de segurança */
+    max-width: 100%; 
+}
+
+/* Ajuste fino para o input de edição */
+.input-editable {
+    background-color: rgba(255,255,255,0.4); /* Fundo sutil ao editar */
+    border-radius: 4px 4px 0 0;
+    outline: none;
+}
+
+/* Scrollbar Customizada (Fina e Verde) */
+.data-text::-webkit-scrollbar,
+.input-editable::-webkit-scrollbar {
+    height: 6px; /* Altura bem fina */
+}
+
+.data-text::-webkit-scrollbar-track,
+.input-editable::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.data-text::-webkit-scrollbar-thumb,
+.input-editable::-webkit-scrollbar-thumb {
+    background-color: var(--green-light); /* Verde escuro para contraste no bege */
+    border-radius: 10px;
+}
+
+/* --- BOTÕES --- */
+.card-actions {
+    margin-top: auto; /* Empurra para o final do card */
+    padding-top: 2rem;
+    display: flex;
+    justify-content: flex-end; /* Alinha à direita */
+    gap: 1rem;
+}
+
+.btn-editar-perfil {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+}
+
+.btn-atualizar {
+    background-color: var(--green-light); /* #B9CE5D */
+    color: var(--green-dark-2); /* Texto escuro no verde claro */
+    font-weight: 700;
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-transform: lowercase; /* "atualizar" na imagem está em minúsculo */
+}
+
+.btn-cancelar {
+    background-color: transparent;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+    border-radius: 50px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* --- CARD ATUALIZAR SENHA --- */
+.card-senha {
+    background-color: var(--beige); /* #FFF1D4 */
+    border-radius: 15px;
+    padding: 1.2rem 2rem; /* Mais compacto na altura */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    width: 100%; /* Mesma largura do card de cima */
+}
+
+.card-senha:hover {
+    transform: translateY(-2px);
+}
+
+.card-senha span {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.icon-link {
+    width: 28px;
+    height: 28px;
+    /* Ajuste caso o ícone seja preto na imagem */
+    filter: brightness(0); 
+}
+
+/* =========================================================
+   4. RESPONSIVIDADE
+   ========================================================= */
+@media (max-width: 761px) {
+    .perfil-usuario-container {
+        flex-direction: column;
+        padding: 2rem;
+        gap: 79px;
+    }
+
+    .perfil-left-col {
+        width: 100%;
+    }
+
+    .saudacao-container {
+        align-items: center; 
+    }
+    
+    .perfil-right-col {
+        width: 100%;
+    }
+}
+
+@media (max-width: 760px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Uma coluna no mobile */
+        gap: 1.4rem;
+    }
+    
+
+    .perfil-usuario-container{
+        align-items: center;
+        gap: 79px;
+    }
+    .card-dados-usuario {
+        padding: 1.5rem;
+    }
+    
+    .foto-wrapper {
+        width: 200px;
+        height: 200px;
+    }
+
+    .saudacao-container {
+        align-items: center; 
+    }
+}

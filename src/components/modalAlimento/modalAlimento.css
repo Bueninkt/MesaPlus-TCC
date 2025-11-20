@@ -176,8 +176,9 @@
     border: none;
     padding: 12px 20px;
     border-radius: 8px;
+    font-family: 'Poppins';
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;

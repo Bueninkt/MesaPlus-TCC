@@ -8,7 +8,7 @@ function NavbarUsuario() {
   // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
   const links = [
     { label: 'Home', to: '/homeUsuario' },         // por ora aponta para a mesma página inicial
-    { label: 'Meu Perfil', to: '/meu-perfil' },
+    { label: 'Meu Perfil', to: '/meuPerfilUsuario' },
     { label: 'Meus Alimentos', to: '/meusAlimentosUsuario' },
     { label: 'Favoritos', to: '/favoritos' }
     

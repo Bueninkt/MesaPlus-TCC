@@ -7,7 +7,6 @@
   border-radius: 8px;
   max-width: 400px;
   margin: auto;
-  font-family: 'Poppins', sans-serif; /* 🔄 Usando a fonte do seu @import */
 
   /* 🆕 Novo: Usa flexbox para espaçar os 'cards' */
   display: flex;
@@ -15,9 +14,10 @@
   gap: 15px; /* 🆕 Espaço entre cada card de filtro */
 }
 
+
 .filtrar-titulo {
   color: var(--white); /* Branco */
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 5px; /* 🔄 Diminuído (o 'gap' já espaça) */
 }
@@ -39,10 +39,11 @@
   padding: 15px 20px;
   width: 100%;
   display: flex;
+  font-family: 'Poppins';
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  font-size: 1.1rem; /* 🔄 Um pouco maior */
+  font-size: 1rem; /* 🔄 Um pouco maior */
   font-weight: 600;
   text-align: left;
 }
@@ -101,7 +102,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
   color: #000000; /* Preto */
   cursor: pointer;
 }
@@ -151,7 +151,7 @@
 .filtro-input-texto {
   width: 100%;
   padding: 10px 15px;
-  font-size: 1rem;
+  font-size: 1.05rem;
   outline: none;
   border: 2px solid var(--green-dark);
   border-radius: 4px;

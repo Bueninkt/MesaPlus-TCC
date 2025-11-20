@@ -23,7 +23,6 @@ function HudCadastrosPage() {
 
       {/* Cartões */}
       <main className="hud" aria-labelledby="hud-title">
-        <h2 id="hud-title" className="sr-only">Opções de cadastro</h2>
         <div className="container">
           <ul className="hud__cards" role="list">
             {/* Pessoa */}

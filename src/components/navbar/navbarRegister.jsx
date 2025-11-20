@@ -11,7 +11,7 @@ function navbarRegister() {
         <>  
             <nav className="container-topo">
                 <div className="logo">
-                    <Link to="/" aria-label="Ir para Sobre Nós">
+                    <Link to="/">
                         <img className="logo_img" src={logo} alt="Mesa+ logotipo" />
                     </Link>
                 </div>

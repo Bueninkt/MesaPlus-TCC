@@ -11,7 +11,7 @@ box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3)
 }
 
 .nav__wrap {
-  width: min(1765px, 92vw);
+  width: min(1765px, 100vw);
   margin-inline: auto;
   padding-block: 40px;
   padding-inline: 20px;

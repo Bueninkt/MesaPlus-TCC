@@ -5,18 +5,6 @@
   /* alinha com a navbar do site */
 }
 
-.sr-only {
-  position: absolute !important;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .hudcadastros-bg {
   position: fixed;
   inset: 0;
@@ -24,7 +12,6 @@
   background-position: center;
   background-size: cover;
   opacity: .2;
-  /* intensidade sutil como no print */
   pointer-events: none;
   z-index: 1;
 }
@@ -42,14 +29,13 @@
 }
 
 .hud .container {
-  margin-top: 18px;
+  margin-top: 12px;
   /* pequeno espaço após o header */
 }
 
 .hud__cards {
   list-style: none;
-  margin-top: 46px;
-  padding: 0;
+  margin-top: 1px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   /* três colunas como no print */
@@ -60,15 +46,14 @@
 /* ===== CARTÃO ===== */
 .card {
   background: var(--beige-2);
-  border-radius: 15px;
+  border-radius: 17px;
   box-shadow:
     0 7px 0 rgba(0, 0, 0, .17),
     /* “borda” de sombra dura */
     0 26px 46px rgba(0, 0, 0, .28);
   /* sombra suave externa */
-  padding: 46px 36px 28px;
+  padding: 46px 50px 28px;
   /* top | lados | bottom */
-  min-height: 560px;
   /* altura percebida no print */
   display: flex;
   flex-direction: column;
