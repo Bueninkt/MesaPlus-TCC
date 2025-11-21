@@ -113,15 +113,50 @@
     flex-direction: column;
 }
 
-.modal-section-title {
-    font-size: 1rem;
-    color: var(--green-dark, #2e4a22);
+/* --- NOVO: Wrapper para o título e o ícone ficarem na mesma linha --- */
+.modal-section-header-wrapper {
+    display: flex;
+    justify-content: space-between; /* Título na esq, ícone na dir */
+    align-items: center;
     border-bottom: 2px solid var(--green-light, #aacc33);
     padding-bottom: 8px;
     margin-bottom: 20px;
+}
+
+/* Ajuste no título: Removemos a borda daqui pois ela foi para o wrapper acima */
+.modal-section-title {
+    font-size: 1rem;
+    color: var(--green-dark, #2e4a22);
+    /* border-bottom: 2px solid var(--green-light, #aacc33); <- REMOVIDO */
+    /* padding-bottom: 8px; <- REMOVIDO */
+    /* margin-bottom: 20px; <- REMOVIDO */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin: 0; /* Reseta margens */
+}
+
+/* --- NOVO: Estilo para o botão do ícone favorito --- */
+.btn-favorito {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    transition: transform 0.2s ease;
+}
+
+.btn-favorito:hover {
+    transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+}
+
+/* Tamanho da imagem do favorito.png */
+.btn-favorito img {
+    width: 24px; 
+    height: 24px;
+    object-fit: contain;
 }
 
 /* Grid de Informações de Contato */

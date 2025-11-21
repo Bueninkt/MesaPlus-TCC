@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom'; 
 import './modalCarrosselEmpresa.css'; 
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; 
-// 1. Importe o AlimentoCard
 import AlimentoCard from '../alimentoCard/alimentoCard'; 
-// 2. Importe o componente de Paginação (Ajuste o caminho se sua pasta for diferente)
 import Paginacao from '../../components/paginacaoCard/Paginacao'; 
+
+import favorito from '../../assets/icons/favorito.png';
 
 const maskPhone = (v) => {
     if (!v) return "";
@@ -24,18 +26,19 @@ const maskCNPJ = (v) => {
         .slice(0, 18);
 };
 
-// Defina quantos itens você quer por página (3 conforme a altura do seu modal)
 const ITEMS_PER_PAGE = 2;
 
 function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
+    
+    const navigate = useNavigate(); 
+    
     const [empresa, setEmpresa] = useState(null);
     const [alimentos, setAlimentos] = useState([]);
-    
-    // Estado para paginação
     const [currentPage, setCurrentPage] = useState(1);
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const [isFavorited, setIsFavorited] = useState(false);
 
     useEffect(() => {
         if (isOpen && empresaId) {
@@ -43,10 +46,10 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                 setLoading(true);
                 setError(null);
                 setAlimentos([]); 
-                setCurrentPage(1); // Resetar para página 1 sempre que abrir ou trocar empresa
-                
+                setCurrentPage(1); 
+                setIsFavorited(false); 
+
                 try {
-                    // --- FETCH 1: Dados da Empresa ---
                     const resEmpresa = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${empresaId}`);
                     if (!resEmpresa.ok) throw new Error("Erro ao carregar empresa.");
                     const dataEmpresa = await resEmpresa.json();
@@ -57,7 +60,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                         throw new Error("Empresa não encontrada.");
                     }
 
-                    // --- FETCH 2: Alimentos da Empresa ---
                     const resAlimentos = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaId}`);
                     
                     if (resAlimentos.ok) {
@@ -82,15 +84,69 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
         }
     }, [isOpen, empresaId]);
 
-    // --- LÓGICA DE PAGINAÇÃO (Client Side) ---
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
     const currentAlimentos = alimentos.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(alimentos.length / ITEMS_PER_PAGE);
 
-    // Função para mudar página (será passada para o componente Paginacao)
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+    };
+
+    // 🆕 Lógica Atualizada: Suporte para Pessoa e ONG
+    const handleToggleFavorito = async () => {
+        try {
+            // 1. Recupera dados do LocalStorage
+            const userString = localStorage.getItem("user");
+            const userType = localStorage.getItem("userType"); 
+
+            // 2. Verifica se está logado e se é um tipo válido (pessoa ou ong)
+            if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
+                alert("Você precisa estar logado como Usuário ou ONG para favoritar empresas.");
+                return;
+            }
+
+            const usuario = JSON.parse(userString);
+
+            // 3. Monta o payload dinamicamente
+            let payload = {};
+
+            if (userType === 'pessoa') {
+                payload = {
+                    id_usuario: usuario.id,
+                    id_empresa: empresa.id
+                };
+            } else if (userType === 'ong') {
+                payload = {
+                    id_ong: usuario.id, // Aqui usamos o ID da ONG
+                    id_empresa: empresa.id
+                };
+            }
+
+            console.log("Payload enviado:", payload);
+
+            // 4. Envia para o endpoint (a controller aceita os dois formatos)
+            const response = await axios.post('http://localhost:8080/v1/mesa-plus/favoritoUser', payload);
+
+            if (response.status === 200 || response.status === 201) {
+                setIsFavorited(true);
+                alert("Empresa adicionada aos favoritos com sucesso!");
+                
+                // 5. Redirecionamento condicional (opcional)
+                // Se você tiver páginas diferentes de favoritos para ONG e Pessoa:
+                if (userType === 'pessoa') {
+                    navigate('/favoritosUsuario'); 
+                } else {
+                    // Supondo que você tenha/vai criar essa rota para ONGs
+                    navigate('/favoritosOng'); 
+                    // Ou use a mesma rota se a página for genérica
+                }
+            }
+
+        } catch (error) {
+            console.error("Erro ao favoritar:", error);
+            alert("Erro ao adicionar aos favoritos. Tente novamente.");
+        }
     };
 
     if (!isOpen) return null;
@@ -106,7 +162,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                     <div className="modal-error">{error}</div>
                 ) : empresa ? (
                     <>
-                        {/* Cabeçalho Fixo */}
                         <div className="modal-header-empresa">
                             <img 
                                 src={empresa.foto || userDefaultEmpresa} 
@@ -117,12 +172,21 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                             <h2 className="modal-empresa-nome">{empresa.nome}</h2>
                         </div>
 
-                        {/* Corpo com Rolagem */}
                         <div className="modal-scroll-area">
                             
-                            {/* Dados Cadastrais */}
                             <div className="modal-section">
-                                <h3 className="modal-section-title">Dados de Contato</h3>
+                                <div className="modal-section-header-wrapper">
+                                    <h3 className="modal-section-title">DADOS DE CONTATO</h3>
+                                    
+                                    <button 
+                                        className={`btn-favorito ${isFavorited ? 'active' : ''}`} 
+                                        onClick={handleToggleFavorito}
+                                        title="Favoritar Empresa"
+                                    >
+                                        <img src={favorito} alt="Coração Favorito" />
+                                    </button>
+                                </div>
+
                                 <div className="modal-info-grid">
                                     <div className="modal-info-row">
                                         <span className="modal-label">Email</span>
@@ -145,7 +209,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                                 </div>
                             </div>
 
-                            {/* Lista de Alimentos Paginada */}
                             <div className="modal-section">
                                 <h3 className="modal-section-title">
                                     Doações Disponíveis: 
@@ -154,7 +217,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                                 {alimentos.length > 0 ? (
                                     <>
                                         <div className="modal-alimentos-list">
-                                            {/* Mapeamos currentAlimentos em vez de todos */}
                                             {currentAlimentos.map(item => (
                                                 <AlimentoCard 
                                                     key={item.id_alimento} 
@@ -164,8 +226,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                                                 />
                                             ))}
                                         </div>
-
-                                        {/* Componente de Paginação */}
                                         <Paginacao 
                                             currentPage={currentPage}
                                             totalPages={totalPages}
