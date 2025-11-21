@@ -65,13 +65,12 @@ function MeuPerfilUsuarioPage() {
     const [isEditing, setIsEditing] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    // Dados do Formulário
+    // Dados do Formulário (Endereço removido)
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
         cpf: '',
         telefone: '',
-        endereco: '', 
         foto: null
     });
     
@@ -108,7 +107,6 @@ function MeuPerfilUsuarioPage() {
                         email: u.email || '',
                         cpf: maskCPF(u.cpf || ''),
                         telefone: maskPhone(u.telefone || ''),
-                        endereco: u.endereco || 'Endereço não cadastrado',
                         foto: u.foto
                     };
 
@@ -190,7 +188,7 @@ function MeuPerfilUsuarioPage() {
                 nome: formData.nome,
                 email: formData.email,
                 telefone: formData.telefone,
-                endereco: formData.endereco,
+                // Endereço removido do payload
                 foto: finalFotoUrl,
                 senha: "" 
             };
@@ -339,21 +337,8 @@ function MeuPerfilUsuarioPage() {
                                 )}
                             </div>
 
-                            {/* Endereço */}
-                            <div className="input-group full-width">
-                                <label>Endereço:</label>
-                                {isEditing ? (
-                                    <input 
-                                        type="text" 
-                                        name="endereco" 
-                                        value={formData.endereco} 
-                                        onChange={handleChange}
-                                        className="input-editable"
-                                    />
-                                ) : (
-                                    <span className="data-text">{formData.endereco}</span>
-                                )}
-                            </div>
+                            {/* CAMPO ENDEREÇO FOI REMOVIDO AQUI */}
+
                         </div>
 
                         {/* Botões de Ação */}

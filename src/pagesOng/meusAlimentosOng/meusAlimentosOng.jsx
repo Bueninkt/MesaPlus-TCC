@@ -114,7 +114,7 @@ function MeusAlimentosOngPage() {
             return <div className="feedback-message">Carregando meus alimentos...</div>;
         }
         if (error) {
-            return <div className="feedback-message">Erro ao carregar dados: {error}</div>;
+            return <div className="feedback-message">Você ainda não adicionou nenhum alimento. </div>;
         }
         if (meusPedidos.length === 0) {
             return <div className="feedback-message">Você ainda não adicionou nenhum alimento.</div>;

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; 
-import { useNavigate } from 'react-router-dom'; 
-import './modalCarrosselEmpresa.css'; 
-import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; 
-import AlimentoCard from '../alimentoCard/alimentoCard'; 
-import Paginacao from '../../components/paginacaoCard/Paginacao'; 
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './modalCarrosselEmpresa.css';
+import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
+import AlimentoCard from '../alimentoCard/alimentoCard';
+import Paginacao from '../../components/paginacaoCard/Paginacao';
 import favorito from '../../assets/icons/favorito.png';
+
+// Importe o componente ModalAlimento
+import ModalAlimento from '../modalAlimento/ModalAlimento';
 
 const maskPhone = (v) => {
     if (!v) return "";
@@ -28,26 +30,28 @@ const maskCNPJ = (v) => {
 
 const ITEMS_PER_PAGE = 2;
 
-function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
-    
-    const navigate = useNavigate(); 
-    
+function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = false }) {
+
+    const navigate = useNavigate();
     const [empresa, setEmpresa] = useState(null);
     const [alimentos, setAlimentos] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
     const [isFavorited, setIsFavorited] = useState(false);
+
+    // Estado para controlar o Alimento Selecionado (Painel Direito)
+    const [selectedAlimento, setSelectedAlimento] = useState(null);
 
     useEffect(() => {
         if (isOpen && empresaId) {
             const fetchData = async () => {
                 setLoading(true);
                 setError(null);
-                setAlimentos([]); 
-                setCurrentPage(1); 
-                setIsFavorited(false); 
+                setAlimentos([]);
+                setCurrentPage(1);
+                setIsFavorited(false);
+                setSelectedAlimento(null); // Reseta seleção ao abrir nova empresa
 
                 try {
                     const resEmpresa = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${empresaId}`);
@@ -61,7 +65,7 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                     }
 
                     const resAlimentos = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaId}`);
-                    
+
                     if (resAlimentos.ok) {
                         const dataAlimentos = await resAlimentos.json();
                         if (dataAlimentos.status && Array.isArray(dataAlimentos.resultFiltro)) {
@@ -76,7 +80,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
                     setLoading(false);
                 }
             };
-
             fetchData();
         } else {
             setEmpresa(null);
@@ -93,152 +96,156 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId }) {
         setCurrentPage(pageNumber);
     };
 
-    // 🆕 Lógica Atualizada: Suporte para Pessoa e ONG
     const handleToggleFavorito = async () => {
+        // ... (Lógica de favoritar mantém-se a mesma) ...
         try {
-            // 1. Recupera dados do LocalStorage
             const userString = localStorage.getItem("user");
-            const userType = localStorage.getItem("userType"); 
-
-            // 2. Verifica se está logado e se é um tipo válido (pessoa ou ong)
+            const userType = localStorage.getItem("userType");
             if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
-                alert("Você precisa estar logado como Usuário ou ONG para favoritar empresas.");
-                return;
+                alert("Login necessário."); return;
             }
-
             const usuario = JSON.parse(userString);
+            let payload = userType === 'pessoa' 
+                ? { id_usuario: usuario.id, id_empresa: empresa.id }
+                : { id_ong: usuario.id, id_empresa: empresa.id };
 
-            // 3. Monta o payload dinamicamente
-            let payload = {};
-
-            if (userType === 'pessoa') {
-                payload = {
-                    id_usuario: usuario.id,
-                    id_empresa: empresa.id
-                };
-            } else if (userType === 'ong') {
-                payload = {
-                    id_ong: usuario.id, // Aqui usamos o ID da ONG
-                    id_empresa: empresa.id
-                };
-            }
-
-            console.log("Payload enviado:", payload);
-
-            // 4. Envia para o endpoint (a controller aceita os dois formatos)
             const response = await axios.post('http://localhost:8080/v1/mesa-plus/favoritoUser', payload);
-
             if (response.status === 200 || response.status === 201) {
                 setIsFavorited(true);
-                alert("Empresa adicionada aos favoritos com sucesso!");
-                
-                // 5. Redirecionamento condicional (opcional)
-                // Se você tiver páginas diferentes de favoritos para ONG e Pessoa:
-                if (userType === 'pessoa') {
-                    navigate('/favoritosUsuario'); 
-                } else {
-                    // Supondo que você tenha/vai criar essa rota para ONGs
-                    navigate('/favoritosOng'); 
-                    // Ou use a mesma rota se a página for genérica
-                }
+                alert("Favoritado com sucesso!");
+                if (userType === 'pessoa') navigate('/favoritosUsuario');
+                else navigate('/favoritosOng');
             }
-
         } catch (error) {
-            console.error("Erro ao favoritar:", error);
-            alert("Erro ao adicionar aos favoritos. Tente novamente.");
+            console.error(error);
+            alert("Erro ao favoritar.");
         }
+    };
+
+    // Funções de controle do painel lateral
+    const handleOpenAlimento = (alimento) => {
+        setSelectedAlimento(alimento);
+    };
+
+    const handleCloseAlimento = () => {
+        setSelectedAlimento(null);
     };
 
     if (!isOpen) return null;
 
     return (
         <div className="modal-overlay-empresa" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="btn-close-modal" onClick={onClose}>&times;</button>
+            {/* Adiciona a classe 'expanded' se houver um alimento selecionado */}
+            <div 
+                className={`modal-content ${selectedAlimento ? 'expanded' : ''}`} 
+                onClick={(e) => e.stopPropagation()}
+            >
+                
+                {/* Container Flexbox para dividir Lado Esquerdo e Direito */}
+                <div className="split-view-container">
 
-                {loading ? (
-                    <div className="modal-loading">Carregando informações...</div>
-                ) : error ? (
-                    <div className="modal-error">{error}</div>
-                ) : empresa ? (
-                    <>
-                        <div className="modal-header-empresa">
-                            <img 
-                                src={empresa.foto || userDefaultEmpresa} 
-                                alt={empresa.nome} 
-                                className="modal-empresa-foto"
-                                onError={(e) => { e.target.src = userDefaultEmpresa; }}
-                            />
-                            <h2 className="modal-empresa-nome">{empresa.nome}</h2>
-                        </div>
+                    {/* --- PAINEL ESQUERDO: DETALHES DA EMPRESA --- */}
+                    <div className="left-panel-empresa">
+                        <button className="btn-close-modal" onClick={onClose}>&times;</button>
 
-                        <div className="modal-scroll-area">
-                            
-                            <div className="modal-section">
-                                <div className="modal-section-header-wrapper">
-                                    <h3 className="modal-section-title">DADOS DE CONTATO</h3>
-                                    
-                                    <button 
-                                        className={`btn-favorito ${isFavorited ? 'active' : ''}`} 
-                                        onClick={handleToggleFavorito}
-                                        title="Favoritar Empresa"
-                                    >
-                                        <img src={favorito} alt="Coração Favorito" />
-                                    </button>
+                        {loading ? (
+                            <div className="modal-loading">Carregando informações...</div>
+                        ) : error ? (
+                            <div className="modal-error">{error}</div>
+                        ) : empresa ? (
+                            <>
+                                <div className="modal-header-empresa">
+                                    <img
+                                        src={empresa.foto || userDefaultEmpresa}
+                                        alt={empresa.nome}
+                                        className="modal-empresa-foto"
+                                        onError={(e) => { e.target.src = userDefaultEmpresa; }}
+                                    />
+                                    <h2 className="modal-empresa-nome">{empresa.nome}</h2>
                                 </div>
 
-                                <div className="modal-info-grid">
-                                    <div className="modal-info-row">
-                                        <span className="modal-label">Email</span>
-                                        <span className="modal-value">{empresa.email}</span>
-                                    </div>
-                                    <div className="modal-info-row">
-                                        <span className="modal-label">Telefone</span>
-                                        <span className="modal-value">{maskPhone(empresa.telefone)}</span>
-                                    </div>
-                                    <div className="modal-info-row">
-                                        <span className="modal-label">CNPJ/MEI</span>
-                                        <span className="modal-value">{maskCNPJ(empresa.cnpj_mei)}</span>
-                                    </div>
-                                    <div className="modal-info-row">
-                                        <span className="modal-label">Endereço</span>
-                                        <span className="modal-value">
-                                            {empresa.endereco ? empresa.endereco : "Não informado"}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="modal-section">
-                                <h3 className="modal-section-title">
-                                    Doações Disponíveis: 
-                                </h3>
-                                
-                                {alimentos.length > 0 ? (
-                                    <>
-                                        <div className="modal-alimentos-list">
-                                            {currentAlimentos.map(item => (
-                                                <AlimentoCard 
-                                                    key={item.id_alimento} 
-                                                    alimento={item} 
-                                                    onCardClick={() => {}} 
-                                                    onDeleteClick={null} 
-                                                />
-                                            ))}
+                                <div className="modal-scroll-area">
+                                    <div className="modal-section">
+                                        <div className="modal-section-header-wrapper">
+                                            <h3 className="modal-section-title">DADOS DE CONTATO</h3>
+                                            {!ocultarFavorito && (
+                                                <button
+                                                    className={`btn-favorito ${isFavorited ? 'active' : ''}`}
+                                                    onClick={handleToggleFavorito}
+                                                    title="Favoritar Empresa"
+                                                >
+                                                    <img src={favorito} alt="Coração Favorito" />
+                                                </button>
+                                            )}
                                         </div>
-                                        <Paginacao 
-                                            currentPage={currentPage}
-                                            totalPages={totalPages}
-                                            onPageChange={handlePageChange}
-                                        />
-                                    </>
-                                ) : (
-                                    <p className="modal-empty-msg">Esta empresa não possui alimentos cadastrados no momento.</p>
-                                )}
-                            </div>
-                        </div>
-                    </>
-                ) : null}
+
+                                        <div className="modal-info-grid">
+                                            <div className="modal-info-row">
+                                                <span className="modal-label">Email</span>
+                                                <span className="modal-value">{empresa.email}</span>
+                                            </div>
+                                            <div className="modal-info-row">
+                                                <span className="modal-label">Telefone</span>
+                                                <span className="modal-value">{maskPhone(empresa.telefone)}</span>
+                                            </div>
+                                            <div className="modal-info-row">
+                                                <span className="modal-label">CNPJ/MEI</span>
+                                                <span className="modal-value">{maskCNPJ(empresa.cnpj_mei)}</span>
+                                            </div>
+                                            <div className="modal-info-row">
+                                                <span className="modal-label">Endereço</span>
+                                                <span className="modal-value">
+                                                    {empresa.endereco ? empresa.endereco : "Não informado"}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="modal-section">
+                                        <h3 className="modal-section-title">
+                                            Doações Disponíveis:
+                                        </h3>
+
+                                        {alimentos.length > 0 ? (
+                                            <>
+                                                <div className="modal-alimentos-list">
+                                                    {currentAlimentos.map(item => (
+                                                        <AlimentoCard
+                                                            key={item.id_alimento}
+                                                            alimento={item}
+                                                            // Ao clicar, abre no painel direito
+                                                            onCardClick={() => handleOpenAlimento(item)}
+                                                            onDeleteClick={null}
+                                                        />
+                                                    ))}
+                                                </div>
+                                                <Paginacao
+                                                    currentPage={currentPage}
+                                                    totalPages={totalPages}
+                                                    onPageChange={handlePageChange}
+                                                />
+                                            </>
+                                        ) : (
+                                            <p className="modal-empty-msg">Esta empresa não possui alimentos cadastrados no momento.</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                    </div>
+
+                    {/* --- PAINEL DIREITO: DETALHES DO ALIMENTO --- */}
+                    <div className={`right-panel-alimento ${selectedAlimento ? 'open' : ''}`}>
+                        {selectedAlimento && (
+                            <ModalAlimento
+                                alimento={selectedAlimento}
+                                onClose={handleCloseAlimento}
+                                inline={true} // IMPORTANTE: Prop para remover o fundo preto
+                            />
+                        )}
+                    </div>
+
+                </div> {/* Fim do Split View */}
             </div>
         </div>
     );

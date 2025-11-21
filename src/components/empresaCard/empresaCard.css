@@ -13,7 +13,7 @@
     
     width: 100%; 
     
-    min-width: 600px;
+    min-width: 550px;
     
     transition: all 0.3s ease;
     border: 1px solid transparent; /* Prepara para o hover */
@@ -40,8 +40,6 @@
     height: 110px;
     border-radius: 50%; /* Empresas geralmente ficam melhor com logo redondo */
     object-fit: cover; /* Garante que não distorça */
-    background-color: #fff; /* Fundo branco caso o logo seja PNG transparente */
-    border: 2px solid #eee;
 }
 
 /* 2. Área de Informações */

@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
 import EmpresaCard from '../../components/empresaCard/empresaCard'; 
-// 1. Importe o componente de paginação
 import Paginacao from '../../components/paginacaoCard/Paginacao'; 
+
+// 1. Importe o Modal de Empresa
+import ModalCarrosselEmpresa from '../../components/modalCarrosselEmpresa/modalCarrosselEmpresa';
 
 import './favoritosUsuario.css'; 
 
-// 2. Defina quantos itens você quer por página
-const ITEMS_PER_PAGE = 4; 
+const ITEMS_PER_PAGE = 6; 
 
 function FavoritosUsuarioPage() {
 
     const [favoritos, setFavoritos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // 3. Estado para controlar a página atual
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Busca os favoritos ao carregar a página
+    // 2. Novos Estados para controlar o Modal
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
+
     useEffect(() => {
         const fetchFavoritos = async () => {
             try {
@@ -55,18 +57,33 @@ function FavoritosUsuarioPage() {
         fetchFavoritos();
     }, []);
 
-    // 4. Lógica de Paginação (Cálculos)
+    // Cálculos de Paginação
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
     const currentFavoritos = favoritos.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(favoritos.length / ITEMS_PER_PAGE);
 
-    // Função para mudar de página
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    // Função para remover um favorito
+    // 3. Função para ABRIR o Modal
+    const handleCardClick = (empresa) => {
+        // O objeto 'empresa' vindo do favorito tem o campo 'id_empresa'
+        // Mas o objeto vindo de busca normal tem 'id'.
+        // Usamos uma lógica "ou" para garantir.
+        const idParaModal = empresa.id_empresa || empresa.id;
+        
+        setSelectedEmpresaId(idParaModal);
+        setModalOpen(true);
+    };
+
+    // 4. Função para FECHAR o Modal
+    const handleCloseModal = () => {
+        setModalOpen(false);
+        setSelectedEmpresaId(null);
+    };
+
     const handleDeleteFavorito = async (idFavorito) => {
         if (!window.confirm("Deseja remover esta empresa dos favoritos?")) return;
 
@@ -76,11 +93,9 @@ function FavoritosUsuarioPage() {
             if (response.status === 200) {
                 alert("Favorito removido com sucesso!");
                 
-                // Atualiza a lista visualmente
                 const novosFavoritos = favoritos.filter(item => item.id_favorito !== idFavorito);
                 setFavoritos(novosFavoritos);
 
-                // 5. Lógica defensiva: Se deletar o último item da página, volta uma página
                 const novoTotalPages = Math.ceil(novosFavoritos.length / ITEMS_PER_PAGE);
                 if (currentPage > novoTotalPages && novoTotalPages > 0) {
                     setCurrentPage(novoTotalPages);
@@ -92,15 +107,9 @@ function FavoritosUsuarioPage() {
         }
     };
 
-    // Renderização Condicional
     const renderContent = () => {
-        if (loading) {
-            return <div className="feedback-msg">Carregando seus favoritos...</div>;
-        }
-        
-        if (error) {
-            return <div className="feedback-msg error">{error}</div>;
-        }
+        if (loading) return <div className="feedback-msg">Carregando seus favoritos...</div>;
+        if (error) return <div className="feedback-msg error">{error}</div>;
 
         if (favoritos.length === 0) {
             return (
@@ -113,19 +122,18 @@ function FavoritosUsuarioPage() {
 
         return (
             <>
-                {/* Grid mapeia apenas os 'currentFavoritos' (fatiados) */}
                 <div className="favoritos-grid">
                     {currentFavoritos.map((item) => (
                         <EmpresaCard 
                             key={item.id_favorito} 
                             empresa={item} 
-                            onCardClick={() => {}} 
+                            // 5. Passamos a função que abre o modal aqui
+                            onCardClick={handleCardClick} 
                             onDeleteClick={() => handleDeleteFavorito(item.id_favorito)} 
                         />
                     ))}
                 </div>
 
-                {/* ADICIONE A CLASSE AQUI: className="paginacao-wrapper" */}
                 <div className="paginacao-wrapper">
                     <Paginacao 
                         currentPage={currentPage}
@@ -145,7 +153,18 @@ function FavoritosUsuarioPage() {
                     <h1 className="titulo-pagina">Minhas Empresas Favoritas</h1>
                     {renderContent()}
                 </main>
+
+                
             </div>
+
+            {/* 6. Renderização do Modal */}
+                {/* Ele fica "escondido" até modalOpen ser true */}
+                <ModalCarrosselEmpresa 
+                    isOpen={modalOpen}
+                    onClose={handleCloseModal}
+                    empresaId={selectedEmpresaId}
+                    ocultarFavorito={true}
+                />
         </>
     );
 }

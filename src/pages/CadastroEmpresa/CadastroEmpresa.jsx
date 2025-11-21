@@ -1,82 +1,68 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // Removido Link não utilizado
+import { useNavigate } from "react-router-dom"; 
 import "./cadastroEmpresa.css";
 
 // --- Imports de Componentes e Ícones ---
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
-import postCard from "../../assets/icons/postCard.png";
+import postCard from "../../assets/icons/postCard.png"; // Reutilizando para o endereço/CNPJ
 import email from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
+import local from "../../assets/icons/local.png"
 
 const Navbar = navbarRegister;
 
-// --- Lógica de Validação Centralizada (Inspirada no CadastroPessoaPage) ---
+// --- Lógica de Validação Centralizada ---
 const validateField = (name, value) => {
   switch (name) {
     case "nome":
       if (!value) return "Nome é obrigatório.";
-
-      // Nova validação: Verifica apenas se o primeiro caractere é uma letra maiúscula.
-      // Isso permite qualquer tamanho de nome (Ex: "Ana", "Carlos de Andrade", "Maria da Silva Sauro").
       if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
         return "O nome deve começar com letra maiúscula.";
       }
+      return "";
 
-      return ""; // Válido se passar pelas checagens
-
-     case "email":
+    case "email":
       if (!value) return "Email é obrigatório.";
-
-      // A expressão regular principal já valida a maioria dos casos.
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (emailRegex.test(value)) {
-        return ""; // Se for válido, retorna sucesso.
-      }
-
-      // Se a regex falhar, damos erros mais específicos.
-      if (!value.includes("@")) {
-        return "Email deve conter um '@'.";
-      }
+      if (emailRegex.test(value)) return "";
       
+      if (!value.includes("@")) return "Email deve conter um '@'.";
       const parts = value.split('@');
       if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
-        return "Formato de email inválido (ex: nome@dominio.com).";
+        return "Formato de email inválido.";
       }
-
       const domainPart = parts[1];
-      if (!domainPart.includes('.')) {
-        return "O domínio do email precisa de um ponto (ex: dominio.com).";
-      }
-
+      if (!domainPart.includes('.')) return "O domínio precisa de um ponto.";
       const tld = domainPart.split('.').pop();
-      if (tld.length < 2) {
-        return "O final do domínio deve ter pelo menos 2 letras (ex: .com, .br).";
-      }
-
-      // Erro genérico se nenhuma das condições específicas for atendida.
+      if (tld.length < 2) return "Final do domínio inválido.";
       return "Formato de email inválido.";
 
-
-     case "senha":
+    case "senha":
       if (!value) return "Senha é obrigatória.";
-      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter uma letra maiúscula e uma minuscula";
-      if (value.length >= 15 || value.length <= 9) return "Senha no mínimo 10 caracteres.";
+      if (!/(?=.*[A-Z])/.test(value) || !/(?=.*[a-z])/.test(value)) return "Deve conter uma letra maiúscula e uma minúscula";
+      if (value.length >= 15 || value.length <= 9) return "Senha entre 10 e 14 caracteres.";
       if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(value)) return "Deve conter um caractere especial.";
       return "";
 
     case "telefone":
       const phoneDigits = value.replace(/\D/g, "");
-      if (phoneDigits.length < 1) return "Telefone deve ter 10 ou 11 dígitos.";
+      if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
       return "";
 
     case "cnpj":
       const cnpjDigits = value.replace(/\D/g, "");
       if (cnpjDigits.length !== 14) return "CNPJ/MEI deve ter 14 dígitos.";
+      return "";
+
+    // --- NOVA VALIDAÇÃO ADICIONADA ---
+    case "endereco":
+      if (!value || value.trim() === "") return "Endereço é obrigatório.";
+      if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
       return "";
 
     default:
@@ -89,12 +75,14 @@ function CadastroEmpresaPage() {
   const navigate = useNavigate();
   const redirectTimer = useRef(null);
 
+  // --- ESTADO ATUALIZADO ---
   const [form, setForm] = useState({
     nome: "",
     email: "",
     senha: "",
     telefone: "",
-    cnpj: ""
+    cnpj: "",
+    endereco: "" // Novo campo
   });
 
   const [errors, setErrors] = useState({});
@@ -107,32 +95,16 @@ function CadastroEmpresaPage() {
     };
   }, []);
 
-  // --- Máscaras (Seguindo o padrão de 'CadastroPessoaPage') ---
-  
-  // Máscara de telefone exatamente igual à do componente de referência para consistência
-const maskPhone = (v) => {
-    // Remove todos os caracteres que não são dígitos e limita a 11
+  // --- Máscaras ---
+  const maskPhone = (v) => {
     let n = v.replace(/\D/g, "").slice(0, 11);
-
-    // Aplica a máscara de forma progressiva com base no tamanho do input
-    if (n.length > 10) {
-      // Formato para celular com 11 dígitos: (XX) XXXXX-XXXX
-      n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
-    } else if (n.length > 6) {
-      // Formato para telefone com 7 a 10 dígitos: (XX) XXXX-XXXX
-      n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
-    } else if (n.length > 2) {
-      // Formato para quando o usuário começa a digitar o número após o DDD
-      n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
-    } else if (n.length > 0) {
-      // Formato para quando o usuário está digitando o DDD
-      n = n.replace(/^(\d*)/, "($1");
-    }
-
+    if (n.length > 10) n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    else if (n.length > 6) n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    else if (n.length > 2) n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
+    else if (n.length > 0) n = n.replace(/^(\d*)/, "($1");
     return n;
   };
 
-  // Máscara de CNPJ progressiva, inspirada na máscara de telefone
   const maskCNPJ = (v) => {
     return v.replace(/\D/g, "")
       .replace(/^(\d{2})(\d)/, '$1.$2')
@@ -150,7 +122,6 @@ const maskPhone = (v) => {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
-  // Função `handleMask` idêntica para reutilização do padrão
   const handleMask = (maskFn) => (e) => {
     const { name, value } = e.target;
     const maskedValue = maskFn(value);
@@ -185,12 +156,14 @@ const maskPhone = (v) => {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        // --- ENVIO ATUALIZADO ---
         body: JSON.stringify({
           nome: form.nome.trim(),
           email: form.email.trim(),
           senha: form.senha,
           telefone: form.telefone.replace(/\D/g, ""),
-          cnpj_mei: form.cnpj.replace(/\D/g, "")
+          cnpj_mei: form.cnpj.replace(/\D/g, ""),
+          endereco: form.endereco.trim() // Campo adicionado
         })
       });
 
@@ -204,7 +177,7 @@ const maskPhone = (v) => {
         msg: "Cadastro feito com sucesso!",
         loading: false
       });
-      setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "" });
+      setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "", endereco: "" });
 
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
 
@@ -227,6 +200,7 @@ const maskPhone = (v) => {
           <p className="ce__subtitle">Cadastrar Empresa</p>
           <form className="ce__form" onSubmit={onSubmit} noValidate>
 
+            {/* Nome */}
             <label className="fieldCe">
               <img className="field__icon" src={profile} alt="" aria-hidden="true" />
               <span className="field__label">Nome:</span>
@@ -243,6 +217,7 @@ const maskPhone = (v) => {
               {errors.nome && <div className="ce__error-message" role="alert">{errors.nome}</div>}
             </label>
 
+            {/* Email */}
             <label className="fieldCe">
               <img className="field__icon" src={email} alt="" aria-hidden="true" />
               <span className="field__label">Email:</span>
@@ -260,6 +235,7 @@ const maskPhone = (v) => {
               {errors.email && <div className="ce__error-message" role="alert">{errors.email}</div>}
             </label>
 
+            {/* Senha */}
             <label className="fieldCe field--pwd">
               <img className="field__icon" src={lockIcon} alt="" aria-hidden="true" />
               <span className="field__label">Senha:</span>
@@ -280,13 +256,13 @@ const maskPhone = (v) => {
                 className="field__toggle"
                 onClick={() => setShowPwd(s => !s)}
                 aria-label={showPwd ? "Ocultar senha" : "Mostrar senha"}
-                aria-pressed={showPwd}
                 title={showPwd ? "Ocultar senha" : "Mostrar senha"}
               >
                 <img src={showPwd ? eye : eyeclosed} alt="" aria-hidden="true" />
               </button>
             </label>
 
+            {/* Telefone */}
             <label className="fieldCe">
               <img className="field__icon" src={phone} alt="" aria-hidden="true" />
               <span className="field__label">Telefone:</span>
@@ -304,6 +280,7 @@ const maskPhone = (v) => {
               {errors.telefone && <div className="ce__error-message" role="alert">{errors.telefone}</div>}
             </label>
 
+            {/* CNPJ */}
             <label className="fieldCe">
               <img className="field__icon" src={postCard} alt="" aria-hidden="true" />
               <span className="field__label">CNPJ/MEI:</span>
@@ -315,10 +292,29 @@ const maskPhone = (v) => {
                 aria-label="CNPJ/MEI"
                 required
                 inputMode="numeric"
-                maxLength={18} // XX.XXX.XXX/YYYY-ZZ
+                maxLength={18}
                 aria-invalid={!!errors.cnpj}
               />
               {errors.cnpj && <div className="ce__error-message" role="alert">{errors.cnpj}</div>}
+            </label>
+
+            {/* --- NOVO CAMPO: ENDEREÇO --- */}
+            <label className="fieldCe">
+              {/* Reutilizando postCard ou você pode importar um location.png */}
+              <img className="field__icon" src={local} alt="" aria-hidden="true" />
+              <span className="field__label">Endereço:</span>
+              <input
+                type="text"
+                name="endereco"
+                value={form.endereco}
+                onChange={onChange}
+                aria-label="Endereço Completo"
+                required
+                maxLength={150}
+                autoComplete="street-address"
+                aria-invalid={!!errors.endereco}
+              />
+              {errors.endereco && <div className="ce__error-message" role="alert">{errors.endereco}</div>}
             </label>
 
             <button
