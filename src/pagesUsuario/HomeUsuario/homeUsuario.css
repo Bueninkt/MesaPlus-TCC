@@ -1,3 +1,5 @@
+
+
 /* + NOVO CONTAINER GERAL (para o sticky footer) */
 .home-usuario-page-container {
     display: flex;
@@ -139,3 +141,5 @@
         width: 100%;
     }
 }
+
+ 

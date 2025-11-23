@@ -21,10 +21,7 @@
          box-sizing: border-box;
      }
 
-     /* O resto do seu CSS está perfeito */
-     body {
-         position: relative;
-     }
+   
 
      html {
          scroll-behavior: smooth;
@@ -32,24 +29,8 @@
          width: 100%;
      }
 
-
-
-     /* 2. PARA NOTEBOOKS MÉDIOS (Ex: 1440px, 1600px) */
-@media (max-width: 1680px) {
-    body{
-        zoom: 0.78;
-    }
-}
-
-/* 3. PARA LAPTOPS PEQUENOS (Ex: 1366px - Padrão corporativo comum) */
-@media (max-width: 1366px) {
-    html {
-        font-size: 16px; /* Reduz tudo em 25% em relação ao original */
-    }
-}
-
-
-
      section[id] {
          scroll-margin-top: 80px;
      }
+
+

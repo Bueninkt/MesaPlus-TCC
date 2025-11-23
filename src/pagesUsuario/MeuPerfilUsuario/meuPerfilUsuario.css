@@ -349,6 +349,36 @@
     filter: brightness(0); 
 }
 
+
+/* Permite que o erro "quebre" para a linha de baixo */
+.input-group {
+    flex-wrap: wrap; 
+}
+
+/* Estilo da mensagem de erro (vermelha, pequena, abaixo do campo) */
+.campo-erro {
+    width: 100%;             /* Força a quebra de linha */
+    color: #d32f2f;          /* Vermelho padrão de erro */
+    font-size: 0.85rem;      /* Texto pequeno */
+    font-weight: 600;
+    margin-top: 4px;         /* Afastamento do input */
+    margin-left: 0;          /* Alinhado à esquerda (ou ajuste conforme o label) */
+    padding-left: 5px;       
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animação suave para o erro aparecer */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ajuste para input com erro (borda vermelha opcional) */
+.input-editable.input-error {
+    border-bottom: 2px solid #d32f2f !important;
+    background-color: rgba(211, 47, 47, 0.05);
+}
+
 /* =========================================================
    4. RESPONSIVIDADE
    ========================================================= */

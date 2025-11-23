@@ -299,6 +299,90 @@
 }
 
 /* =========================================
+   AJUSTES DA FOTO E BOTÕES (NOVO)
+   ========================================= */
+
+/* Wrapper para criar o contexto de posicionamento relativo */
+.foto-wrapper-empresa {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 160px; /* Mesma largura da imagem */
+    margin: 0 auto;
+}
+
+.perfil-imagem {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    /* Adicione uma borda sutil se quiser destacar a foto branca no fundo claro */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+
+/* Container dos botões (Alterar e Remover) */
+.botoes-foto-wrapper-empresa {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 8px;
+    gap: 5px;
+}
+
+/* Botão Alterar (Estilo Verde) */
+.btn-editar-foto-empresa {
+    background-color: var(--green-light);
+    color: var(--green-dark-2);
+    padding: 0.4rem 0;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    text-align: center;
+    width: 80px;
+    transition: transform 0.2s;
+    border: none;
+    display: flex;         /* Centralizar texto */
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-editar-foto-empresa:hover {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+}
+
+/* Botão Remover (Estilo Vermelho/Branco) */
+.btn-remover-foto-empresa {
+    background-color: #ffffff;
+    color: #d32f2f;
+    border: 1px solid #ffffff; /* Borda invisível para manter tamanho */
+    padding: 0.4rem 0;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    width: 80px;
+    text-align: center;
+    transition: all 0.2s ease;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px 0px;
+}
+
+.btn-remover-foto-empresa:hover {
+    transform: scale(1.05);
+    background-color: #d32f2f;
+    color: #fff;
+}
+
+/* Esconde o input original */
+.file-input-hidden {
+    display: none;
+}
+
+/* =========================================
    RESPONSIVIDADE
    ========================================= */
 @media (max-width: 768px) {

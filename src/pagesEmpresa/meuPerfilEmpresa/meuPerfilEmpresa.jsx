@@ -6,16 +6,19 @@ import './MeuPerfilEmpresa.css';
 import NavbarEmpresa from '../../components/navbarEmpresa/navbarEmpresa';
 import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
 import Paginacao from '../../components/PaginacaoCard/Paginacao';
-// 1. Importação do Modal (Verifique se o caminho está correto no seu projeto)
 import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
 
-// Assets
+// Assets (Mantemos o local para fallback caso a URL falhe, ou pode usar a URL direto)
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 
 // =========================================================
-// CONFIGURAÇÕES E HELPERS
+// CONFIGURAÇÕES
 // =========================================================
 
+// URL DA FOTO PADRÃO QUE SERÁ SALVA NO BANCO AO REMOVER
+const URL_FOTO_PADRAO = "https://image2url.com/images/1763934555658-3e67f304-f96e-416b-a98f-12ef5a4fbe50.png";
+
+// AZURE CONFIG
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
@@ -38,7 +41,9 @@ const uploadParaAzure = async (file, idEmpresa) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// --- Máscaras e Validações ---
+// =========================================================
+// MÁSCARAS E VALIDAÇÕES
+// =========================================================
 
 const maskPhone = (v) => {
     if (!v) return "";
@@ -59,9 +64,29 @@ const maskCNPJ = (v) => {
 };
 
 const validateField = (name, value) => {
-    if (name === "nome" && !value) return "Nome obrigatório";
-    if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email inválido";
-    return "";
+    switch (name) {
+        case "nome":
+            if (!value) return "Nome é obrigatório.";
+            if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
+                return "O nome deve começar com letra maiúscula.";
+            }
+            return "";
+        case "email":
+            if (!value) return "Email é obrigatório.";
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (emailRegex.test(value)) return "";
+            return "Formato de email inválido.";
+        case "telefone":
+            const phoneDigits = value.replace(/\D/g, "");
+            if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
+            return "";
+        case "endereco":
+            if (!value || value.trim() === "") return "Endereço é obrigatório.";
+            if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
+            return "";
+        default:
+            return "";
+    }
 };
 
 // =========================================================
@@ -81,7 +106,7 @@ const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text", e
                             value={valor}
                             onChange={onChange}
                             className={`campo-input ${error ? 'input-error' : ''}`}
-                            size={valor.length > 36 ? valor.length : 36}
+                            size={valor && valor.length > 36 ? valor.length : 36}
                         />
                     ) : (
                         isEditing && disabled ? (
@@ -90,7 +115,7 @@ const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text", e
                                 value={valor}
                                 disabled
                                 className="campo-input input-disabled"
-                                size={valor.length > 36 ? valor.length : 36}
+                                size={valor && valor.length > 36 ? valor.length : 36}
                             />
                         ) : (
                             <span className="campo-texto">{valor}</span>
@@ -98,7 +123,7 @@ const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text", e
                     )}
                 </div>
             </div>
-            {error && <span className="campo-erro">{error}</span>}
+            {error && <span className="campo-erro" style={{ color: 'red', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{error}</span>}
         </div>
     );
 };
@@ -123,16 +148,21 @@ function MeuPerfilEmpresaPage() {
     const [originalPasswordHash, setOriginalPasswordHash] = useState("");
     const [idEmpresa, setIdEmpresa] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    
+    // Inicia com a imagem padrão local ou vazia
     const [profileImage, setProfileImage] = useState(userDefaultEmpresa);
     const [errors, setErrors] = useState({});
+    
+    // --- Estados de Controle de Imagem ---
     const [selectedFile, setSelectedFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    
+    // --- NOVO ESTADO: Controle de Remoção/Reset ---
+    const [fotoRemovida, setFotoRemovida] = useState(false);
+    
     // --- Estados para Alimentos ---
     const [meusAlimentos, setMeusAlimentos] = useState([]);
     const [loadingAlimentos, setLoadingAlimentos] = useState(false);
-
-    // 2. Estado para controlar o Modal
     const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
 
     // --- Estados da Paginação ---
@@ -140,10 +170,9 @@ function MeuPerfilEmpresaPage() {
     const ITEMS_PER_PAGE = 2;
 
     // -------------------------------------------------------
-    // EFEITOS (USE EFFECT)
+    // EFEITOS (USE EFFECT) - CARREGAMENTO
     // -------------------------------------------------------
 
-    // 1. Carregar dados da Empresa
     useEffect(() => {
         const fetchEmpresaData = async () => {
             try {
@@ -170,14 +199,16 @@ function MeuPerfilEmpresaPage() {
                         senha: emp.senha,
                         telefone: maskPhone(emp.telefone),
                         cnpj: maskCNPJ(emp.cnpj_mei),
-                        endereco: ""
+                        endereco: emp.endereco || ""
                     };
 
                     setFormData(initialData);
                     setOriginalData({ ...initialData, fotoUrl: emp.foto });
                     setOriginalPasswordHash(emp.senha);
 
-                    if (emp.foto) setProfileImage(emp.foto);
+                    // Se vier do banco, usa. Se não, usa a URL padrão fornecida ou o asset local
+                    // Se emp.foto for null, vamos mostrar o userDefaultEmpresa (asset local) na tela
+                    setProfileImage(emp.foto || URL_FOTO_PADRAO);
                 }
             } catch (error) {
                 console.error("Erro de conexão:", error);
@@ -188,15 +219,12 @@ function MeuPerfilEmpresaPage() {
         fetchEmpresaData();
     }, [navigate]);
 
-    // 2. Buscar Alimentos
     useEffect(() => {
         const fetchAlimentos = async () => {
             if (!idEmpresa) return;
-
             try {
                 setLoadingAlimentos(true);
                 const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${idEmpresa}`);
-
                 if (response.ok) {
                     const data = await response.json();
                     if (data.status && data.resultFiltro) {
@@ -217,24 +245,33 @@ function MeuPerfilEmpresaPage() {
     }, [idEmpresa]);
 
     // -------------------------------------------------------
-    // LÓGICA DE PAGINAÇÃO
+    // HANDLERS
     // -------------------------------------------------------
     const totalPages = Math.ceil(meusAlimentos.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentAlimentos = meusAlimentos.slice(startIndex, endIndex);
 
-    // -------------------------------------------------------
-    // HANDLERS (FUNÇÕES DE AÇÃO)
-    // -------------------------------------------------------
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             setProfileImage(URL.createObjectURL(file));
             setSelectedFile(file);
+            setFotoRemovida(false); // Se selecionou nova, desmarca a remoção
             setErrors(prev => ({ ...prev, imagem: "" }));
         }
+    };
+
+    // --- LÓGICA DE REMOVER FOTO (VISUAL) ---
+    const handleRemovePhoto = () => {
+        // 1. Muda visualmente para a URL Padrão fornecida
+        setProfileImage(URL_FOTO_PADRAO);
+        
+        // 2. Limpa qualquer arquivo que estivesse selecionado para upload
+        setSelectedFile(null);
+        
+        // 3. Marca a flag para sabermos que deve enviar a URL Padrão no Update
+        setFotoRemovida(true);
     };
 
     const handleChange = (event) => {
@@ -263,44 +300,72 @@ function MeuPerfilEmpresaPage() {
             cnpj: originalData.cnpj,
             endereco: originalData.endereco
         });
-        setProfileImage(originalData.fotoUrl || userDefaultEmpresa);
+        
+        // Restaura a foto que estava antes de começar a editar
+        setProfileImage(originalData.fotoUrl || URL_FOTO_PADRAO);
         setSelectedFile(null);
+        setFotoRemovida(false);
         setErrors({});
         setIsEditing(false);
     };
 
+    // --- LÓGICA DE UPDATE (ENVIO AO BANCO) ---
     const handleUpdate = async () => {
         const validationErrors = {};
-
         Object.keys(formData).forEach(name => {
-            if (name !== 'endereco' && name !== 'cnpj' && name !== 'senha') {
+            if (name !== 'senha') {
                 const error = validateField(name, formData[name]);
                 if (error) validationErrors[name] = error;
             }
         });
 
         setErrors(validationErrors);
-        if (Object.keys(validationErrors).length > 0) return;
+
+        if (Object.values(validationErrors).some(error => error)) {
+            alert("Por favor, corrija os erros antes de salvar.");
+            return;
+        }
 
         try {
             setIsLoading(true);
-            let finalImageUrl = profileImage;
 
+            let urlParaSalvar;
+
+            // --- LÓGICA DE PRIORIDADE DA FOTO ---
             if (selectedFile) {
-                finalImageUrl = await uploadParaAzure(selectedFile, idEmpresa);
+                // 1. Prioridade Máxima: Tem arquivo novo selecionado -> Upload Azure
+                console.log("Ação: Upload de nova foto.");
+                urlParaSalvar = await uploadParaAzure(selectedFile, idEmpresa);
+
+            } else if (fotoRemovida) {
+                // 2. Prioridade Média: Usuário clicou em "Remover" -> Salva a URL PADRÃO
+                console.log("Ação: Resetando para foto padrão (URL fixa).");
+                urlParaSalvar = URL_FOTO_PADRAO;
+
+            } else {
+                // 3. Prioridade Baixa: Não mexeu na foto -> Mantém o que já estava
+                console.log("Ação: Mantendo foto atual.");
+                urlParaSalvar = originalData.fotoUrl;
             }
 
+            // Limpeza dos dados de texto
+            const telefoneLimpo = formData.telefone.replace(/\D/g, "");
+            const enderecoLimpo = formData.endereco ? formData.endereco.trim() : null;
+
+            // Monta o objeto final para o PUT
             const dadosParaEnviar = {
                 nome: formData.nome,
                 email: formData.email,
-                telefone: formData.telefone,
-                foto: finalImageUrl !== userDefaultEmpresa ? finalImageUrl : null
+                telefone: telefoneLimpo,
+                endereco: enderecoLimpo,
+                foto: urlParaSalvar // Envia a URL (Azure, Padrão ou Antiga)
             };
 
             if (formData.senha !== originalPasswordHash) {
                 dadosParaEnviar.senha = formData.senha;
             }
 
+            // Envia para a API
             const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${idEmpresa}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -312,10 +377,23 @@ function MeuPerfilEmpresaPage() {
             const result = await response.json();
 
             if (result.status) {
-                alert("Perfil atualizado!");
+                alert("Perfil atualizado com sucesso!");
                 setIsEditing(false);
+                
+                // Atualiza os dados originais
+                setOriginalData({ ...formData, fotoUrl: urlParaSalvar });
+                setProfileImage(urlParaSalvar);
+                
+                // Reseta estados temporários
                 setSelectedFile(null);
-                setOriginalData({ ...formData, fotoUrl: finalImageUrl });
+                setFotoRemovida(false);
+
+                // Atualiza localStorage
+                const userStorage = JSON.parse(localStorage.getItem("user"));
+                if (userStorage) {
+                    localStorage.setItem("user", JSON.stringify({ ...userStorage, foto: urlParaSalvar }));
+                }
+
             } else {
                 alert("Erro: " + result.message);
             }
@@ -327,20 +405,8 @@ function MeuPerfilEmpresaPage() {
         }
     };
 
-    // 3. Lógica para abrir o Modal
-    const handleCardClick = (alimento) => {
-        console.log("Abrindo modal para:", alimento);
-        setAlimentoSelecionado(alimento);
-    };
-
-    // 4. Lógica para fechar o Modal
-    const handleCloseModal = () => {
-        setAlimentoSelecionado(null);
-    };
-
-    // -------------------------------------------------------
-    // RENDERIZAÇÃO (JSX)
-    // -------------------------------------------------------
+    const handleCardClick = (alimento) => setAlimentoSelecionado(alimento);
+    const handleCloseModal = () => setAlimentoSelecionado(null);
 
     if (isLoading && !formData.nome) {
         return <div className="perfil-pagina-container"><p>Carregando perfil...</p></div>;
@@ -351,32 +417,47 @@ function MeuPerfilEmpresaPage() {
             <NavbarEmpresa />
 
             <div className="perfil-pagina-container">
-
-                {/* === CARD DE PERFIL === */}
                 <div className="perfil-card">
-
-                    {/* Foto */}
+                    {/* FOTO */}
                     <div className="perfil-foto-container">
-                        <img src={profileImage || userDefaultEmpresa} alt="Foto Empresa" className="perfil-imagem" />
-                        {isEditing && (
-                            <>
-                                <label htmlFor="file-upload" className="editar-foto-label">
-                                    {isLoading ? "Enviando..." : "Editar foto"}
-                                </label>
-                                <input
-                                    id="file-upload"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    className="file-input-hidden"
-                                    disabled={isLoading}
-                                />
-                                {errors.imagem && <span className="campo-erro-foto">{errors.imagem}</span>}
-                            </>
-                        )}
+                        <div className="foto-wrapper-empresa">
+                            <img
+                                src={profileImage || URL_FOTO_PADRAO}
+                                alt="Foto Empresa"
+                                className="perfil-imagem"
+                                // Fallback caso a URL padrão quebre, usa a local
+                                onError={(e) => { e.target.onerror = null; e.target.src = userDefaultEmpresa; }}
+                            />
+                            {isEditing && (
+                                <div className="botoes-foto-wrapper-empresa">
+                                    <label htmlFor="file-upload" className="btn-editar-foto-empresa">
+                                        {isLoading ? "..." : "Alterar"}
+                                    </label>
+
+                                    <button
+                                        type="button"
+                                        onClick={handleRemovePhoto}
+                                        className="btn-remover-foto-empresa"
+                                        disabled={isLoading}
+                                    >
+                                        Remover
+                                    </button>
+
+                                    <input
+                                        id="file-upload"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="file-input-hidden"
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        {errors.imagem && <span className="campo-erro-foto">{errors.imagem}</span>}
                     </div>
 
-                    {/* Dados */}
+                    {/* DADOS */}
                     <div className="perfil-dados-container">
                         <PerfilCampo
                             label="Nome"
@@ -387,7 +468,6 @@ function MeuPerfilEmpresaPage() {
                             error={errors.nome}
                         />
 
-                        {/* Campo Especial de Senha */}
                         <div className="campo-container">
                             <label className="campo-label">Senha:</label>
                             <div className="campo-valor-wrapper">
@@ -455,7 +535,7 @@ function MeuPerfilEmpresaPage() {
                                     <button
                                         className="btn-atualizar"
                                         onClick={handleUpdate}
-                                        disabled={isLoading || Object.keys(errors).some(key => errors[key] !== "")}
+                                        disabled={isLoading}
                                     >
                                         {isLoading ? "Salvando..." : "Atualizar"}
                                     </button>
@@ -465,7 +545,7 @@ function MeuPerfilEmpresaPage() {
                     </div>
                 </div>
 
-                {/* === SEÇÃO MEUS ALIMENTOS === */}
+                {/* SEÇÃO MEUS ALIMENTOS */}
                 <div className="meus-alimentos-wrapper-empresa">
                     <h2 className="titulo-secao">Meus Alimentos Cadastrados</h2>
                     <div className="linha-divisoria"></div>
@@ -473,28 +553,26 @@ function MeuPerfilEmpresaPage() {
                     {loadingAlimentos ? (
                         <p className="loading-msg">Carregando seus alimentos...</p>
                     ) : (
-                        <>
-                            <div className="alimentos-grid">
-                                {currentAlimentos.length > 0 ? (
-                                    currentAlimentos.map((item) => (
-                                        <AlimentoCard
-                                            key={item.id_alimento || item.id}
-                                            alimento={item}
-                                            onCardClick={handleCardClick}
-                                            onDeleteClick={null}
-                                        />
-                                    ))
-                                ) : (
-                                    <div className="sem-alimentos-msg">
-                                        <p>Você ainda não cadastrou nenhum alimento.</p>
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                        <div className="alimentos-grid">
+                            {currentAlimentos.length > 0 ? (
+                                currentAlimentos.map((item) => (
+                                    <AlimentoCard
+                                        key={item.id_alimento || item.id}
+                                        alimento={item}
+                                        onCardClick={handleCardClick}
+                                        onDeleteClick={null}
+                                    />
+                                ))
+                            ) : (
+                                <div className="sem-alimentos-msg">
+                                    <p>Você ainda não cadastrou nenhum alimento.</p>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
 
-                {/* === FOOTER DA PAGINAÇÃO === */}
+                {/* FOOTER PAGINAÇÃO */}
                 {meusAlimentos && meusAlimentos.length > ITEMS_PER_PAGE && (
                     <footer className="paginacao-footer-perfil-empresa">
                         <Paginacao
@@ -506,13 +584,10 @@ function MeuPerfilEmpresaPage() {
                 )}
             </div>
 
-            {/* 5. Renderização do Modal */}
             {alimentoSelecionado && (
                 <ModalAlimento
                     alimento={{
                         ...alimentoSelecionado,
-                        // AQUI ESTÁ A CORREÇÃO:
-                        // Se não tiver 'id', ele pega o 'id_alimento' e usa como 'id'
                         id: alimentoSelecionado.id || alimentoSelecionado.id_alimento
                     }}
                     onClose={handleCloseModal}

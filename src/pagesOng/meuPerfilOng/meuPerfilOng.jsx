@@ -5,20 +5,23 @@ import { useNavigate } from 'react-router-dom';
 import './MeuPerfilOng.css';
 import NavbarOng from '../../components/navbarOng/navbarOng';
 
-// Assets
-import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; // Pode manter ou trocar por um ícone de ONG se tiver
+// Assets (Fallback local)
+import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; 
 import linkExterno from '../../assets/icons/linkExterno.png';
 
 // =========================================================
-// CONFIGURAÇÕES E HELPERS (Azure e Máscaras)
+// CONFIGURAÇÕES E HELPERS (AZURE)
 // =========================================================
+
+// URL DA FOTO PADRÃO (Mesma utilizada nas outras telas)
+const URL_FOTO_PADRAO = "https://image2url.com/images/1763934555658-3e67f304-f96e-416b-a98f-12ef5a4fbe50.png";
 
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
 
 const uploadParaAzure = async (file, idUsuario) => {
-    const blobName = `ong_${idUsuario}_${Date.now()}_${file.name}`; // Alterado prefixo para ong_
+    const blobName = `ong_${idUsuario}_${Date.now()}_${file.name}`; 
     const url = `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}?${SAS_TOKEN}`;
 
     const res = await fetch(url, {
@@ -34,16 +37,58 @@ const uploadParaAzure = async (file, idUsuario) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// --- Máscaras ---
+// =========================================================
+// MÁSCARAS E VALIDAÇÕES
+// =========================================================
+
 const maskPhone = (v) => {
     if (!v) return "";
     let n = v.replace(/\D/g, "").slice(0, 11);
-    return n.length > 10
-        ? n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3")
-        : n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    if (n.length > 10) {
+        return n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (n.length > 6) {
+        return n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (n.length > 2) {
+        return n.replace(/^(\d{2})(\d*)/, "($1) $2");
+    } else {
+        return n.replace(/^(\d*)/, "($1");
+    }
 };
 
-// (Removed maskCPF function as it is not needed for ONG based on provided SQL)
+const validateField = (name, value) => {
+    switch (name) {
+        case "nome":
+            if (!value) return "Nome é obrigatório.";
+            if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
+                return "O nome deve começar com letra maiúscula.";
+            }
+            return "";
+
+        case "email":
+            if (!value) return "Email é obrigatório.";
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (emailRegex.test(value)) return "";
+
+            if (!value.includes("@")) return "Email deve conter um '@'.";
+            const parts = value.split('@');
+            if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
+                return "Formato de email inválido.";
+            }
+            const domainPart = parts[1];
+            if (!domainPart.includes('.')) return "Domínio precisa de ponto.";
+            const tld = domainPart.split('.').pop();
+            if (tld.length < 2) return "Domínio inválido.";
+            return "Formato de email inválido.";
+
+        case "telefone":
+            const phoneDigits = value.replace(/\D/g, "");
+            if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
+            return "";
+
+        default:
+            return "";
+    }
+};
 
 // =========================================================
 // COMPONENTE PRINCIPAL
@@ -58,7 +103,7 @@ function MeuPerfilOngPage() {
     const [isEditing, setIsEditing] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    // Dados do Formulário (Removido CPF e Endereço para alinhar com tbl_ongs e procedure)
+    // Dados do Formulário
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
@@ -66,15 +111,17 @@ function MeuPerfilOngPage() {
         foto: null
     });
     
-    // Estado para backup dos dados (caso cancele a edição)
+    // Backup e Erros
     const [originalData, setOriginalData] = useState({});
+    const [errors, setErrors] = useState({});
 
-    // Imagens
+    // Imagens e Controle
     const [previewFoto, setPreviewFoto] = useState(userDefaultEmpresa);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [fotoRemovida, setFotoRemovida] = useState(false); // NOVO ESTADO
 
     // -------------------------------------------------------
-    // 1. Carregar Dados (GET) - Endpoint de ONG
+    // 1. Carregar Dados (GET)
     // -------------------------------------------------------
     useEffect(() => {
         const fetchData = async () => {
@@ -88,11 +135,9 @@ function MeuPerfilOngPage() {
                 setIdOng(user.id);
 
                 // Fetch na API - Rota de ONG
-                // Endpoint ajustado conforme solicitado
                 const response = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${user.id}`);
                 const data = await response.json();
 
-                // Verifica se data.ong existe (baseado no Controller da ONG)
                 if (data.status && data.ong) {
                     const u = data.ong;
                     
@@ -106,7 +151,8 @@ function MeuPerfilOngPage() {
                     setFormData(loadedData);
                     setOriginalData(loadedData);
                     
-                    if (u.foto) setPreviewFoto(u.foto);
+                    // Se vier do banco, usa. Se não, usa a URL padrão.
+                    setPreviewFoto(u.foto || URL_FOTO_PADRAO);
                 }
             } catch (error) {
                 console.error("Erro ao buscar ONG:", error);
@@ -127,6 +173,10 @@ function MeuPerfilOngPage() {
         if (name === 'telefone') val = maskPhone(value);
         
         setFormData(prev => ({ ...prev, [name]: val }));
+
+        // Validação em Tempo Real
+        const errorMessage = validateField(name, val);
+        setErrors(prev => ({ ...prev, [name]: errorMessage }));
     };
 
     const handleImageChange = (e) => {
@@ -134,49 +184,81 @@ function MeuPerfilOngPage() {
         if (file) {
             setPreviewFoto(URL.createObjectURL(file));
             setSelectedFile(file);
+            setFotoRemovida(false); // Selecionou nova, desmarca remoção
         }
     };
 
     const handleRemovePhoto = () => {
-        setPreviewFoto(userDefaultEmpresa);
+        // Visualmente mostra a foto padrão
+        setPreviewFoto(URL_FOTO_PADRAO);
         setSelectedFile(null);
-        setFormData(prev => ({ ...prev, foto: null })); 
+        // Marca flag para salvar a URL Padrão no banco
+        setFotoRemovida(true);
     };
 
     const handleCancel = () => {
         setIsEditing(false);
         setFormData(originalData);
-        setPreviewFoto(originalData.foto || userDefaultEmpresa);
+        
+        // Restaura foto original ou padrão se não tinha nada
+        setPreviewFoto(originalData.foto || URL_FOTO_PADRAO);
+        
         setSelectedFile(null);
+        setFotoRemovida(false);
+        setErrors({}); 
     };
 
     // -------------------------------------------------------
-    // 3. Atualizar Perfil (PUT) - Endpoint de ONG
+    // 3. Atualizar Perfil (PUT)
     // -------------------------------------------------------
     const handleUpdate = async () => {
-        if (!formData.nome || !formData.email) {
-            alert("Nome e Email são obrigatórios.");
+        // 1. Validação Final
+        const validationErrors = {};
+        Object.keys(formData).forEach(key => {
+            if (key !== 'foto') {
+                const error = validateField(key, formData[key]);
+                if (error) validationErrors[key] = error;
+            }
+        });
+
+        setErrors(validationErrors);
+
+        if (Object.values(validationErrors).some(error => error)) {
+            alert("Por favor, corrija os campos inválidos antes de salvar.");
             return;
         }
 
         setSaving(true);
+        
         try {
-            let finalFotoUrl = formData.foto;
+            let urlParaSalvar;
 
+            // --- LÓGICA DE PRIORIDADE DA FOTO ---
             if (selectedFile) {
-                finalFotoUrl = await uploadParaAzure(selectedFile, idOng);
+                // 1. Upload novo
+                console.log("Ação: Upload de nova foto.");
+                urlParaSalvar = await uploadParaAzure(selectedFile, idOng);
+            } else if (fotoRemovida) {
+                // 2. Removeu (Salva URL Padrão)
+                console.log("Ação: Resetando para foto padrão.");
+                urlParaSalvar = URL_FOTO_PADRAO;
+            } else {
+                // 3. Mantém a original
+                console.log("Ação: Mantendo foto atual.");
+                urlParaSalvar = originalData.foto;
             }
 
-            // Payload alinhado com a procedure atualizar_ong (sem cpf, sem endereco)
+            // Remove máscara para envio
+            const telefoneLimpo = formData.telefone.replace(/\D/g, "");
+
             const payload = {
                 nome: formData.nome,
                 email: formData.email,
-                telefone: formData.telefone,
-                foto: finalFotoUrl,
-                senha: "" // A controller/DAO tratam senha vazia mantendo a antiga
+                telefone: telefoneLimpo,
+                foto: urlParaSalvar, // Envia a URL definida acima
+                senha: "" 
             };
 
-            // Endpoint ajustado para ONG
             const res = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${idOng}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -189,11 +271,17 @@ function MeuPerfilOngPage() {
                 alert('Perfil da ONG atualizado com sucesso!');
                 setIsEditing(false);
                 
-                const novosDados = { ...formData, foto: finalFotoUrl };
+                // Atualiza estados locais
+                const novosDados = { ...formData, foto: urlParaSalvar };
                 setOriginalData(novosDados);
                 setFormData(novosDados);
+                setPreviewFoto(urlParaSalvar);
 
-                // Atualiza localStorage mantendo outras props (como tipo de usuario)
+                // Limpa flags
+                setSelectedFile(null);
+                setFotoRemovida(false);
+
+                // Atualiza localStorage
                 const userStorage = JSON.parse(localStorage.getItem("user"));
                 localStorage.setItem("user", JSON.stringify({ ...userStorage, ...payload }));
             } else {
@@ -220,9 +308,11 @@ function MeuPerfilOngPage() {
                 <section className="perfil-left-col">
                     <div className="foto-wrapper">
                         <img 
-                            src={previewFoto || userDefaultEmpresa} 
+                            src={previewFoto} 
                             alt="Logo da ONG" 
                             className="foto-perfil-usuario" 
+                            // Fallback para asset local se a URL quebrar
+                            onError={(e) => { e.target.onerror = null; e.target.src = userDefaultEmpresa; }}
                         />
                         
                         {isEditing && (
@@ -269,13 +359,16 @@ function MeuPerfilOngPage() {
                             <div className="input-group full-width">
                                 <label>Nome:</label>
                                 {isEditing ? (
-                                    <input 
-                                        type="text" 
-                                        name="nome" 
-                                        value={formData.nome} 
-                                        onChange={handleChange} 
-                                        className="input-editable"
-                                    />
+                                    <>
+                                        <input 
+                                            type="text" 
+                                            name="nome" 
+                                            value={formData.nome} 
+                                            onChange={handleChange} 
+                                            className={`input-editable ${errors.nome ? 'input-error' : ''}`}
+                                        />
+                                        {errors.nome && <span style={{color: 'red', fontSize: '0.8rem', display: 'block', marginTop: '4px'}}>{errors.nome}</span>}
+                                    </>
                                 ) : (
                                     <span className="data-text">{formData.nome}</span>
                                 )}
@@ -285,13 +378,16 @@ function MeuPerfilOngPage() {
                             <div className="input-group full-width">
                                 <label>Email:</label>
                                 {isEditing ? (
-                                    <input 
-                                        type="email" 
-                                        name="email" 
-                                        value={formData.email} 
-                                        onChange={handleChange}
-                                        className="input-editable"
-                                    />
+                                    <>
+                                        <input 
+                                            type="email" 
+                                            name="email" 
+                                            value={formData.email} 
+                                            onChange={handleChange}
+                                            className={`input-editable ${errors.email ? 'input-error' : ''}`}
+                                        />
+                                        {errors.email && <span style={{color: 'red', fontSize: '0.8rem', display: 'block', marginTop: '4px'}}>{errors.email}</span>}
+                                    </>
                                 ) : (
                                     <span className="data-text">{formData.email}</span>
                                 )}
@@ -301,20 +397,22 @@ function MeuPerfilOngPage() {
                             <div className="input-group full-width">
                                 <label>Telefone:</label>
                                 {isEditing ? (
-                                    <input 
-                                        type="text" 
-                                        name="telefone" 
-                                        value={formData.telefone} 
-                                        onChange={handleChange}
-                                        maxLength={15}
-                                        className="input-editable"
-                                    />
+                                    <>
+                                        <input 
+                                            type="text" 
+                                            name="telefone" 
+                                            value={formData.telefone} 
+                                            onChange={handleChange}
+                                            maxLength={15}
+                                            className={`input-editable ${errors.telefone ? 'input-error' : ''}`}
+                                        />
+                                        {errors.telefone && <span style={{color: 'red', fontSize: '0.8rem', display: 'block', marginTop: '4px'}}>{errors.telefone}</span>}
+                                    </>
                                 ) : (
                                     <span className="data-text">{formData.telefone}</span>
                                 )}
                             </div>
                             
-                            {/* Endereço e CPF foram removidos pois não são atualizáveis via /ong PUT */}
                         </div>
 
                         {/* Botões de Ação */}

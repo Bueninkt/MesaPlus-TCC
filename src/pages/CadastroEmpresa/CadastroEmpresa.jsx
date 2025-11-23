@@ -6,13 +6,13 @@ import "./cadastroEmpresa.css";
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
-import postCard from "../../assets/icons/postCard.png"; // Reutilizando para o endereço/CNPJ
+import postCard from "../../assets/icons/postCard.png"; 
 import email from "../../assets/icons/email.png";
 import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
-import local from "../../assets/icons/local.png"
+import local from "../../assets/icons/local.png"; // Ícone de endereço
 
 const Navbar = navbarRegister;
 
@@ -59,7 +59,7 @@ const validateField = (name, value) => {
       if (cnpjDigits.length !== 14) return "CNPJ/MEI deve ter 14 dígitos.";
       return "";
 
-    // --- NOVA VALIDAÇÃO ADICIONADA ---
+    // Validação do Endereço (Alinhado com Controller Node.js)
     case "endereco":
       if (!value || value.trim() === "") return "Endereço é obrigatório.";
       if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
@@ -75,14 +75,13 @@ function CadastroEmpresaPage() {
   const navigate = useNavigate();
   const redirectTimer = useRef(null);
 
-  // --- ESTADO ATUALIZADO ---
   const [form, setForm] = useState({
     nome: "",
     email: "",
     senha: "",
     telefone: "",
     cnpj: "",
-    endereco: "" // Novo campo
+    endereco: "" // State inicializado
   });
 
   const [errors, setErrors] = useState({});
@@ -149,6 +148,8 @@ function CadastroEmpresaPage() {
     }
 
     setStatus({ type: "", msg: "", loading: true });
+    
+    // URL da API
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
     const url = `${API_BASE}/empresa`;
 
@@ -156,14 +157,14 @@ function CadastroEmpresaPage() {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // --- ENVIO ATUALIZADO ---
+        // Body da requisição com o endereço incluído
         body: JSON.stringify({
           nome: form.nome.trim(),
           email: form.email.trim(),
           senha: form.senha,
           telefone: form.telefone.replace(/\D/g, ""),
           cnpj_mei: form.cnpj.replace(/\D/g, ""),
-          endereco: form.endereco.trim() // Campo adicionado
+          endereco: form.endereco.trim() 
         })
       });
 
@@ -177,6 +178,8 @@ function CadastroEmpresaPage() {
         msg: "Cadastro feito com sucesso!",
         loading: false
       });
+      
+      // Limpa o form
       setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "", endereco: "" });
 
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
@@ -298,9 +301,8 @@ function CadastroEmpresaPage() {
               {errors.cnpj && <div className="ce__error-message" role="alert">{errors.cnpj}</div>}
             </label>
 
-            {/* --- NOVO CAMPO: ENDEREÇO --- */}
+            {/* Endereço - Validado e Incluído */}
             <label className="fieldCe">
-              {/* Reutilizando postCard ou você pode importar um location.png */}
               <img className="field__icon" src={local} alt="" aria-hidden="true" />
               <span className="field__label">Endereço:</span>
               <input
