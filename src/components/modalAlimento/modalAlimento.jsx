@@ -133,7 +133,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false, 
                     <div className="modal-detalhes">
                         <h3>Detalhes</h3>
                         <p><strong>Validade:</strong> {prazoFormatado}</p>
-                        <p><strong>Quantidade:</strong> {quantidadeDisponivel}</p>
+                        <p><strong>Qtd:</strong> {quantidadeDisponivel}</p>
                         <p><strong>Peso:</strong> {pesoCompleto}</p>
                     </div>
                     <div className="modal-descricao">
@@ -152,7 +152,7 @@ function ModalAlimento({ alimento: alimentoBase, onClose, isPedidoPage = false, 
                 {!isPedidoPage && (
                     <div className="footer-col carrinho-col">
                         <button className="add-to-cart-button" onClick={handleAddToCart}>
-                            <img src={cart} alt="Cart" className="cart-icon" /> Adicionar ao carrinho
+                            <img src={cart} alt="Cart" className="cart-icon" /> Adicionar
                         </button>
                         <div className="quantity-controls">
                             <button className="quantity-button" onClick={handleDecrement} disabled={quantidadeSelecionada === 1}><img src={menos} alt="-" /></button>

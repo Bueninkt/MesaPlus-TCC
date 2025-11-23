@@ -1,4 +1,4 @@
-/* 1. Overlay (Fundo) */
+/* --- ESTRUTURA BASE (Overlay e Container) --- */
 .modal-overlay-alimento {
     position: fixed;
     top: 0;
@@ -13,7 +13,6 @@
     padding: 20px;
 }
 
-/* 2. Contêiner Principal (O modal em si) */
 .modal-container {
     font-family: 'Poppins', sans-serif;
     background-color: var(--beige);
@@ -21,31 +20,29 @@
     border-radius: 12px;
     padding: 2rem;
     width: 100%;
-    max-width: 900px; /* Largura máxima do modal */
-    max-height: 90vh; /* Altura máxima */
-    overflow-y: auto; /* Permite scroll se o conteúdo for maior */
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* 3. Botão de Fechar (X) */
 .modal-close-button {
     position: absolute;
     top: 15px;
     right: 20px;
     background: none;
     border: none;
-    font-size: 2.5rem; /* Tamanho do 'X' */
-    font-weight: 300;
+    font-size: 2.5rem;
     color: var(--green-dark);
     cursor: pointer;
     line-height: 1;
 }
 
-/* 4. Cabeçalho (Título) */
+/* --- HEADER --- */
 .modal-header {
     text-align: center;
-    border-bottom: 2px solid #E0D1B3; /* Cor derivada do beige */
+    border-bottom: 2px solid #E0D1B3;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
 }
@@ -56,23 +53,24 @@
     margin: 0;
 }
 
-/* 5. Corpo (Layout Flex) */
+/* --- BODY (FLEX) --- */
 .modal-body {
     display: flex;
     gap: 2rem;
 }
 
-/* 5a. Coluna da Imagem */
+/* --- COLUNA IMAGEM --- */
 .modal-imagem-col {
     flex: 1;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .modal-imagem-col img {
     width: 100%;
-    max-width: 250px; /* Limita o tamanho da imagem */
+    max-width: 250px;
     height: auto;
     object-fit: contain;
     border-radius: 8px;
@@ -81,14 +79,26 @@
     border: 1px solid #E0D1B3;
 }
 
-/* 5b. Coluna de Informações */
+/* Estilo "Dropzone" quando em edição */
+.modal-imagem-col.editing-image-area {
+    border: 2px dashed var(--green-dark);
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-image-edit-overlay {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* --- COLUNA INFO --- */
 .modal-info-col {
     flex: 2;
 }
 
-/* Bloco da Empresa (similar à imagem) */
 .modal-empresa-info {
-    background-color: #FFEACC; /* Tom pêssego/bege claro da imagem */
+    background-color: #FFEACC;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -105,12 +115,7 @@
     background: var(--white);
 }
 
-.modal-empresa-info span {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-/* Blocos de Detalhes e Descrição */
+/* --- VISUALIZAÇÃO (TEXTO) --- */
 .modal-info-col h3 {
     font-size: 1.4rem;
     font-weight: 600;
@@ -123,18 +128,113 @@
     margin-bottom: 0.5rem;
 }
 
-.modal-detalhes {
+.modal-detalhes,
+.modal-descricao {
     margin-bottom: 1.5rem;
 }
 
-/* 6. Rodapé (Categorias) */
+/* ==================================================== */
+/* === NOVOS ESTILOS DE EDIÇÃO (Inspirado no Cadastro) === */
+/* ==================================================== */
+
+/* O Container Fieldset (Borda Verde e Legenda) */
+.modal-fieldset {
+    border: 2px solid var(--green-dark);
+    border-radius: 8px;
+    padding: 0.3rem 0.8rem;
+    background-color: transparent;
+    margin: 0;
+    width: 100%;
+}
+
+.modal-fieldset legend {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    color: var(--green-dark);
+    background-color: var(--beige);
+    /* Garante que a linha "quebre" */
+    padding: 0 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.modal-fieldset-full {
+    width: 100%;
+}
+
+/* Input Transparente (Sem borda, usa a do Fieldset) */
+.modal-input-transparent {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #000000;
+    padding: 4px 0;
+}
+
+.modal-input-transparent::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Grid para inputs lado a lado (Validade, Peso, etc) */
+.modal-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Ajustes específicos para Textarea */
+.descricao-height textarea {
+    min-height: 120px;
+    resize: none;
+    line-height: 1.4;
+}
+
+/* Header Flex (Título e Botão Editar) */
+.header-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-enable-edit {
+    background: transparent;
+    border: 1px solid var(--green-dark);
+    color: var(--green-dark);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-enable-edit:hover {
+    background: var(--green-dark);
+    color: var(--white);
+}
+
+/* --- FOOTER --- */
 .modal-footer {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 2px solid #E0D1B3;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end; /* Alinha o conteúdo verticalmente */
+    align-items: flex-end;
 }
 
 .modal-footer h3 {
@@ -150,7 +250,7 @@
 }
 
 .tag {
-    background-color: #FFDDA9; /* Tom laranja/bege mais escuro */
+    background-color: #FFDDA9;
     color: var(--green-dark-2);
     padding: 6px 14px;
     border-radius: 20px;
@@ -163,11 +263,46 @@
     font-size: 0.9rem;
 }
 
-
+/* --- AÇÕES DE EDIÇÃO E CARRINHO --- */
 .carrinho-col {
     display: flex;
     gap: 20px;
     align-items: center;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.save-button {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-button:hover {
+    background-color: #1b5e20;
+}
+
+.cancel-button {
+    background-color: #ef5350;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: #c62828;
 }
 
 .add-to-cart-button {
@@ -183,8 +318,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: background-color 0.2s;
-    height: 50px; /* Garante alinhamento com os controles de quantidade */
+    height: 50px;
 }
 
 .add-to-cart-button:hover {
@@ -194,7 +328,7 @@
 .cart-icon {
     width: 20px;
     height: 20px;
-    filter: brightness(0) invert(1); /* Deixa o ícone branco */
+    filter: brightness(0) invert(1);
 }
 
 .quantity-controls {
@@ -207,19 +341,12 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
     width: 30px;
     height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: background-color 0.1s;
-}
-
-.quantity-button img {
-    width: 20px;
-    height: 20px;
 }
 
 .quantity-button:disabled {
@@ -227,12 +354,10 @@
     cursor: not-allowed;
 }
 
-/* Estilo para o span da quantidade */
 .quantity-display {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--green-dark);
-    /* Estilo para parecer um badge (opcional, ajustando com a imagem) */
     background-color: var(--beige-2);
     padding: 10px;
     border-radius: 8px;
@@ -244,25 +369,17 @@
     justify-content: center;
 }
 
-/* Responsividade: ajusta o footer para mobile */
+/* RESPONSIVIDADE */
 @media (max-width: 768px) {
     .modal-body {
         flex-direction: column;
     }
 
-    .modal-imagem-col img {
-        max-width: 200px; /* Imagem menor em telas pequenas */
-        margin-bottom: 1rem;
-    }
-    
-    .modal-header h2 {
-        font-size: 1.8rem;
+    .modal-form-row {
+        flex-direction: column;
+        gap: 1rem;
     }
 
-    .modal-info-col h3, .modal-footer h3 {
-        font-size: 1.2rem;
-    }
-    
     .modal-footer {
         flex-direction: column;
         align-items: flex-start;
@@ -271,17 +388,17 @@
 
     .carrinho-col {
         flex-direction: column;
-        align-items: flex-start;
         width: 100%;
+        align-items: flex-start;
     }
 
-    .add-to-cart-button {
+    .add-to-cart-button,
+    .quantity-controls {
         width: 100%;
         justify-content: center;
     }
 
     .quantity-controls {
-        width: 100%;
         justify-content: space-between;
     }
 }

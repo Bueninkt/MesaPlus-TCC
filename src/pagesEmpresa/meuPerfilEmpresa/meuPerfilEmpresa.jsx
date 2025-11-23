@@ -591,7 +591,17 @@ function MeuPerfilEmpresaPage() {
                         id: alimentoSelecionado.id || alimentoSelecionado.id_alimento
                     }}
                     onClose={handleCloseModal}
+
+                    canEdit={true}
+
                     isPedidoPage={true}
+
+                  onUpdateSuccess={() => {
+                        // Recarrega os dados da empresa e alimentos
+                        // Você pode criar uma função específica refreshData() ou forçar reload
+                        window.location.reload(); 
+                        // Ou chamar fetchAlimentos() se você extrair ela do useEffect
+                    }}
                 />
             )}
         </>
