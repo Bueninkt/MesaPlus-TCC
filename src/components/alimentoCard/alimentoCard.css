@@ -20,7 +20,7 @@
     border-color: var(--green-light, #B9CE5D); /* Usa o verde-claro para o hover */
     /* Você pode adicionar um 'box-shadow' se quiser */
     /* box-shadow: 0 0 10px rgba(185, 206, 93, 0.5); */
-    transform: translateY(-2px); /* Efeito leve de "levantar" */
+    transform: translateY(-2px); /* Efeito leve de "levantaer" */
 }
 
 /* 1. Imagem (Esquerda) */
