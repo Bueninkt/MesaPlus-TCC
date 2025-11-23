@@ -74,7 +74,7 @@
     display: grid;
     margin-top: 40px;
     grid-template-columns: repeat(2, 1fr); 
-    gap: 55px; 
+    gap: 39px; 
 }
 
 /* Footer da paginação (AGORA DENTRO DO FUNDO VERDE) */
@@ -140,6 +140,18 @@
         max-width: 100%;
         width: 100%;
     }
+
+    .coluna-conteudo{
+        display: flex;
+        align-items: center;
+    }
+
+    .lista-alimentos-grid {
+        display: grid;
+        margin-top: 40px;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 39px; 
+}
 }
 
- 
+    /* Para telas menores (ex: tablets) */

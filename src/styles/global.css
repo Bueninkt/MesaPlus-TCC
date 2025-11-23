@@ -27,10 +27,14 @@
          scroll-behavior: smooth;
          height: 100%;
          width: 100%;
+         zoom: 0.79;
+         
      }
 
      section[id] {
          scroll-margin-top: 80px;
      }
+
+     
 
 
