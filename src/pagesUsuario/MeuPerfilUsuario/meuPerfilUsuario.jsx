@@ -136,7 +136,7 @@ function MeuPerfilUsuarioPage() {
                 const user = JSON.parse(userStorage);
                 setIdUsuario(user.id);
 
-                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/usuario/${user.id}`);
+                const response = await fetch(`http://localhost:8080/v1/mesa-plus/usuario/${user.id}`);
                 const data = await response.json();
 
                 if (data.status && data.usuario) {
@@ -277,7 +277,7 @@ function MeuPerfilUsuarioPage() {
                 senha: "" 
             };
 
-            const res = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/usuario/${idUsuario}`, {
+            const res = await fetch(`http://localhost:8080/v1/mesa-plus/usuario/${idUsuario}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

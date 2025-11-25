@@ -135,7 +135,7 @@ function MeuPerfilOngPage() {
                 setIdOng(user.id);
 
                 // Fetch na API - Rota de ONG
-                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/ong/${user.id}`);
+                const response = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${user.id}`);
                 const data = await response.json();
 
                 if (data.status && data.ong) {
@@ -277,7 +277,7 @@ function MeuPerfilOngPage() {
                 senha: "" 
             };
 
-            const res = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/ong/${idOng}`, {
+            const res = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${idOng}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

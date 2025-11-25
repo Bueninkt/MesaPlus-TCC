@@ -33,7 +33,7 @@ function MeusAlimentosOngPage() {
                 const usuario = JSON.parse(userString); // 'ong' aqui é o objeto da ONG
 
                 // ❗️ MUDANÇA 2: Usando o endpoint 'id_ong'
-                const response = await axios.get(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedido?id_ong=${usuario.id}`);
+                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/pedido?id_ong=${usuario.id}`);
 
                 if (response.data && response.data.status_code === 200) {
                     setMeusPedidos(response.data.result);
@@ -72,7 +72,7 @@ function MeusAlimentosOngPage() {
         }
 
         try {
-            const response = await axios.delete(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedido/${idPedido}`);
+            const response = await axios.delete(`http://localhost:8080/v1/mesa-plus/pedido/${idPedido}`);
 
             if (response.data && response.data.status_code === 200) {
                 alert("Pedido removido com sucesso!");

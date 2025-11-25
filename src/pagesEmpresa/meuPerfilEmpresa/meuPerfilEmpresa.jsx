@@ -217,7 +217,7 @@ function MeuPerfilEmpresaPage() {
                 setIdEmpresa(user.id);
                 setIsLoading(true);
 
-                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa/${user.id}`);
+                const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${user.id}`);
                 if (!response.ok) throw new Error("Erro ao buscar dados da empresa");
 
                 const data = await response.json();
@@ -253,7 +253,7 @@ function MeuPerfilEmpresaPage() {
             if (!idEmpresa) return;
             try {
                 setLoadingAlimentos(true);
-                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresaAlimento/${idEmpresa}`);
+                const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${idEmpresa}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.status && data.resultFiltro) {
@@ -304,7 +304,7 @@ function MeuPerfilEmpresaPage() {
     const handleDeleteAlimento = async (idAlimento) => {
         if (window.confirm("Tem certeza que deseja excluir este alimento?")) {
             try {
-                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${idAlimento}`, {
+                const response = await fetch(`http://localhost:8080/v1/mesa-plus/alimento/${idAlimento}`, {
                     method: 'DELETE'
                 });
 
@@ -426,7 +426,7 @@ function MeuPerfilEmpresaPage() {
                 dadosParaEnviar.senha = formData.senha;
             }
 
-            const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa/${idEmpresa}`, {
+            const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${idEmpresa}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosParaEnviar)

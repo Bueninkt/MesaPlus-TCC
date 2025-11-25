@@ -28,7 +28,7 @@ function MeusAlimentosUsuarioPage() {
                 }
                 const usuario = JSON.parse(userString);
 
-                const response = await axios.get(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedido?id_usuario=${usuario.id}`);
+                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/pedido?id_usuario=${usuario.id}`);
 
                 if (response.data && response.data.status_code === 200) {
                     setMeusPedidos(response.data.result);
@@ -67,7 +67,7 @@ function MeusAlimentosUsuarioPage() {
         }
 
         try {
-            const response = await axios.delete(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedido/${idPedido}`);
+            const response = await axios.delete(`http://localhost:8080/v1/mesa-plus/pedido/${idPedido}`);
 
             if (response.data && response.data.status_code === 200) {
                 alert("Pedido removido com sucesso!");

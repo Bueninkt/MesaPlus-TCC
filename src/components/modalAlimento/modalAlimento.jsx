@@ -101,7 +101,7 @@ function ModalAlimento({
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${idParaBuscar}`);
+                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/alimento/${idParaBuscar}`);
                 if (response.data && response.data.status_code === 200 && response.data.alimento && response.data.alimento.length > 0) {
                     setAlimentoCompleto(response.data.alimento[0]);
                 } else {
@@ -144,7 +144,7 @@ function ModalAlimento({
              const usuario = JSON.parse(userString);
              let payload = {};
              let redirectUrl = '';
-             const url = 'https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedidoUsuario';
+             const url = 'http://localhost:8080/v1/mesa-plus/pedidoUsuario';
 
              if (userType === 'pessoa') {
                  payload = { id_usuario: usuario.id, id_alimento: alimentoCompleto.id, quantidade: quantidadeSelecionada };
@@ -263,7 +263,7 @@ function ModalAlimento({
                 peso: Number(editFormData.peso)
             };
 
-            const response = await axios.put(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${alimentoCompleto.id}`, payload);
+            const response = await axios.put(`http://localhost:8080/v1/mesa-plus/alimento/${alimentoCompleto.id}`, payload);
 
             if (response.status === 200) {
                 alert("Alimento atualizado com sucesso!");

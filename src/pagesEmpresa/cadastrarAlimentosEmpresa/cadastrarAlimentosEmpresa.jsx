@@ -153,7 +153,7 @@ function CadastrarAlimentosEmpresaPage() {
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await axios.get('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/categoria');
+                const response = await axios.get('http://localhost:8080/v1/mesa-plus/categoria');
                 if (response.data && response.data.categorias) {
                     setListaCategorias(response.data.categorias);
                 }
@@ -169,7 +169,7 @@ function CadastrarAlimentosEmpresaPage() {
     useEffect(() => {
         const fetchTiposPeso = async () => {
             try {
-                const response = await axios.get('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/tipoPeso');
+                const response = await axios.get('http://localhost:8080/v1/mesa-plus/tipoPeso');
                 if (response.data && response.data.tipos) {
                     setListaTiposPeso(response.data.tipos);
                 }
@@ -346,7 +346,7 @@ function CadastrarAlimentosEmpresaPage() {
             quantidade: Number(quantidade) // --- ADICIONADO ---
         }
         try {
-            const response = await axios.post('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimentos', payload, {
+            const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.status === 200) {

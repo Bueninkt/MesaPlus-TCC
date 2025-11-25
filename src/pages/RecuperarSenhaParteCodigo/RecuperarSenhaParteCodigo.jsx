@@ -58,10 +58,10 @@ function RecuperarSenhaParteCodigo() {
 
     try {
       // 1. VERIFICAR O CÓDIGO
-      await axios.post('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/codigo-recuperacao', { email, tipo, codigo });
+      await axios.post('http://localhost:8080/v1/mesa-plus/codigo-recuperacao', { email, tipo, codigo });
 
       // 2. APAGAR O CÓDIGO DO BANCO
-      await axios.put('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/apagar-codigo', { email, tipo });
+      await axios.put('http://localhost:8080/v1/mesa-plus/apagar-codigo', { email, tipo });
 
       // 3. NOVO: DEFINIR MENSAGEM DE SUCESSO
       setStatus({

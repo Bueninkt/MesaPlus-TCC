@@ -88,7 +88,7 @@ function FavoritosUsuarioPage() {
         if (!window.confirm("Deseja remover esta empresa dos favoritos?")) return;
 
         try {
-            const response = await axios.delete(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/favorito/${idFavorito}`);
+            const response = await axios.delete(`http://localhost:8080/v1/mesa-plus/favorito/${idFavorito}`);
 
             if (response.status === 200) {
                 alert("Favorito removido com sucesso!");

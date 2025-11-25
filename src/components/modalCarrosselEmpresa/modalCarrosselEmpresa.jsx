@@ -54,7 +54,7 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                 setSelectedAlimento(null); // Reseta seleção ao abrir nova empresa
 
                 try {
-                    const resEmpresa = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa/${empresaId}`);
+                    const resEmpresa = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${empresaId}`);
                     if (!resEmpresa.ok) throw new Error("Erro ao carregar empresa.");
                     const dataEmpresa = await resEmpresa.json();
 
@@ -64,7 +64,7 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                         throw new Error("Empresa não encontrada.");
                     }
 
-                    const resAlimentos = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresaAlimento/${empresaId}`);
+                    const resAlimentos = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaId}`);
 
                     if (resAlimentos.ok) {
                         const dataAlimentos = await resAlimentos.json();
@@ -109,7 +109,7 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                 ? { id_usuario: usuario.id, id_empresa: empresa.id }
                 : { id_ong: usuario.id, id_empresa: empresa.id };
 
-            const response = await axios.post('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/favoritoUser', payload);
+            const response = await axios.post('http://localhost:8080/v1/mesa-plus/favoritoUser', payload);
             if (response.status === 200 || response.status === 201) {
                 setIsFavorited(true);
                 alert("Favoritado com sucesso!");
