@@ -27,7 +27,7 @@
     align-items: flex-start; /* Alinha ao topo para manter a foto fixa */
     gap: 6rem; /* Espaço generoso entre a foto e o card, conforme imagem */
     
-    margin-top: 5vh; /* Empurra um pouco para baixo */
+    margin-top: 5vh; /* Empurra um pouco */
 }
 
 /* =========================================================
