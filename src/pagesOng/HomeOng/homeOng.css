@@ -1,70 +1,72 @@
-/* + NOVO CONTAINER GERAL (para o sticky footer) */
+/* ==========================================================================
+   Homeong.css - Refatorado para Responsividade Fluida (1400px -> 700px)
+   ========================================================================== */
+
+/* 1. CONTAINER GERAL (Ocupa toda a tela e gerencia o Sticky Footer) */
 .home-ong-page-container {
     display: flex;
     flex-direction: column;
-    /* Ocupa 100% da altura da janela */
-    min-height: 100vh; 
-    /* Garante que o layout funcione corretamente */
-    background-color: var(--green-dark, #1B4227); 
+    background-color: var(--green-dark, #1B4227);
+    overflow-x: hidden; /* Previne scroll horizontal acidental */
 }
 
-/* Wrapper (o container verde abaixo da navbar) */
+/* 2. WRAPPER DO CONTEÚDO (Abaixo da Navbar) */
 .home-ong-page-wrapper {
+    /* Desconta a altura da Navbar (~80px a 110px) para preencher a tela */
+    min-height: calc(100vh - 110px); 
     display: flex;
-    flex-direction: column; /* Organiza <main> e <footer> verticalmente */
-    
-    background-color: var(--green-dark, #1B4227); 
-    
-    /* Garante que ele preencha o restante da tela */
-    min-height: calc(100vh - 80px); /* (Ajuste '80px' para a altura da sua navbar) */
-
-    padding: 20px 40px;
-    gap: 20px; /* Espaço entre o <main> e o <footer> */
+    flex-direction: column;
+    justify-content: center;
+    /* Padding responsivo: mais espaço em telas grandes, menos em pequenas */
+    padding: 30px 4%; 
+    align-items: flex-end;
+    gap: 5rem;
 }
 
-
-/* Container principal (<main>) */
+/* 3. ÁREA PRINCIPAL (<main>) - Onde a mágica do layout acontece */
 .home-ong-container {
     display: flex;
-    flex-direction: row;
-    gap: 40px; 
-    align-items: flex-start; 
+    flex-direction: row; /* Padrão: Lado a Lado */
+    align-items: flex-start;
+    gap: 40px; /* Espaço generoso entre Sidebar e Conteúdo */
     
-    /* + CHAVE DA SOLUÇÃO: Faz o main "crescer" e preencher o espaço,
-       empurrando o footer para o final do wrapper */
+    /* Força o main a crescer para empurrar o footer para baixo */
     flex-grow: 1;
+    width: 100%;
+    max-width: 1600px; /* Trava em telas UltraWide para não ficar esticado */
+    margin: 0 auto; /* Centraliza */
 }
 
-/* Título das colunas */
+/* --- COLUNA ESQUERDA: FILTROS --- */
+.coluna-filtros {
+    /* Largura flexível mas robusta */
+    flex: 0 0 320px; 
+    width: 320px;
+    
+    /* Sticky: Acompanha o scroll apenas no Desktop */
+    position: sticky;
+    top: 20px;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+/* --- COLUNA DIREITA: CONTEÚDO --- */
+.coluna-conteudo {
+    flex: 1; /* Ocupa todo o espaço restante */
+    
+    /* CRÍTICO: Impede que filhos largos (como Carrossel) quebrem o layout */
+    min-width: 0; 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
 .coluna-titulo {
     color: var(--white);
     font-weight: 600;
-    font-size: 2.4rem; 
-    margin-top: 15px;
-    margin-bottom: 0px;
-}
-
-/* Coluna da Esquerda (Filtros) */
-.coluna-filtros {
-    flex: 3; 
-    max-width: 400px; 
-    min-width: 300px;
-    position: sticky;
-    top: 20px; 
-}
-
-/* Coluna da Direita (Conteúdo) */
-.coluna-conteudo {
-    flex: 7; 
-    display: flex;
-    flex-direction: column;
-    gap: 20px; 
-}
-
-/* Mensagens de feedback */
-.feedback-message {
-    color: var(--white);
-    font-size: 1rem;
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
 }
 
 /* Grid que segura os AlimentoCards */
@@ -72,47 +74,109 @@
     display: grid;
     margin-top: 40px;
     grid-template-columns: repeat(2, 1fr); 
-    gap: 55px; 
+    gap: 39px; 
 }
 
-/* Footer da paginação (AGORA DENTRO DO FUNDO VERDE) */
+/* Feedback (Loading/Erro) */
+.feedback-message {
+    color: var(--white);
+    font-size: 1.1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* 4. FOOTER DA PAGINAÇÃO */
 .home-ong-footer {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px 0;
+    margin-top: auto; /* Empurrão final para baixo */
     width: 100%;
-    padding: 10px 0 20px 0; /* Espaçamento para o rodapé */
-    
-    /* Garante que o footer não encolha */
     flex-shrink: 0;
+    zoom: 1.11;
 }
 
+/* ==========================================================================
+   MEDIA QUERIES - O Ajuste Fino para Tablets e Laptops
+   ========================================================================== */
 
-/* --- RESPONSIVIDADE --- */
-
-/* Para telas menores (ex: tablets) */
-@media (max-width: 1200px) {
-    .lista-alimentos-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Para telas muito pequenas (ex: celulares) */
-@media (max-width: 768px) {
-    
-    .home-ong-page-wrapper {
-        padding: 20px;
-        gap: 30px;
-    }
-
+/* 1. LAPTOPS PEQUENOS (1200px a 993px) 
+   Aqui ainda mantemos a barra lateral, mas reduzimos os espaços. */
+@media (max-width: 1400px) {
     .home-ong-container {
-        flex-direction: column;
-        gap: 30px;
+        gap: 25px; /* Reduz o vão entre filtro e conteúdo */
     }
-    
+
     .coluna-filtros {
-        position: static; 
-        max-width: 100%;
+        flex: 0 0 280px; /* A sidebar emagrece um pouco */
+        width: 280px;
+    }
+
+    .lista-alimentos-grid {
+        gap: 20px; /* Cards ficam mais próximos */
+    }
+
+    .home-ong-footer{
+        zoom: 1.2;
+        position: relative;
+        bottom: 0%;
+    }
+}
+
+/* 2. TABLETS E DISPOSITIVOS MENORES (Abaixo de 992px)
+   AQUI MUDAMOS A ESTRUTURA (Layout Shift) */
+@media (max-width: 992px) {
+    
+    .home-ong-container {
+        flex-direction: column; /* Empilha: Filtros em cima, Conteúdo embaixo */
+    }
+
+    .coluna-filtros {
+        position: static; /* Deixa de ser sticky */
+        width: 100%; /* Ocupa largura total */
+        max-width: none;
+        flex: none;
+        margin-bottom: 10px;
+    }
+
+    /* Opcional: Se quiser que os filtros fiquem lado a lado neste modo, 
+       você precisaria ajustar o CSS interno do componente Filtrar.
+       Por enquanto, deixamos empilhado para segurança. */
+
+    .coluna-conteudo {
         width: 100%;
+    }
+
+    .coluna-titulo {
+        font-size: 2rem;
+        text-align: center; /* Centraliza título em telas menores */
+    }
+
+    /* Ajuste do grid para aproveitar a largura total */
+    .lista-alimentos-grid {
+        /* Mantém a lógica minmax, mas agora tem mais espaço lateral */
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* 3. MOBILE (Abaixo de 600px) */
+@media (max-width: 600px) {
+    .home-ong-page-wrapper {
+        padding: 24px 15px; /* Menos padding lateral para aproveitar tela */
+    }
+
+    .lista-alimentos-grid {
+        /* Em celulares, 1 coluna é mais seguro e clicável */
+        display: grid;
+        place-items: center;
+        grid-template-columns: 1fr; 
+    }
+
+    .coluna-titulo {
+        font-size: 1.8rem;
     }
 }

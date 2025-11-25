@@ -115,7 +115,7 @@ function RecuperarNovaSenha() {
 
       console.log("Enviando payload:", { ...payload, senha: "***" }); // Debug seguro
 
-      await axios.put('http://localhost:8080/v1/mesa-plus/nova-senha/', payload, {
+      await axios.put('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/nova-senha/', payload, {
         headers: {
           'Content-Type': 'application/json'
         }

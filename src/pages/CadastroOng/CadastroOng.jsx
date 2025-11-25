@@ -74,7 +74,6 @@ const validateField = (name, value) => {
   }
 };
 
-
 // --- Componente ---
 function CadastroOngPage() {
   const navigate = useNavigate();
@@ -97,26 +96,18 @@ function CadastroOngPage() {
     };
   }, []);
 
-  // --- Máscara de Telefone (padrão do projeto) ---
+  // --- Máscara de Telefone ---
   const maskPhone = (v) => {
-    // Remove todos os caracteres que não são dígitos e limita a 11
     let n = v.replace(/\D/g, "").slice(0, 11);
-
-    // Aplica a máscara de forma progressiva com base no tamanho do input
     if (n.length > 10) {
-      // Formato para celular com 11 dígitos: (XX) XXXXX-XXXX
       n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
     } else if (n.length > 6) {
-      // Formato para telefone com 7 a 10 dígitos: (XX) XXXX-XXXX
       n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
     } else if (n.length > 2) {
-      // Formato para quando o usuário começa a digitar o número após o DDD
       n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
     } else if (n.length > 0) {
-      // Formato para quando o usuário está digitando o DDD
       n = n.replace(/^(\d*)/, "($1");
     }
-
     return n;
   };
 
@@ -136,6 +127,7 @@ function CadastroOngPage() {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
+  // --- FUNÇÃO ONSUBMIT REFORMULADA ---
   async function onSubmit(e) {
     e.preventDefault();
 
@@ -156,7 +148,7 @@ function CadastroOngPage() {
 
     setStatus({ type: "", msg: "", loading: true });
     
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
+    const API_BASE = import.meta.env.VITE_API_URL || "https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus";
     const url = `${API_BASE}/ong`;
 
     try {
@@ -172,8 +164,16 @@ function CadastroOngPage() {
       });
 
       if (!res.ok) {
-        const msg = await res.text().catch(() => "");
-        throw new Error(msg || "Falha ao cadastrar.");
+        // Tenta ler o corpo da resposta como JSON
+        const errorData = await res.json().catch(() => null);
+
+        // Se o JSON existir e tiver uma mensagem, usamos ela (ex: "Email já cadastrado")
+        if (errorData && errorData.message) {
+             throw new Error(errorData.message);
+        }
+
+        // Caso contrário, lançamos a mensagem genérica que você pediu
+        throw new Error("Não foi possível cadastrar. Verifique se os dados já estão em uso.");
       }
       
       setStatus({
@@ -189,7 +189,8 @@ function CadastroOngPage() {
       }, 2470);
 
     } catch (err) {
-      setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
+      // Exibe apenas a mensagem limpa no rodapé do form
+      setStatus({ type: "error", msg: err.message, loading: false });
     }
   }
 
@@ -220,6 +221,7 @@ function CadastroOngPage() {
                 required
                 aria-invalid={!!errors.nome}
                 autoComplete="organization"
+                maxLength={45}
               />
               {errors.nome && <div className="co__error-message" role="alert">{errors.nome}</div>}
             </label>
@@ -238,6 +240,7 @@ function CadastroOngPage() {
                 aria-invalid={!!errors.email}
                 inputMode="email"
                 autoComplete="email"
+                maxLength={45}
               />
               {errors.email && <div className="co__error-message" role="alert">{errors.email}</div>}
             </label>

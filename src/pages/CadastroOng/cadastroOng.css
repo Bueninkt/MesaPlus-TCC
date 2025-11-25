@@ -19,7 +19,7 @@
 /* Painel */
 .co__panel {
     width: min(560px, 92vw);
-    height: 519px;
+    height: auto;
     margin: 0 auto;
     background: var(--beige);
     border-radius: 14px;

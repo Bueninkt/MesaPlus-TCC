@@ -20,7 +20,7 @@ function Filtrar({ onFilterChange }) {
         const buscarDadosIniciais = async () => {
             // Busca Categorias
             try {
-                const response = await fetch('http://localhost:8080/v1/mesa-plus/categoria');
+                const response = await fetch('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/categoria');
                 if (response.ok) {
                     const data = await response.json();
                     if (data.status && data.categorias) {
@@ -35,7 +35,7 @@ function Filtrar({ onFilterChange }) {
 
             // Busca Empresas
             try {
-                const response = await fetch('http://localhost:8080/v1/mesa-plus/empresa');
+                const response = await fetch('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa');
                 if (response.ok) {
                     const data = await response.json();
                     if (data.status && data.empresas) {

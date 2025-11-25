@@ -137,11 +137,3 @@
   }
   
   
-  /* breakpoints só ajustam respiro, NÃO a tipografia */
-  @media (max-width: 900px) {
-    .nav__wrapOng { padding-block: 14px; }
-  }
-  @media (max-width: 560px) {
-    .nav__wrapOng { padding-block: 12px; }
-  }
-  

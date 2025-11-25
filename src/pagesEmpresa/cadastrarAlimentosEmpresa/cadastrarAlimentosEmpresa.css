@@ -397,16 +397,15 @@
   border: none;
   border-radius: 40px;
   cursor: pointer;
+  background: var(--green-dark);
   transition: background-color 0.2s ease, transform 0.1s ease;
  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.submit-button:hover {
-  background: var(--green-dark);
-}
 
 .submit-button:active {
-  transform: scale(0.98);
+  transform: scale(1.98);
+
 }
 
 /* Validação de Erro dos Campos */

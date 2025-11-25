@@ -9,7 +9,7 @@
 }
 
 .nav__wrapEmpresa {
-  width: min(1765px, 92vw);
+  max-width: 100%;
   margin-inline: auto;
   padding-block: 40px;
   padding-inline: 20px;
@@ -137,10 +137,3 @@
 }
 
 
-/* breakpoints só ajustam respiro, NÃO a tipografia */
-@media (max-width: 900px) {
-  .nav__wrapEmpresa { padding-block: 14px; }
-}
-@media (max-width: 560px) {
-  .nav__wrapEmpresa { padding-block: 12px; }
-}

@@ -60,16 +60,31 @@ const validateField = (name, value) => {
       return "";
 
     // Validação do Endereço (Alinhado com Controller Node.js)
-    case "endereco":
+   case "endereco":
       if (!value || value.trim() === "") return "Endereço é obrigatório.";
+      
       if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
+      
+      // --- NOVA VALIDAÇÃO ---
+      // Regex que verifica se existe pelo menos uma letra (a-z, A-Z) 
+      // ou letras com acentos (\u00C0-\u00FF inclui á, é, ã, ç, etc.)
+      const temLetras = /[a-zA-Z\u00C0-\u00FF]/.test(value);
+      
+      if (!temLetras) {
+        return "O endereço deve conter o nome da rua ou bairro.";
+      }
+
+      // Sugestão opcional: Adicionar um tamanho mínimo para evitar endereços como "Rua A" muito curtos
+      if (value.trim().length < 5) {
+        return "O endereço está muito curto.";
+      }
+
       return "";
 
     default:
       return "";
   }
 };
-
 // --- Componente ---
 function CadastroEmpresaPage() {
   const navigate = useNavigate();
@@ -81,7 +96,7 @@ function CadastroEmpresaPage() {
     senha: "",
     telefone: "",
     cnpj: "",
-    endereco: "" // State inicializado
+    endereco: ""
   });
 
   const [errors, setErrors] = useState({});
@@ -129,6 +144,7 @@ function CadastroEmpresaPage() {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
+  // --- ONSUBMIT ATUALIZADO ---
   async function onSubmit(e) {
     e.preventDefault();
 
@@ -150,14 +166,13 @@ function CadastroEmpresaPage() {
     setStatus({ type: "", msg: "", loading: true });
     
     // URL da API
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
+    const API_BASE = import.meta.env.VITE_API_URL || "https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus";
     const url = `${API_BASE}/empresa`;
 
     try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Body da requisição com o endereço incluído
         body: JSON.stringify({
           nome: form.nome.trim(),
           email: form.email.trim(),
@@ -169,8 +184,16 @@ function CadastroEmpresaPage() {
       });
 
       if (!res.ok) {
-        const msg = await res.text().catch(() => "");
-        throw new Error(msg || "Falha ao cadastrar.");
+        // Tenta ler o erro como JSON
+        const errorData = await res.json().catch(() => null);
+
+        // Se tiver mensagem vinda do backend, usa ela
+        if (errorData && errorData.message) {
+             throw new Error(errorData.message);
+        }
+
+        // Caso contrário, mensagem genérica amigável
+        throw new Error("Não foi possível cadastrar. Verifique se os dados (CNPJ/Email) já estão em uso.");
       }
 
       setStatus({
@@ -179,7 +202,6 @@ function CadastroEmpresaPage() {
         loading: false
       });
       
-      // Limpa o form
       setForm({ nome: "", email: "", senha: "", telefone: "", cnpj: "", endereco: "" });
 
       if (redirectTimer.current) clearTimeout(redirectTimer.current);
@@ -189,7 +211,8 @@ function CadastroEmpresaPage() {
       }, 2470);
 
     } catch (err) {
-      setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
+      // Exibe a mensagem limpa
+      setStatus({ type: "error", msg: err.message, loading: false });
     }
   }
 
@@ -216,6 +239,8 @@ function CadastroEmpresaPage() {
                 required
                 autoComplete="organization"
                 aria-invalid={!!errors.nome}
+                placeholder="insira primeiro nome"
+                maxLength={15}
               />
               {errors.nome && <div className="ce__error-message" role="alert">{errors.nome}</div>}
             </label>
@@ -234,6 +259,7 @@ function CadastroEmpresaPage() {
                 autoComplete="email"
                 inputMode="email"
                 aria-invalid={!!errors.email}
+                maxLength={45}
               />
               {errors.email && <div className="ce__error-message" role="alert">{errors.email}</div>}
             </label>
@@ -301,7 +327,7 @@ function CadastroEmpresaPage() {
               {errors.cnpj && <div className="ce__error-message" role="alert">{errors.cnpj}</div>}
             </label>
 
-            {/* Endereço - Validado e Incluído */}
+            {/* Endereço */}
             <label className="fieldCe">
               <img className="field__icon" src={local} alt="" aria-hidden="true" />
               <span className="field__label">Endereço:</span>
@@ -312,7 +338,7 @@ function CadastroEmpresaPage() {
                 onChange={onChange}
                 aria-label="Endereço Completo"
                 required
-                maxLength={150}
+                maxLength={170}
                 autoComplete="street-address"
                 aria-invalid={!!errors.endereco}
               />

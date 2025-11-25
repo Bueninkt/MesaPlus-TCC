@@ -135,7 +135,7 @@
 }
 
 .titulo-ola {
-    font-size: 5rem;
+    font-size: 2.5rem;
     font-weight: 600;
     color: var(--white);
     line-height: 1;
@@ -143,7 +143,7 @@
 }
 
 .nome-destaque {
-    font-size: 3rem;
+    font-size: 2.4rem;
     font-weight: 800;
     color: var(--green-light);
     line-height: 1.1;
@@ -166,13 +166,13 @@
 .card-dados-usuario {
     background-color: var(--beige); /* #FFF1D4 */
     border-radius: 20px;
-    padding: 2.5rem 3rem;
+    padding: 2.2rem 3rem;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
+
     /* Garante altura mínima para ficar bonito */
-    min-height: 350px; 
-    position: relative;
+    min-height: 50px; 
 }
 
 .card-titulo {
@@ -349,11 +349,6 @@
     filter: brightness(0); 
 }
 
-
-/* Permite que o erro "quebre" para a linha de baixo */
-.input-group {
-    flex-wrap: wrap; 
-}
 
 /* Estilo da mensagem de erro (vermelha, pequena, abaixo do campo) */
 .campo-erro {

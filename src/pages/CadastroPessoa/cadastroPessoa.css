@@ -1,7 +1,3 @@
-.cp {
-    position: relative;
-    background: var(--green-dark);
-}
 
 .cp__bg {
     position: fixed;
@@ -19,7 +15,7 @@
 .cp__panel {
     margin: 0 auto;
     width: min(560px, 92vw);
-    height: 100%;
+    height: auto;
     background: var(--beige);
     border-radius: 14px;
     box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
@@ -199,4 +195,320 @@ input[aria-invalid="true"] {
     border-color: #e74c3c !important;
     /* Borda vermelha para inputs inválidos */
     box-shadow: 0 0 3px #e74c3c;
+}
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--green-dark);
+  /* garante fundo contínuo no topo */
+  color: #0d0d0d;
+}
+
+
+/* Header */
+header.lg__header {
+  background: var(--green-dark);
+  /* header sem “faixa” clara */
+  display: flex;
+  align-items: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+}
+
+header.lg__header>.container.lg__headerGrid {
+  width: 100% !important;
+  margin-top: 30px !important;
+  margin: auto 16px;
+  justify-content: flex-start;
+  align-items: center;
+  
+}
+
+header.lg__header .lg__brandmark {
+  height: 140px;
+  width: 136px;
+  transform-origin: left center;
+}
+
+.lg__homeLink:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Fundo / painel */
+.lg {
+  margin-top: 0px;
+  /* alinhado ao header real */
+  padding: 0px;
+}
+
+.lg__bg {
+  position: fixed;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: .3;
+  /* intensidade sutil como no print */
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+
+.lg__panel {
+  width: min(560px, 92vw);
+  height: auto;
+  margin: 0px auto;
+  background: var(--beige);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .22), 0 6px 18px rgba(0, 0, 0, .18);
+  padding: 22px 26px 24px;
+  text-align: left;
+}
+
+/* Títulos */
+.lg__brand {
+  margin: 10px 0 2px 0;
+  text-align: center;
+  font-family: 'Alex Brush', cursive;
+  font-weight: 400;
+  font-size: 56px;
+  line-height: 1;
+  color: #0d0d0d;
+}
+
+.lg__subtitle {
+  margin: 0 0 12px 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #161616;
+}
+
+/* Form */
+.lg__form {
+  margin-top: 25px;
+}
+
+.fieldLogin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* tom interno do print */
+  border: 2px solid rgba(27, 66, 39, .65);
+  /* contorno verde */
+  border-radius: 7px;
+  padding: 7px 12px;
+  height: 41px;
+  margin: 14px 0;
+}
+
+
+.field__icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.field__label {
+  font-size: 13px;
+  color: #1B4227;
+  font-weight: 600;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+.fieldLogin input {
+  border: 0;
+  background: var(--beige);
+  outline: none;
+  font-size: 14px;
+  color: #1a1a1a;
+  width: 100%;
+}
+
+/* Toggle senha */
+.field--pwd {
+  padding-right: 42px;
+}
+
+.field__toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0;
+  cursor: pointer;
+}
+
+.field__toggle img {
+  width: 20px;
+  height: 20px;
+  opacity: .9;
+}
+
+.field__toggle:hover img {
+  opacity: 1;
+}
+
+/* Links auxiliares */
+.lg__forgot,
+.lg__signup {
+  display: inline-block;
+  margin: 2px 0 8px 4px;
+  font-size: 12px;
+  color: #1B4227;
+  text-decoration: none;
+}
+
+.lg__forgot:hover,
+.lg__signup:hover {
+  text-decoration: underline;
+}
+
+/* Select tipo de login */
+.selectField {
+  position: relative;
+  background: #F9EAD0;
+  border: 2px solid rgba(27, 66, 39, .65);
+  border-radius: 7px;
+  height: 41px;
+  margin: 6px 0 8px;    
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.selectField__select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 0.5px;
+  background-color: transparent ;
+  width: 100%;
+  height: 100%;
+  font-family: 'poppins';
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--green-dark);
+  outline: none;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px 18px;
+  padding: 0 36px 0 12px;
+}
+
+.selectField__arrow {
+  position: absolute;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: .95;
+}
+
+/* Botão */
+.btnLogin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1;
+  transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+.btn--submit {
+  display: flex;
+  margin: 1px auto;
+  min-width: 160px;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 14px 16px;
+  background: var(--green-dark);
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn--submit:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+/* Status */
+.lg__status {
+  min-height: 20px;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.lg__status--success {
+  color: #0b7c3e;
+}
+
+.lg__status--error {
+  color: #9b1c1c;
+}
+
+
+.rodapelg {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.rodapelg p{
+  color: #ffffff;
+  font-family: 'Poppins';
+  font-size: 16px;
+}
+
+
+.lg__error-message {
+  font-family: 'Poppins';
+    color: #e74c3c;
+    /* Vermelho para erros */
+    font-size: 0.8rem;
+    /* Ajusta a posição da mensagem de err */
+    position: absolute;
+    top: 37px;
+    left: 2px;
+    white-space: nowrap;
+}
+
+/* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */
+.fieldLogin:has(.cp__error-message) {
+  margin-bottom: 24px;
+}
+
+
+input[aria-invalid="true"] {
+  border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
+  
+}
+
+@media (max-width: 1400px) {
+  html{
+    min-height: 160vh;
+  }
+
+   .cp{
+    margin-top: 70px;
+   }
 }

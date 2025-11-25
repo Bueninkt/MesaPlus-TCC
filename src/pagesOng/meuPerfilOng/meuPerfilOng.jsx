@@ -135,7 +135,7 @@ function MeuPerfilOngPage() {
                 setIdOng(user.id);
 
                 // Fetch na API - Rota de ONG
-                const response = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${user.id}`);
+                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/ong/${user.id}`);
                 const data = await response.json();
 
                 if (data.status && data.ong) {
@@ -166,11 +166,29 @@ function MeuPerfilOngPage() {
     // -------------------------------------------------------
     // 2. Handlers (Inputs e Imagem)
     // -------------------------------------------------------
-    const handleChange = (e) => {
+   const handleChange = (e) => {
         const { name, value } = e.target;
         let val = value;
 
-        if (name === 'telefone') val = maskPhone(value);
+        // =========================================================
+        // LIMITES DE CARACTERES
+        // =========================================================
+
+        // Limite para Nome (18 caracteres)
+        if (name === 'nome' && val.length > 18) {
+            val = val.slice(0, 18);
+        }
+
+        // Limite para Email (45 caracteres)
+        if (name === 'email' && val.length > 45) {
+            val = val.slice(0, 45);
+        }
+
+        // =========================================================
+        // MÁSCARAS EXISTENTES
+        // =========================================================
+
+        if (name === 'telefone') val = maskPhone(val);
         
         setFormData(prev => ({ ...prev, [name]: val }));
 
@@ -259,7 +277,7 @@ function MeuPerfilOngPage() {
                 senha: "" 
             };
 
-            const res = await fetch(`http://localhost:8080/v1/mesa-plus/ong/${idOng}`, {
+            const res = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/ong/${idOng}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

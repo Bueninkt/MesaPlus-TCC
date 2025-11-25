@@ -55,7 +55,7 @@ const validateField = (name, value) => {
         case "idTipoPeso":
             if (!value) return "Tipo de peso é obrigatório.";
             return "";
-        
+
         // --- ADICIONADO: Validação de Quantidade ---
         case "quantidade":
             if (!value) return "Quantidade é obrigatória.";
@@ -153,7 +153,7 @@ function CadastrarAlimentosEmpresaPage() {
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/v1/mesa-plus/categoria');
+                const response = await axios.get('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/categoria');
                 if (response.data && response.data.categorias) {
                     setListaCategorias(response.data.categorias);
                 }
@@ -169,7 +169,7 @@ function CadastrarAlimentosEmpresaPage() {
     useEffect(() => {
         const fetchTiposPeso = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/v1/mesa-plus/tipoPeso');
+                const response = await axios.get('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/tipoPeso');
                 if (response.data && response.data.tipos) {
                     setListaTiposPeso(response.data.tipos);
                 }
@@ -229,7 +229,7 @@ function CadastrarAlimentosEmpresaPage() {
     const getTipoPesoDisplayText = () => {
         if (!idTipoPeso) return 'Selecione um tipo';
         const selecionado = listaTiposPeso.find(u => u.id === idTipoPeso);
-        return selecionado ? selecionado.tipo: 'Selecione um tipo';
+        return selecionado ? selecionado.tipo : 'Selecione um tipo';
     };
 
     // --- Funções para Upload (sem alteração) ---
@@ -346,7 +346,7 @@ function CadastrarAlimentosEmpresaPage() {
             quantidade: Number(quantidade) // --- ADICIONADO ---
         }
         try {
-            const response = await axios.post('http://localhost:8080/v1/mesa-plus/alimentos', payload, {
+            const response = await axios.post('https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimentos', payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.status === 200) {
@@ -415,7 +415,12 @@ function CadastrarAlimentosEmpresaPage() {
                                     id="nome"
                                     name="nome"
                                     value={nome}
-                                    onChange={(e) => setNome(e.target.value)}
+                                    onChange={(e) => {
+                                        // A regex /\d/g seleciona todos os números.
+                                        // O replace troca esses números por nada ('').
+                                        const apenasLetras = e.target.value.replace(/\d/g, '');
+                                        setNome(apenasLetras);
+                                    }}
                                     onBlur={handleBlur}
                                     maxLength={30}
                                 />
@@ -445,7 +450,7 @@ function CadastrarAlimentosEmpresaPage() {
                                         name="peso" // --- ALTERADO ---
                                         value={peso} // --- ALTERADO ---
                                         onChange={(e) => {
-                                            if (e.target.value.length <= 5) {
+                                            if (e.target.value.length <= 8) {
                                                 setPeso(e.target.value); // --- ALTERADO ---
                                             }
                                         }}
@@ -518,7 +523,7 @@ function CadastrarAlimentosEmpresaPage() {
                                     onChange={(e) => {
                                         // Limita a entrada a 5 dígitos e remove não-inteiros
                                         const val = e.target.value.replace(/[^0-9]/g, '');
-                                        if (val.length <= 5) {
+                                        if (val.length <= 8) {
                                             setQuantidade(val);
                                         }
                                     }}
@@ -527,7 +532,7 @@ function CadastrarAlimentosEmpresaPage() {
                                 />
                                 <span className="validation-error">{errors.quantidade}</span>
                             </fieldset>
-                            
+
                         </div>
 
                         {/* Coluna da Direita (Foto e Categoria - sem alteração) */}
@@ -558,7 +563,7 @@ function CadastrarAlimentosEmpresaPage() {
                                             className="remove-preview-btn"
                                             onClick={handleRemovePreview}
                                         >
-                                        &times;
+                                            &times;
                                         </button>
                                     )}
                                     {!previewUrl && (
@@ -568,7 +573,7 @@ function CadastrarAlimentosEmpresaPage() {
                                     )}
                                 </div>
                                 <span className="validation-error">{errors.imagem}</span>
-                                    </fieldset>
+                            </fieldset>
 
                             <fieldset
                                 className="form-group categoria-custom-select"

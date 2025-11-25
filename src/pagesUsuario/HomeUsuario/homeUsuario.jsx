@@ -59,13 +59,13 @@ function HomeUsuarioPage() {
             // ❗️ FIM DA MODIFICAÇÃO ❗️
 
             if (empresaID) {
-                url = `http://localhost:8080/v1/mesa-plus/empresaAlimento/${empresaID}`;
+                url = `https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresaAlimento/${empresaID}`;
             } else if (categoriaID) {
-                url = `http://localhost:8080/v1/mesa-plus/filtroCat/${categoriaID}`;
+                url = `https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/filtroCat/${categoriaID}`;
             } else if (dataFormatadaParaAPI) { // ❗️ Usa a data formatada
-                url = `http://localhost:8080/v1/mesa-plus/filtroData?data=${dataFormatadaParaAPI}`;
+                url = `https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/filtroData?data=${dataFormatadaParaAPI}`;
             } else {
-                url = 'http://localhost:8080/v1/mesa-plus/alimentos';
+                url = 'https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimentos';
             }
 
             try {

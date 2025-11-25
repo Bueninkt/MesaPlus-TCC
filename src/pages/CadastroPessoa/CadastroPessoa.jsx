@@ -2,6 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./cadastroPessoa.css";
 
+// --- Componente Imports ---
+import navbarRegister from "../../components/navbar/navbarRegister";
+import profile from "../../assets/icons/profile.png";
+import phone from "../../assets/icons/phone.png";
+import postCard from "../../assets/icons/postCard.png";
+import email from "../../assets/icons/email.png";
+import eye from "../../assets/icons/eye.png";
+import eyeclosed from "../../assets/icons/eye-closed.png";
+import lockIcon from "../../assets/icons/lock.png";
+import backimage from "../../assets/icons/backimage.png";
+
+const Navbar = navbarRegister;
+
 // --- Validações ---
 const validateField = (name, value) => {
   switch (name) {
@@ -73,20 +86,7 @@ const validateField = (name, value) => {
   }
 };
 
-
-// --- Componente ---
-import navbarRegister from "../../components/navbar/navbarRegister";
-import profile from "../../assets/icons/profile.png";
-import phone from "../../assets/icons/phone.png";
-import postCard from "../../assets/icons/postCard.png";
-import email from "../../assets/icons/email.png";
-import eye from "../../assets/icons/eye.png";
-import eyeclosed from "../../assets/icons/eye-closed.png";
-import lockIcon from "../../assets/icons/lock.png";
-import backimage from "../../assets/icons/backimage.png";
-
-const Navbar = navbarRegister;
-
+// --- Componente Principal ---
 function CadastroPessoaPage() {
   const navigate = useNavigate();
   const redirectTimer = useRef(null);
@@ -117,25 +117,17 @@ function CadastroPessoaPage() {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
- const maskPhone = (v) => {
-    // Remove todos os caracteres que não são dígitos e limita a 11
+  const maskPhone = (v) => {
     let n = v.replace(/\D/g, "").slice(0, 11);
-
-    // Aplica a máscara de forma progressiva com base no tamanho do input
     if (n.length > 10) {
-      // Formato para celular com 11 dígitos: (XX) XXXXX-XXXX
       n = n.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
     } else if (n.length > 6) {
-      // Formato para telefone com 7 a 10 dígitos: (XX) XXXX-XXXX
       n = n.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
     } else if (n.length > 2) {
-      // Formato para quando o usuário começa a digitar o número após o DDD
       n = n.replace(/^(\d{2})(\d*)/, "($1) $2");
     } else if (n.length > 0) {
-      // Formato para quando o usuário está digitando o DDD
       n = n.replace(/^(\d*)/, "($1");
     }
-
     return n;
   };
 
@@ -154,6 +146,7 @@ function CadastroPessoaPage() {
     setErrors(prev => ({ ...prev, [name]: errorMessage }));
   };
 
+  // --- ONSUBMIT ATUALIZADO ---
   async function onSubmit(e) {
     e.preventDefault();
     
@@ -173,7 +166,8 @@ function CadastroPessoaPage() {
     }
 
     setStatus({ type: "", msg: "", loading: true });
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
+    
+    const API_BASE = import.meta.env.VITE_API_URL || "https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus";
     const url = `${API_BASE}/usuario`;
 
     try {
@@ -190,8 +184,16 @@ function CadastroPessoaPage() {
       });
 
       if (!res.ok) {
-        const msg = await res.text().catch(() => "");
-        throw new Error(msg || "Falha ao cadastrar.");
+        // Tenta ler o erro como JSON
+        const errorData = await res.json().catch(() => null);
+
+        // Se tiver mensagem vinda do backend, usa ela
+        if (errorData && errorData.message) {
+             throw new Error(errorData.message);
+        }
+
+        // Caso contrário, mensagem genérica amigável
+        throw new Error("Não foi possível cadastrar. Verifique se os dados (CPF/Email) já estão em uso.");
       }
 
       setStatus({
@@ -209,7 +211,8 @@ function CadastroPessoaPage() {
       }, 2470);
 
     } catch (err) {
-      setStatus({ type: "error", msg: err.message || "Erro ao conectar ao servidor.", loading: false });
+      // Exibe a mensagem limpa
+      setStatus({ type: "error", msg: err.message, loading: false });
     }
   }
 
@@ -235,6 +238,7 @@ function CadastroPessoaPage() {
                 required
                 autoComplete="name"
                 aria-invalid={!!errors.nome}
+                maxLength={45}
               />
               {errors.nome && <div className="cp__error-message" role="alert">{errors.nome}</div>}
             </label>
@@ -252,6 +256,7 @@ function CadastroPessoaPage() {
                 autoComplete="email"
                 inputMode="email"
                 aria-invalid={!!errors.email}
+                maxLength={45}
               />
               {errors.email && <div className="cp__error-message" role="alert">{errors.email}</div>}
             </label>

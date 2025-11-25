@@ -192,8 +192,18 @@ input[aria-invalid="true"] {
 }
 
 /* Responsivo */
-@media (max-width: 560px) {
-    .ce__panel {
-        padding: 20px;
+@media (max-width: 1400px) {
+    .ce {
+        min-height: 104vh;
+        margin-top: 21px;
+        zoom: 0.97;
+    }
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+    .ce {
+        min-height: 86vh;
+        margin-top: 78px;
     }
 }

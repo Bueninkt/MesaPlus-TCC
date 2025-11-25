@@ -1,107 +1,141 @@
-/* Estilo do Card (Bege)
-   Usa as variáveis do seu global.css (ex: --beige, --green-dark)
-*/
+/* =========================================================
+   ESTILO DO CARD (alimentoCard.css)
+   ========================================================= */
 
 .card-container {
+    /* --- CORREÇÃO DO BUG --- */
+    position: relative; /* Isso segura o botão de lixeira dentro do card */
+    /* ----------------------- */
+
     display: flex;
     cursor: pointer;
     gap: 15px; /* Espaço entre imagem, info e qnt */
+    
     /* Cores do seu global.css */
     background-color: var(--beige); 
     border-radius: 12px;
     padding: 10px 15px;
     height: 159px;
-    width: 95%;
+    width: 92%; /* Ocupa bem o espaço da grid */
     transition: all 0.3s ease;
+    
+    /* Sombra suave para dar profundidade (opcional, fica bonito no fundo branco) */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* Efeito de foco/hover (como na 2ª imagem que você mandou) */
+/* Efeito de foco/hover */
 .card-container:hover {
-    border-color: var(--green-light, #B9CE5D); /* Usa o verde-claro para o hover */
-    /* Você pode adicionar um 'box-shadow' se quiser */
-    /* box-shadow: 0 0 10px rgba(185, 206, 93, 0.5); */
-    transform: translateY(-2px); /* Efeito leve de "levantaer" */
+    border: 1px solid var(--green-light, #B9CE5D); 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* 1. Imagem (Esquerda) */
 .imagem-container {
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    justify-content: center;
+    flex-shrink: 0; /* Impede a imagem de esmagar */
+    width: 105px;   /* Largura fixa para manter alinhamento */
 }
+
 .imagem-container img {
-    width:  125px;
-    height: 130px;
-  
+    width: 105px;
+    height: 105px;
+    object-fit: cover; /* Garante que a imagem preencha o quadrado sem distorcer */
+    border-radius: 8px; /* Arredonda levemente a foto do alimento */
 }
 
 /* 2. Informações (Centro) */
 .info-container {
-    flex-grow: 1; /* Ocupa o espaço restante */
+    flex-grow: 1; /* Ocupa todo o espaço sobrando no meio */
     display: flex;
-    align-items: flex-start;
     flex-direction: column;
-    gap: 2px;
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: flex-start;
+    gap: 4px; /* Espaçamento entre os textos */
+    overflow: hidden; /* Evita que texto muito longo quebre o layout */
 }
 
 .info-container h3 {
-    font-size: 1.8rem; /* 18px */
-    font-weight: 600;
-    /* Usa o tom mais escuro para o título (do seu global.css) */
+    font-size: 1.2rem; /* Ajustado para caber melhor */
+    font-weight: 700;
     color: var(--green-dark-2, #12341F); 
+    margin: 0;
+    
+    /* Trunca texto muito longo com "..." */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 
 .info-container p {
-    font-size: 1rem; /* 14px */
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
 }
 
 .empresa-info {
     display: flex;
     align-items: center;
-    gap: 5px; 
-    margin-top: 4px;
+    gap: 6px; 
+    margin-top: 8px;
+    background-color: rgba(255,255,255,0.5); /* Fundo sutil atrás da empresa */
+    padding: 2px 8px 2px 2px;
+    border-radius: 20px;
 }
 
 .empresa-info img {
-    width: 23px;
-    height: 23px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .empresa-info span {
-    font-size: 1.0em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--green-dark, #2E5C39);
 }
 
-/* 3. Quantidade (Direita) */
+/* 3. Quantidade (Direita Superior) */
 .quantidade-container {
     flex-shrink: 0; 
-    font-size: 1.2rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--green-dark-2);
+    margin-top: 5px; /* Pequeno ajuste para alinhar com o topo da imagem */
 }
 
-
-/* ... seu CSS existente ... */
+/* =========================================================
+   BOTÃO DE EXCLUIR (Lixeira)
+   ========================================================= */
 
 .card-delete-button {
     position: absolute;
-    bottom: 12px;
-    right: 15px;
-    background: none;
+    bottom: 10px;  /* Distância do fundo do card */
+    right: 10px;   /* Distância da direita do card */
+    
+    background-color: transparent;
     border: none;
     cursor: pointer;
-    padding: 5px;
+    padding: 6px;
     border-radius: 50%;
+    
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.2s;
+    z-index: 10; /* Garante que fique acima de tudo */
 }
 
 .card-delete-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 0, 0, 0.1); /* Hover vermelho suave */
 }
 
 .card-delete-button img {
-    width: 20px; /* Ajuste o tamanho do seu ícone */
-    height: 20px;
+    width: 22px; 
+    height: 22px;
+    display: block;
 }

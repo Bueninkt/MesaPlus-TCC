@@ -98,7 +98,7 @@
 
       setStatus({ type: "", msg: "", loading: true });
 
-      const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080/v1/mesa-plus";
+      const API_BASE = import.meta.env.VITE_API_URL || "https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus";
       const url = `${API_BASE}/login`;
 
       try {
@@ -210,6 +210,7 @@
                   aria-label="Email"
                   autoComplete="email"
                   inputMode="email"
+                  maxLength={45}
                   required
                   aria-invalid={!!errors.email}
                 />

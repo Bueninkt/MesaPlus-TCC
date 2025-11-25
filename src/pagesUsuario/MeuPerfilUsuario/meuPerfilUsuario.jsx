@@ -136,7 +136,7 @@ function MeuPerfilUsuarioPage() {
                 const user = JSON.parse(userStorage);
                 setIdUsuario(user.id);
 
-                const response = await fetch(`http://localhost:8080/v1/mesa-plus/usuario/${user.id}`);
+                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/usuario/${user.id}`);
                 const data = await response.json();
 
                 if (data.status && data.usuario) {
@@ -172,10 +172,30 @@ function MeuPerfilUsuarioPage() {
         const { name, value } = e.target;
         let val = value;
 
-        if (name === 'telefone') val = maskPhone(value);
+        // =========================================================
+        // LIMITES DE CARACTERES
+        // =========================================================
         
+        // Limite para Nome (18 caracteres)
+        if (name === 'nome' && val.length > 50) {
+            val = val.slice(0, 50);
+        }
+
+        // Limite para Email (45 caracteres)
+        if (name === 'email' && val.length > 45) {
+            val = val.slice(0, 45);
+        }
+
+        // =========================================================
+        // MÁSCARAS EXISTENTES
+        // =========================================================
+        
+        if (name === 'telefone') val = maskPhone(val);
+        
+        // Atualiza o estado
         setFormData(prev => ({ ...prev, [name]: val }));
 
+        // Validação em tempo real
         const errorMessage = validateField(name, val);
         setErrors(prev => ({ ...prev, [name]: errorMessage }));
     };
@@ -257,7 +277,7 @@ function MeuPerfilUsuarioPage() {
                 senha: "" 
             };
 
-            const res = await fetch(`http://localhost:8080/v1/mesa-plus/usuario/${idUsuario}`, {
+            const res = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/usuario/${idUsuario}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)

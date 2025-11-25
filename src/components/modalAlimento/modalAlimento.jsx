@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './ModalAlimento.css'; // Certifique-se que este CSS inclui os estilos que você me mandou no prompt anterior
+import './ModalAlimento.css';
 import cart from "../../assets/icons/cart.png";
 import menos from "../../assets/icons/menos.png";
 import mais from "../../assets/icons/mais.png";
 
-// --- CONSTANTES DO AZURE (Reutilizadas do Cadastro) ---
+// --- CONSTANTES DO AZURE ---
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
@@ -23,7 +23,7 @@ const uploadParaAzure = async (file, idEmpresa) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// --- VALIDAÇÃO (Reutilizada do Cadastro) ---
+// --- VALIDAÇÃO ---
 const validateField = (name, value) => {
     switch (name) {
         case "nome":
@@ -40,15 +40,23 @@ const validateField = (name, value) => {
             return "";
         case "peso":
             if (!value) return "Peso é obrigatório.";
-            if (Number(value) <= 0) return "Peso deve ser maior que zero.";
+            const numPeso = Number(value);
+            if (isNaN(numPeso)) return "Peso deve ser um número.";
+            if (numPeso <= 0) return "Peso deve ser maior que zero.";
             return "";
         case "quantidade":
-            if (!value) return "Qtd é obrigatória.";
-            if (Number(value) <= 0) return "Qtd deve ser maior que zero.";
+            if (!value) return "Quantidade é obrigatória.";
+            const numQtde = Number(value);
+            if (isNaN(numQtde)) return "Quantidade deve ser um número.";
+            if (!Number.isInteger(numQtde)) return "Quantidade deve ser um número inteiro.";
+            if (numQtde <= 0) return "Quantidade deve ser maior que zero.";
             return "";
         case "descricao":
             if (!value) return "Descrição é obrigatória.";
-            if (value.length < 10) return "Mínimo de 10 caracteres.";
+            if (value.length < 10) return "Descrição deve ter pelo menos 10 caracteres.";
+            return "";
+        case "imagem":
+            if (!value) return "A foto é obrigatória.";
             return "";
         default:
             return "";
@@ -60,8 +68,8 @@ function ModalAlimento({
     onClose, 
     isPedidoPage = false, 
     inline = false, 
-    canEdit = false, // Nova prop para habilitar botão de editar
-    onUpdateSuccess // Callback para atualizar a lista pai
+    canEdit = false, 
+    onUpdateSuccess 
 }) {
 
     const navigate = useNavigate();
@@ -79,10 +87,6 @@ function ModalAlimento({
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     
-    // Estado para Tipos de Peso (para o dropdown de edição)
-    const [listaTiposPeso, setListaTiposPeso] = useState([]);
-    const [isTipoPesoOpen, setIsTipoPesoOpen] = useState(false);
-
     // --- FETCH INICIAL ---
     useEffect(() => {
         const fetchAlimento = async () => {
@@ -97,7 +101,7 @@ function ModalAlimento({
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`http://localhost:8080/v1/mesa-plus/alimento/${idParaBuscar}`);
+                const response = await axios.get(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${idParaBuscar}`);
                 if (response.data && response.data.status_code === 200 && response.data.alimento && response.data.alimento.length > 0) {
                     setAlimentoCompleto(response.data.alimento[0]);
                 } else {
@@ -113,18 +117,8 @@ function ModalAlimento({
         fetchAlimento();
     }, [alimentoBase]);
 
-    // --- FETCH TIPOS DE PESO (Apenas se entrar em edição) ---
-    useEffect(() => {
-        if (isEditing && listaTiposPeso.length === 0) {
-            axios.get('http://localhost:8080/v1/mesa-plus/tipoPeso')
-                .then(res => {
-                    if(res.data && res.data.tipos) setListaTiposPeso(res.data.tipos);
-                })
-                .catch(console.error);
-        }
-    }, [isEditing, listaTiposPeso.length]);
 
-    // --- LOGICA DE VISUALIZAÇÃO (Carrinho) ---
+    // --- LÓGICA DE VISUALIZAÇÃO ---
     const handleIncrement = () => {
         const qtd = alimentoCompleto?.quantidade || 0;
         if (quantidadeSelecionada < qtd) setQuantidadeSelecionada(p => p + 1);
@@ -138,45 +132,45 @@ function ModalAlimento({
     };
     const handleModalClick = (e) => e.stopPropagation();
 
+    // --- ADD AO CARRINHO ---
     const handleAddToCart = async () => {
          try {
-              const userString = localStorage.getItem("user");
-              const userType = localStorage.getItem("userType");
-              if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
-                  alert("Erro: Você precisa estar logado para adicionar ao carrinho.");
-                  return;
-              }
-              const usuario = JSON.parse(userString);
-              let payload = {};
-              let redirectUrl = '';
-              const url = 'http://localhost:8080/v1/mesa-plus/pedidoUsuario';
+             const userString = localStorage.getItem("user");
+             const userType = localStorage.getItem("userType");
+             if (!userString || (userType !== 'pessoa' && userType !== 'ong')) {
+                 alert("Erro: Você precisa estar logado para adicionar ao carrinho.");
+                 return;
+             }
+             const usuario = JSON.parse(userString);
+             let payload = {};
+             let redirectUrl = '';
+             const url = 'https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/pedidoUsuario';
 
-              if (userType === 'pessoa') {
-                  payload = { id_usuario: usuario.id, id_alimento: alimentoCompleto.id, quantidade: quantidadeSelecionada };
-                  redirectUrl = '/meusAlimentosUsuario';
-              } else if (userType === 'ong') {
-                  payload = { id_ong: usuario.id, id_alimento: alimentoCompleto.id, quantidade: quantidadeSelecionada };
-                  redirectUrl = '/MeusAlimentosOng';
-              }
+             if (userType === 'pessoa') {
+                 payload = { id_usuario: usuario.id, id_alimento: alimentoCompleto.id, quantidade: quantidadeSelecionada };
+                 redirectUrl = '/meusAlimentosUsuario';
+             } else if (userType === 'ong') {
+                 payload = { id_ong: usuario.id, id_alimento: alimentoCompleto.id, quantidade: quantidadeSelecionada };
+                 redirectUrl = '/MeusAlimentosOng';
+             }
 
-              const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' } });
-              if (response.data && (response.data.status_code === 201 || response.data.status_code === 200)) {
-                  alert("Alimento adicionado com sucesso!");
-                  navigate(redirectUrl);
-              } else {
-                  throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
-              }
-          } catch (error) {
-              console.error("Erro no handleAddToCart:", error);
-              alert(`Erro: ${error.message}`);
-          }
+             const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' } });
+             if (response.data && (response.data.status_code === 201 || response.data.status_code === 200)) {
+                 alert("Alimento adicionado com sucesso!");
+                 navigate(redirectUrl);
+             } else {
+                 throw new Error(response.data.message || "Erro ao adicionar ao carrinho.");
+             }
+         } catch (error) {
+             console.error("Erro no handleAddToCart:", error);
+             alert(`Erro: ${error.message}`);
+         }
     };
 
-    // --- LOGICA DE EDIÇÃO ---
+    // --- PREPARAÇÃO EDIÇÃO ---
     const handleEditClick = () => {
         if (!alimentoCompleto) return;
         
-        // Prepara dados para edição
         const dataValidade = alimentoCompleto.data_de_validade ? alimentoCompleto.data_de_validade.split('T')[0] : '';
         const idTipo = (alimentoCompleto.tipoPeso && alimentoCompleto.tipoPeso[0]) ? alimentoCompleto.tipoPeso[0].id : null;
 
@@ -184,7 +178,7 @@ function ModalAlimento({
             nome: alimentoCompleto.nome,
             quantidade: alimentoCompleto.quantidade,
             peso: alimentoCompleto.peso,
-            id_tipo_peso: idTipo,
+            id_tipo_peso: idTipo, // Importante: Mantemos o ID aqui para enviar ao backend
             data_de_validade: dataValidade,
             descricao: alimentoCompleto.descricao,
             imagem: alimentoCompleto.imagem
@@ -200,18 +194,36 @@ function ModalAlimento({
         setFormErrors({});
     };
 
+    // --- CONTROLE DE INPUTS COM BLOQUEIOS ---
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setEditFormData(prev => ({ ...prev, [name]: value }));
-        
-        // Validação em tempo real
-        const error = validateField(name, value);
-        setFormErrors(prev => ({ ...prev, [name]: error }));
-    };
+        let finalValue = value;
 
-    const handleTipoPesoSelect = (id) => {
-        setEditFormData(prev => ({ ...prev, id_tipo_peso: id }));
-        setIsTipoPesoOpen(false);
+        // 1. Nome: Remove números e limita a 30 chars
+        if (name === "nome") {
+            finalValue = value.replace(/\d/g, '').slice(0, 30);
+        }
+
+        // 2. Quantidade: Apenas números, remove letras/símbolos, max 5 chars
+        else if (name === "quantidade") {
+            finalValue = value.replace(/[^0-9]/g, '').slice(0, 5);
+        }
+
+        // 3. Peso: Limita a 5 caracteres
+        else if (name === "peso") {
+             if (value.length > 5) return;
+             finalValue = value;
+        }
+
+        // 4. Descrição: Max 500
+        else if (name === "descricao") {
+            finalValue = value.slice(0, 500);
+        }
+
+        setEditFormData(prev => ({ ...prev, [name]: finalValue }));
+        
+        const error = validateField(name, finalValue);
+        setFormErrors(prev => ({ ...prev, [name]: error }));
     };
 
     const handleFileChange = (event) => {
@@ -222,53 +234,44 @@ function ModalAlimento({
         }
     };
 
+    // --- SALVAR ---
     const handleSave = async () => {
-        // 1. Validação Final
         const errors = {};
         Object.keys(editFormData).forEach(key => {
-            if (key !== 'imagem' && key !== 'id_tipo_peso') { // Imagem e tipo valida separado
+            if (key !== 'imagem') { 
                 const err = validateField(key, String(editFormData[key]));
                 if (err) errors[key] = err;
             }
         });
 
-        if (!editFormData.id_tipo_peso) errors.id_tipo_peso = "Selecione o tipo de peso.";
         setFormErrors(errors);
-
         if (Object.keys(errors).length > 0) return;
 
         setIsUploading(true);
         try {
             let finalImageUrl = editFormData.imagem;
 
-            // 2. Upload se tiver arquivo novo
             if (selectedFile) {
-                const idEmpresa = alimentoCompleto.id_empresa; // Pega do objeto carregado
+                const idEmpresa = alimentoCompleto.id_empresa; 
                 finalImageUrl = await uploadParaAzure(selectedFile, idEmpresa);
             }
 
-            // 3. Monta Payload
             const payload = {
                 ...editFormData,
                 imagem: finalImageUrl,
-                // Garante tipos numéricos
                 quantidade: Number(editFormData.quantidade),
                 peso: Number(editFormData.peso)
             };
 
-            // 4. PUT Request
-            const response = await axios.put(`http://localhost:8080/v1/mesa-plus/alimento/${alimentoCompleto.id}`, payload);
+            const response = await axios.put(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${alimentoCompleto.id}`, payload);
 
             if (response.status === 200) {
                 alert("Alimento atualizado com sucesso!");
                 setIsEditing(false);
                 
-                // Atualiza estado local para refletir mudanças sem reload imediato
                 setAlimentoCompleto(prev => ({
                     ...prev,
                     ...payload,
-                    // Pequeno ajuste para o TipoPeso refletir visualmente na hora (já que a API retorna só o ID no payload)
-                    tipoPeso: listaTiposPeso.filter(tp => tp.id === payload.id_tipo_peso)
                 }));
 
                 if (onUpdateSuccess) onUpdateSuccess();
@@ -284,8 +287,7 @@ function ModalAlimento({
         }
     };
 
-    // --- RENDERIZAÇÃO ---
-
+    // --- RENDER ---
     if (loading) {
         if (inline) return <div className="modal-loading-inline">Carregando detalhes...</div>;
         return <div className="modal-overlay-alimento"><div className="modal-loading-feedback">Carregando...</div></div>;
@@ -296,7 +298,6 @@ function ModalAlimento({
         return <div className="modal-overlay-alimento"><div className="modal-loading-feedback error">{error}<button onClick={onClose}>Fechar</button></div></div>;
     }
 
-    // Variáveis de Display (Visualização)
     const quantidadeDisponivel = alimentoCompleto.quantidade || 0;
     const prazoFormatado = formatarDataModal(alimentoCompleto.data_de_validade);
     const nomeAlimento = alimentoCompleto.nome;
@@ -305,12 +306,6 @@ function ModalAlimento({
     const categoriasTags = alimentoCompleto.categorias || [];
     const tipoPesoNome = (alimentoCompleto.tipoPeso && alimentoCompleto.tipoPeso[0]) ? alimentoCompleto.tipoPeso[0].tipo : 'N/A';
     const pesoCompleto = `${alimentoCompleto.peso || 'N/A'} ${tipoPesoNome}`;
-
-    // Helper para nome do tipo no modo edição
-    const getTipoPesoEditLabel = () => {
-        const tipo = listaTiposPeso.find(t => t.id === editFormData.id_tipo_peso);
-        return tipo ? tipo.tipo : "Selecione";
-    };
 
     const content = (
         <div className={`modal-container ${inline ? 'container-inline' : ''}`} onClick={handleModalClick}>
@@ -334,7 +329,7 @@ function ModalAlimento({
 
             <main className="modal-body">
                 
-                {/* COLUNA DA ESQUERDA (IMAGEM) */}
+                {/* COLUNA ESQUERDA (FOTO) */}
                 <div className="modal-imagem-col">
                     {!isEditing ? (
                         <img src={alimentoCompleto.imagem} alt={`Imagem de ${nomeAlimento}`} />
@@ -358,10 +353,9 @@ function ModalAlimento({
                     )}
                 </div>
 
-                {/* COLUNA DA DIREITA (INFO) */}
+                {/* COLUNA DIREITA (INFO) */}
                 <div className="modal-info-col">
                     
-                    {/* Nome da Empresa (Sempre fixo, não editável) */}
                     {nomeEmpresa && !isEditing && (
                         <div className="modal-empresa-info">
                             <img src={fotoEmpresa} alt={`Logo ${nomeEmpresa}`} />
@@ -369,8 +363,8 @@ function ModalAlimento({
                         </div>
                     )}
 
-                    {/* MODO VISUALIZAÇÃO */}
                     {!isEditing ? (
+                        /* VISUALIZAÇÃO */
                         <>
                             <div className="modal-detalhes">
                                 <h3>Detalhes</h3>
@@ -384,7 +378,7 @@ function ModalAlimento({
                             </div>
                         </>
                     ) : (
-                        /* MODO EDIÇÃO */
+                        /* EDIÇÃO */
                         <>
                             {/* Nome */}
                             <fieldset className="form-group-modal">
@@ -394,12 +388,15 @@ function ModalAlimento({
                                     name="nome" 
                                     value={editFormData.nome} 
                                     onChange={handleInputChange} 
+                                    maxLength={30}
                                 />
                             </fieldset>
                             {formErrors.nome && <span className="validation-error">{formErrors.nome}</span>}
 
-                            {/* Grid (Validade, Qtd, Peso, Tipo) */}
+                            {/* Grid de Inputs Curtos */}
                             <div className="modal-form-grid">
+                                
+                                {/* Validade */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Validade:</legend>
@@ -413,19 +410,22 @@ function ModalAlimento({
                                     {formErrors.data_de_validade && <span className="validation-error">{formErrors.data_de_validade}</span>}
                                 </div>
 
+                                {/* Quantidade */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Quantidade:</legend>
                                         <input 
-                                            type="number" 
+                                            type="text"
                                             name="quantidade" 
                                             value={editFormData.quantidade} 
                                             onChange={handleInputChange} 
+                                            maxLength={5}
                                         />
                                     </fieldset>
                                     {formErrors.quantidade && <span className="validation-error">{formErrors.quantidade}</span>}
                                 </div>
 
+                                {/* Peso */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Peso:</legend>
@@ -439,6 +439,8 @@ function ModalAlimento({
                                     {formErrors.peso && <span className="validation-error">{formErrors.peso}</span>}
                                 </div>
 
+                                {/* CAMPO TIPO REMOVIDO DAQUI */}
+
                             </div>
 
                             {/* Descrição */}
@@ -448,6 +450,7 @@ function ModalAlimento({
                                     name="descricao" 
                                     value={editFormData.descricao} 
                                     onChange={handleInputChange} 
+                                    maxLength={500}
                                 />
                             </fieldset>
                             {formErrors.descricao && <span className="validation-error">{formErrors.descricao}</span>}
@@ -459,15 +462,12 @@ function ModalAlimento({
             <footer className="modal-footer">
                 <div className="footer-col categoria-col">
                     <h3>Categoria</h3>
-                    {/* Categorias são apenas visualizadas, mesmo no modo edição, conforme solicitado */}
                     <div className="tags-container">
                         {categoriasTags.length > 0 ? categoriasTags.map((cat, i) => <span key={i} className="tag">{cat.nome}</span>) : <span className="tag-none">N/C</span>}
                     </div>
                 </div>
 
-                {/* LÓGICA DE BOTÕES DO RODAPÉ */}
                 {!isEditing ? (
-                    /* Botões Normais (Carrinho ou Vazio se for empresa) */
                     !isPedidoPage && !canEdit && (
                         <div className="footer-col carrinho-col">
                             <button className="add-to-cart-button" onClick={handleAddToCart}>
@@ -481,7 +481,6 @@ function ModalAlimento({
                         </div>
                     )
                 ) : (
-                    /* Botões de Edição */
                     <div className="edit-buttons">
                         <button className="btn-cancel" onClick={handleCancelEdit} disabled={isUploading}>Cancelar</button>
                         <button className="btn-save" onClick={handleSave} disabled={isUploading}>

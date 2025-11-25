@@ -8,14 +8,13 @@ import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
 import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
 
-// Assets (Mantemos o local para fallback caso a URL falhe, ou pode usar a URL direto)
+// Assets
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 
 // =========================================================
 // CONFIGURAÇÕES
 // =========================================================
 
-// URL DA FOTO PADRÃO QUE SERÁ SALVA NO BANCO AO REMOVER
 const URL_FOTO_PADRAO = "https://image2url.com/images/1763934555658-3e67f304-f96e-416b-a98f-12ef5a4fbe50.png";
 
 // AZURE CONFIG
@@ -64,31 +63,61 @@ const maskCNPJ = (v) => {
 };
 
 const validateField = (name, value) => {
-    switch (name) {
-        case "nome":
-            if (!value) return "Nome é obrigatório.";
-            if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
-                return "O nome deve começar com letra maiúscula.";
-            }
-            return "";
-        case "email":
-            if (!value) return "Email é obrigatório.";
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (emailRegex.test(value)) return "";
-            return "Formato de email inválido.";
-        case "telefone":
-            const phoneDigits = value.replace(/\D/g, "");
-            if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
-            return "";
-        case "endereco":
-            if (!value || value.trim() === "") return "Endereço é obrigatório.";
-            if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
-            return "";
-        default:
-            return "";
-    }
-};
+  switch (name) {
+    case "nome":
+      if (!value) return "Nome é obrigatório.";
+      if (!/^[A-ZÀ-ÖØ-Þ]/.test(value)) {
+        return "O nome deve começar com letra maiúscula.";
+      }
+      return "";
 
+    case "email":
+      if (!value) return "Email é obrigatório.";
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (emailRegex.test(value)) return "";
+      
+      if (!value.includes("@")) return "Email deve conter um '@'.";
+      const parts = value.split('@');
+      if (parts.length !== 2 || parts[0].length === 0 || parts[1].length < 3) {
+        return "Formato de email inválido.";
+      }
+      const domainPart = parts[1];
+      if (!domainPart.includes('.')) return "O domínio precisa de um ponto.";
+      const tld = domainPart.split('.').pop();
+      if (tld.length < 2) return "Final do domínio inválido.";
+      return "Formato de email inválido.";
+
+    case "telefone":
+      const phoneDigits = value.replace(/\D/g, "");
+      if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
+      return "";
+
+    // Validação do Endereço (Alinhado com Controller Node.js)
+   case "endereco":
+      if (!value || value.trim() === "") return "Endereço é obrigatório.";
+      
+      if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
+      
+      // --- NOVA VALIDAÇÃO ---
+      // Regex que verifica se existe pelo menos uma letra (a-z, A-Z) 
+      // ou letras com acentos (\u00C0-\u00FF inclui á, é, ã, ç, etc.)
+      const temLetras = /[a-zA-Z\u00C0-\u00FF]/.test(value);
+      
+      if (!temLetras) {
+        return "O endereço deve conter o nome da rua ou bairro.";
+      }
+
+      // Sugestão opcional: Adicionar um tamanho mínimo para evitar endereços como "Rua A" muito curtos
+      if (value.trim().length < 5) {
+        return "O endereço está muito curto.";
+      }
+
+      return "";
+
+    default:
+      return "";
+  }
+};
 // =========================================================
 // SUB-COMPONENTE: CAMPO DE PERFIL
 // =========================================================
@@ -148,18 +177,18 @@ function MeuPerfilEmpresaPage() {
     const [originalPasswordHash, setOriginalPasswordHash] = useState("");
     const [idEmpresa, setIdEmpresa] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    
+
     // Inicia com a imagem padrão local ou vazia
     const [profileImage, setProfileImage] = useState(userDefaultEmpresa);
     const [errors, setErrors] = useState({});
-    
+
     // --- Estados de Controle de Imagem ---
     const [selectedFile, setSelectedFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     // --- NOVO ESTADO: Controle de Remoção/Reset ---
     const [fotoRemovida, setFotoRemovida] = useState(false);
-    
+
     // --- Estados para Alimentos ---
     const [meusAlimentos, setMeusAlimentos] = useState([]);
     const [loadingAlimentos, setLoadingAlimentos] = useState(false);
@@ -167,7 +196,9 @@ function MeuPerfilEmpresaPage() {
 
     // --- Estados da Paginação ---
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 2;
+    
+    // ALTERAÇÃO: Aumentado para 6 para ficar visualmente melhor no grid (2 linhas de 3)
+    const ITEMS_PER_PAGE = 2; 
 
     // -------------------------------------------------------
     // EFEITOS (USE EFFECT) - CARREGAMENTO
@@ -186,7 +217,7 @@ function MeuPerfilEmpresaPage() {
                 setIdEmpresa(user.id);
                 setIsLoading(true);
 
-                const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${user.id}`);
+                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa/${user.id}`);
                 if (!response.ok) throw new Error("Erro ao buscar dados da empresa");
 
                 const data = await response.json();
@@ -206,8 +237,6 @@ function MeuPerfilEmpresaPage() {
                     setOriginalData({ ...initialData, fotoUrl: emp.foto });
                     setOriginalPasswordHash(emp.senha);
 
-                    // Se vier do banco, usa. Se não, usa a URL padrão fornecida ou o asset local
-                    // Se emp.foto for null, vamos mostrar o userDefaultEmpresa (asset local) na tela
                     setProfileImage(emp.foto || URL_FOTO_PADRAO);
                 }
             } catch (error) {
@@ -224,7 +253,7 @@ function MeuPerfilEmpresaPage() {
             if (!idEmpresa) return;
             try {
                 setLoadingAlimentos(true);
-                const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresaAlimento/${idEmpresa}`);
+                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresaAlimento/${idEmpresa}`);
                 if (response.ok) {
                     const data = await response.json();
                     if (data.status && data.resultFiltro) {
@@ -247,9 +276,13 @@ function MeuPerfilEmpresaPage() {
     // -------------------------------------------------------
     // HANDLERS
     // -------------------------------------------------------
+    
+    // Cálculos da Paginação
     const totalPages = Math.ceil(meusAlimentos.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
+    
+    // Esta variável contém APENAS os itens da página atual
     const currentAlimentos = meusAlimentos.slice(startIndex, endIndex);
 
     const handleImageChange = (event) => {
@@ -257,30 +290,66 @@ function MeuPerfilEmpresaPage() {
         if (file) {
             setProfileImage(URL.createObjectURL(file));
             setSelectedFile(file);
-            setFotoRemovida(false); // Se selecionou nova, desmarca a remoção
+            setFotoRemovida(false);
             setErrors(prev => ({ ...prev, imagem: "" }));
         }
     };
 
-    // --- LÓGICA DE REMOVER FOTO (VISUAL) ---
     const handleRemovePhoto = () => {
-        // 1. Muda visualmente para a URL Padrão fornecida
         setProfileImage(URL_FOTO_PADRAO);
-        
-        // 2. Limpa qualquer arquivo que estivesse selecionado para upload
         setSelectedFile(null);
-        
-        // 3. Marca a flag para sabermos que deve enviar a URL Padrão no Update
         setFotoRemovida(true);
     };
 
-    const handleChange = (event) => {
+    const handleDeleteAlimento = async (idAlimento) => {
+        if (window.confirm("Tem certeza que deseja excluir este alimento?")) {
+            try {
+                const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/alimento/${idAlimento}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert("Alimento excluído com sucesso!");
+                    // Remove da lista local para atualizar a tela sem reload
+                    setMeusAlimentos(prev => prev.filter(item => (item.id_alimento || item.id) !== idAlimento));
+                    
+                    // Se a página ficar vazia após excluir, volta uma página
+                    if (currentAlimentos.length === 1 && currentPage > 1) {
+                         setCurrentPage(prev => prev - 1);
+                    }
+
+                } else {
+                    alert("Erro ao excluir alimento.");
+                }
+            } catch (error) {
+                console.error("Erro na exclusão:", error);
+                alert("Erro de conexão com o servidor.");
+            }
+        }
+    };
+
+  const handleChange = (event) => {
         const { name, value } = event.target;
         let maskedValue = value;
+
+        // =========================================================
+        // LIMITES DE CARACTERES (NOVA LÓGICA)
+        // =========================================================
+        
+        // Limite para Nome (18 caracteres)
+        if (name === "nome" && value.length > 18) {
+            maskedValue = value.slice(0, 18);
+        }
+        
+        // Limite para Email (45 caracteres)
+        if (name === "email" && value.length > 45) {
+            maskedValue = value.slice(0, 45);
+        }
 
         if (name === "telefone") maskedValue = maskPhone(value);
         else if (name === "cnpj") maskedValue = maskCNPJ(value);
 
+        // Atualiza o estado e valida
         setFormData(prevData => ({ ...prevData, [name]: maskedValue }));
         setErrors(prevErrors => ({ ...prevErrors, [name]: validateField(name, maskedValue) }));
     };
@@ -300,8 +369,7 @@ function MeuPerfilEmpresaPage() {
             cnpj: originalData.cnpj,
             endereco: originalData.endereco
         });
-        
-        // Restaura a foto que estava antes de começar a editar
+
         setProfileImage(originalData.fotoUrl || URL_FOTO_PADRAO);
         setSelectedFile(null);
         setFotoRemovida(false);
@@ -309,7 +377,6 @@ function MeuPerfilEmpresaPage() {
         setIsEditing(false);
     };
 
-    // --- LÓGICA DE UPDATE (ENVIO AO BANCO) ---
     const handleUpdate = async () => {
         const validationErrors = {};
         Object.keys(formData).forEach(name => {
@@ -331,42 +398,35 @@ function MeuPerfilEmpresaPage() {
 
             let urlParaSalvar;
 
-            // --- LÓGICA DE PRIORIDADE DA FOTO ---
             if (selectedFile) {
-                // 1. Prioridade Máxima: Tem arquivo novo selecionado -> Upload Azure
                 console.log("Ação: Upload de nova foto.");
                 urlParaSalvar = await uploadParaAzure(selectedFile, idEmpresa);
 
             } else if (fotoRemovida) {
-                // 2. Prioridade Média: Usuário clicou em "Remover" -> Salva a URL PADRÃO
                 console.log("Ação: Resetando para foto padrão (URL fixa).");
                 urlParaSalvar = URL_FOTO_PADRAO;
 
             } else {
-                // 3. Prioridade Baixa: Não mexeu na foto -> Mantém o que já estava
                 console.log("Ação: Mantendo foto atual.");
                 urlParaSalvar = originalData.fotoUrl;
             }
 
-            // Limpeza dos dados de texto
             const telefoneLimpo = formData.telefone.replace(/\D/g, "");
             const enderecoLimpo = formData.endereco ? formData.endereco.trim() : null;
 
-            // Monta o objeto final para o PUT
             const dadosParaEnviar = {
                 nome: formData.nome,
                 email: formData.email,
                 telefone: telefoneLimpo,
                 endereco: enderecoLimpo,
-                foto: urlParaSalvar // Envia a URL (Azure, Padrão ou Antiga)
+                foto: urlParaSalvar
             };
 
             if (formData.senha !== originalPasswordHash) {
                 dadosParaEnviar.senha = formData.senha;
             }
 
-            // Envia para a API
-            const response = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${idEmpresa}`, {
+            const response = await fetch(`https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/empresa/${idEmpresa}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dadosParaEnviar)
@@ -379,16 +439,13 @@ function MeuPerfilEmpresaPage() {
             if (result.status) {
                 alert("Perfil atualizado com sucesso!");
                 setIsEditing(false);
-                
-                // Atualiza os dados originais
+
                 setOriginalData({ ...formData, fotoUrl: urlParaSalvar });
                 setProfileImage(urlParaSalvar);
                 
-                // Reseta estados temporários
                 setSelectedFile(null);
                 setFotoRemovida(false);
 
-                // Atualiza localStorage
                 const userStorage = JSON.parse(localStorage.getItem("user"));
                 if (userStorage) {
                     localStorage.setItem("user", JSON.stringify({ ...userStorage, foto: urlParaSalvar }));
@@ -425,7 +482,6 @@ function MeuPerfilEmpresaPage() {
                                 src={profileImage || URL_FOTO_PADRAO}
                                 alt="Foto Empresa"
                                 className="perfil-imagem"
-                                // Fallback caso a URL padrão quebre, usa a local
                                 onError={(e) => { e.target.onerror = null; e.target.src = userDefaultEmpresa; }}
                             />
                             {isEditing && (
@@ -500,6 +556,7 @@ function MeuPerfilEmpresaPage() {
                             onChange={handleChange}
                             type="email"
                             error={errors.email}
+
                         />
 
                         <PerfilCampo
@@ -509,6 +566,7 @@ function MeuPerfilEmpresaPage() {
                             isEditing={isEditing}
                             onChange={handleChange}
                             error={errors.telefone}
+                            
                         />
 
                         <PerfilCampo
@@ -555,12 +613,13 @@ function MeuPerfilEmpresaPage() {
                     ) : (
                         <div className="alimentos-grid">
                             {currentAlimentos.length > 0 ? (
+                                // AQUI ESTAVA O SEGREDO: Usar currentAlimentos.map
                                 currentAlimentos.map((item) => (
                                     <AlimentoCard
                                         key={item.id_alimento || item.id}
                                         alimento={item}
                                         onCardClick={handleCardClick}
-                                        onDeleteClick={null}
+                                        onDeleteClick={() => handleDeleteAlimento(item.id_alimento || item.id)}
                                     />
                                 ))
                             ) : (
@@ -591,16 +650,10 @@ function MeuPerfilEmpresaPage() {
                         id: alimentoSelecionado.id || alimentoSelecionado.id_alimento
                     }}
                     onClose={handleCloseModal}
-
                     canEdit={true}
-
                     isPedidoPage={true}
-
-                  onUpdateSuccess={() => {
-                        // Recarrega os dados da empresa e alimentos
-                        // Você pode criar uma função específica refreshData() ou forçar reload
-                        window.location.reload(); 
-                        // Ou chamar fetchAlimentos() se você extrair ela do useEffect
+                    onUpdateSuccess={() => {
+                        window.location.reload();
                     }}
                 />
             )}

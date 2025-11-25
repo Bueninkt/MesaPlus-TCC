@@ -102,7 +102,7 @@ function RecuperarSenhaParteEmail() {
     try {
       // 4. Faz a chamada da API
       const response = await axios.post(
-        "http://localhost:8080/v1/mesa-plus/enviar-codigo",
+        "https://mesaplus-bbh2hhheaab7f6ep.canadacentral-01.azurewebsites.net/v1/mesa-plus/enviar-codigo",
         { email: form.email, tipo: form.tipo }
       );
 
