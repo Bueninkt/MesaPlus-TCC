@@ -9,24 +9,24 @@ import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpre
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
 
 {/*PagesOng */ }
-import FavoritosOngPage from './pagesOng/FavoritosOng/favoritosOng.jsx'
-import HomeOngPage from './pagesOng/HomeOng/homeOng.jsx'
+import FavoritosOngPage from './pagesOng/FavoritosOng/FavoritosOng.jsx'
+import HomeOngPage from './pagesOng/HomeOng/HomeOng.jsx'
 import MeuPerfilOngPage from './pagesOng/meuPerfilOng/meuPerfilOng.jsx'
 import MeusAlimentosOngPage from './pagesOng/meusAlimentosOng/meusAlimentosOng.jsx'
 import SobreNosOngPage from './pagesOng/sobreNosOng/sobreNosOng.jsx';
 
 
 {/*PagesUsuario */ }
-import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/favoritosUsuario.jsx'
-import HomeUsuarioPage from './pagesUsuario/HomeUsuario/homeUsuario.jsx'
-import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/meuPerfilUsuario.jsx'
+import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/FavoritosUsuario.jsx'
+import HomeUsuarioPage from './pagesUsuario/HomeUsuario/HomeUsuario.jsx'
+import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/MeuPerfilUsuario.jsx'
 import MeusAlimentosUsuarioPage from './pagesUsuario/meusAlimentosUsuario/meusAlimentosUsuario.jsx'
 import SobreNosUsuarioPage from './pagesUsuario/sobreNosUsuario/sobreNosUsuario.jsx';
 
 
 {/*PagesRegister */ }
 import LoginPage from './pages/Login/Login.jsx';
-import LadingPage from './pages/Lading/landing.jsx'
+import LadingPage from './pages/Lading/Landing.jsx'
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/CadastroEmpresa.jsx'
