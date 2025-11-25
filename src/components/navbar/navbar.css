@@ -159,7 +159,7 @@ box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3)
   color: var(--green-dark);
 }
 
-/* breakpoints só ajustam respiro, NÃO a tipografia */
+/* breakpoints só ajustam respiro, não a tipografia */
 @media (max-width: 900px) {
   .nav__wrap{
     gap: 39px;
