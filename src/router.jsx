@@ -21,7 +21,7 @@ import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/favoritosUsuar
 import HomeUsuarioPage from './pagesUsuario/HomeUsuario/homeUsuario.jsx'
 import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/meuPerfilUsuario.jsx'
 import MeusAlimentosUsuarioPage from './pagesUsuario/meusAlimentosUsuario/meusAlimentosUsuario.jsx'
-import SobreNosUsuarioPage from './pagesUsuario/SobreNosUsuario/sobreNosUsuario.jsx';
+import SobreNosUsuarioPage from './pagesUsuario/sobreNosUsuario/sobreNosUsuario.jsx';
 
 
 {/*PagesRegister */ }

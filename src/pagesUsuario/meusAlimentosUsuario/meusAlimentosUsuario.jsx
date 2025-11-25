@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
-import AlimentoCard from '../../components/alimentoCard/alimentoCard';
-import ModalAlimento from '../../components/modalAlimento/modalAlimento';
-import Paginacao from '../../components/paginacaoCard/paginacao'; // 🆕 IMPORTADO
+import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
+import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
+import Paginacao from '../../components/PaginacaoCard/Paginacao'; // 🆕 IMPORTADO
 
 function MeusAlimentosUsuarioPage() {
 

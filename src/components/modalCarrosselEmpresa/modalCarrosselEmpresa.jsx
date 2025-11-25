@@ -3,12 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './modalCarrosselEmpresa.css';
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
-import AlimentoCard from '../alimentoCard/alimentoCard';
-import Paginacao from '../../components/paginacaoCard/Paginacao';
+import AlimentoCard from '../AlimentoCard/AlimentoCard';
+import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import favorito from '../../assets/icons/favorito.png';
 
 // Importe o componente ModalAlimento
-import ModalAlimento from '../modalAlimento/ModalAlimento';
+import ModalAlimento from '../ModalAlimento/ModalAlimento';
 
 const maskPhone = (v) => {
     if (!v) return "";

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavbarOng from '../../components/navbarOng/navbarOng';
-import AlimentoCard from '../../components/alimentoCard/alimentoCard';
-import ModalAlimento from '../../components/modalAlimento/modalAlimento';
-import Paginacao from '../../components/paginacaoCard/Paginacao'; // 🆕 IMPORTADO
+import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
+import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
+import Paginacao from '../../components/PaginacaoCard/Paginacao'; // 🆕 IMPORTADO
 
 // ❗️ O nome do arquivo/função ainda é 'MeusAlimentosongPage', 
 // mas a lógica agora é para ONGs.

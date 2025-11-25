@@ -4,10 +4,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 // Importação dos componentes
 import NavbarOng from "../../components/navbarOng/navbarOng";
 import Filtrar from "../../components/filtros/filtrar";
-import AlimentoCard from '../../components/alimentoCard/alimentoCard';
-import Paginacao from '../../components/paginacaoCard/Paginacao';
+import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
+import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import CarrosselEmpresa from '../../components/carrosselEmpresa/carrosselEmpresa';
-import ModalAlimento from '../../components/modalAlimento/modalAlimento';
+import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
 
 import './homeOng.css';
 

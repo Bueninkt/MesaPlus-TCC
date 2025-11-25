@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
 import EmpresaCard from '../../components/empresaCard/empresaCard'; 
-import Paginacao from '../../components/paginacaoCard/Paginacao'; 
+import Paginacao from '../../components/PaginacaoCard/Paginacao'; 
 
 // 1. Importe o Modal de Empresa
 import ModalCarrosselEmpresa from '../../components/modalCarrosselEmpresa/modalCarrosselEmpresa';

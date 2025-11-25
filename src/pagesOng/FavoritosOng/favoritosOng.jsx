@@ -3,7 +3,7 @@ import axios from 'axios';
 import NavbarOng from '../../components/navbarOng/navbarOng';
 import EmpresaCard from '../../components/empresaCard/empresaCard';
 // 1. Importe o componente de paginação
-import Paginacao from '../../components/paginacaoCard/Paginacao';
+import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import ModalCarrosselEmpresa from '../../components/modalCarrosselEmpresa/modalCarrosselEmpresa';
 
 
