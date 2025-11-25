@@ -29,7 +29,7 @@ import LoginPage from './pages/Login/Login.jsx';
 import LadingPage from './pages/Lading/landing.jsx'
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
-import CadastroEmpresaPage from './pages/CadastroEmpresa/cadastroEmpresa.jsx'
+import CadastroEmpresaPage from './pages/CadastroEmpresa/CadastroEmpresa.jsx'
 import CadastroOngPage from './pages/CadastroOng/CadastroOng.jsx'
 import RecuperarSenhaParteEmailPage from './pages/RecuperarSenhaParteEmail/RecuperarSenhaParteEmail.jsx'
 import RecuperarSenhaParteCodigoPage from './pages/RecuperarSenhaParteCodigo/RecuperarSenhaParteCodigo.jsx'
@@ -43,13 +43,13 @@ function AppRoutes() {
     <>
       <Routes>
         {/*RouteRegisters */}
-        <Route path="/" element={<LadingPage/>}></Route>
+        <Route path="/" element={<LadingPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/hudCadastros" element={<HudCadastrosPage />}></Route>
         <Route path="/cadastroPessoa" element={<CadastroPessoaPage />}></Route>
         <Route path="/cadastroEmpresa" element={< CadastroEmpresaPage />}></Route>
         <Route path="/cadastroOng" element={<CadastroOngPage />}></Route>
-        <Route path="/recuperarSenhaParteEmail" element={<RecuperarSenhaParteEmailPage/>}></Route>
+        <Route path="/recuperarSenhaParteEmail" element={<RecuperarSenhaParteEmailPage />}></Route>
         <Route path="/recuperarSenhaParteCodigo" element={<RecuperarSenhaParteCodigoPage />}></Route>
         <Route path="/recuperarNovaSenha" element={<RecuperarNovaSenhaPage />}></Route>
 
@@ -71,7 +71,7 @@ function AppRoutes() {
         <Route path="/homeUsuario" element={<HomeUsuarioPage />}></Route>
         <Route path="/meuPerfilUsuario" element={<MeuPerfilUsuarioPage />}></Route>
         <Route path="/meusAlimentosUsuario" element={<MeusAlimentosUsuarioPage />}></Route>
-        <Route path="/sobreNosUsuario" element={<SobreNosUsuarioPage/>}></Route>
+        <Route path="/sobreNosUsuario" element={<SobreNosUsuarioPage />}></Route>
 
 
       </Routes>
