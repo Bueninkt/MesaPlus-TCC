@@ -1,32 +1,29 @@
 import React from "react";
 
-
-
-
-{/*PagesEmpresa*/ }
+{/*PagesEmpresa - (Parece que estes já estavam certos) */}
 import CadastrarAlimentosEmpresaPage from './pagesEmpresa/cadastrarAlimentosEmpresa/cadastrarAlimentosEmpresa.jsx'
 import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpresa.jsx'
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
 
-{/*PagesOng */ }
-import FavoritosOngPage from './pagesOng/FavoritosOng/FavoritosOng.jsx'
-import HomeOngPage from './pagesOng/HomeOng/HomeOng.jsx'
+{/*PagesOng - (CORRIGIDO AQUI: Pastas para minúsculo) */}
+import FavoritosOngPage from './pagesOng/favoritosOng/FavoritosOng.jsx' 
+import HomeOngPage from './pagesOng/homeOng/HomeOng.jsx'
 import MeuPerfilOngPage from './pagesOng/meuPerfilOng/meuPerfilOng.jsx'
 import MeusAlimentosOngPage from './pagesOng/meusAlimentosOng/meusAlimentosOng.jsx'
 import SobreNosOngPage from './pagesOng/sobreNosOng/sobreNosOng.jsx';
 
-
-{/*PagesUsuario */ }
-import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/FavoritosUsuario.jsx'
-import HomeUsuarioPage from './pagesUsuario/HomeUsuario/HomeUsuario.jsx'
-import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/MeuPerfilUsuario.jsx'
+{/*PagesUsuario - (CORRIGIDO AQUI: Pastas para minúsculo) */}
+import FavoritosUsuarioPage from './pagesUsuario/favoritosUsuario/FavoritosUsuario.jsx'
+import HomeUsuarioPage from './pagesUsuario/homeUsuario/HomeUsuario.jsx'
+import MeuPerfilUsuarioPage from './pagesUsuario/meuPerfilUsuario/MeuPerfilUsuario.jsx'
 import MeusAlimentosUsuarioPage from './pagesUsuario/meusAlimentosUsuario/meusAlimentosUsuario.jsx'
 import SobreNosUsuarioPage from './pagesUsuario/sobreNosUsuario/sobreNosUsuario.jsx';
 
-
-{/*PagesRegister */ }
+{/*PagesRegister */}
 import LoginPage from './pages/Login/Login.jsx';
-import LadingPage from './pages/Lading/Landing.jsx'
+// ATENÇÃO: Verifique se a pasta é "Lading" ou "Landing". Geralmente é "Landing".
+// Se a pasta for "Landing", mude abaixo para './pages/Landing/Landing.jsx'
+import LadingPage from './pages/Lading/Landing.jsx' 
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/CadastroEmpresa.jsx'
@@ -34,7 +31,6 @@ import CadastroOngPage from './pages/CadastroOng/CadastroOng.jsx'
 import RecuperarSenhaParteEmailPage from './pages/RecuperarSenhaParteEmail/RecuperarSenhaParteEmail.jsx'
 import RecuperarSenhaParteCodigoPage from './pages/RecuperarSenhaParteCodigo/RecuperarSenhaParteCodigo.jsx'
 import RecuperarNovaSenhaPage from './pages/RecuperarNovaSenha/RecuperarNovaSenha.jsx'
-
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -58,7 +54,6 @@ function AppRoutes() {
         <Route path="/meuPerfilEmpresa" element={<MeuPerfilEmpresaPage />}></Route>
         <Route path="/sobreNosEmpresa" element={<SobreNosEmpresaPage />}></Route>
 
-
         {/*RouteOng*/}
         <Route path="/favoritosOng" element={<FavoritosOngPage />}></Route>
         <Route path="/homeOng" element={<HomeOngPage />}></Route>
@@ -72,7 +67,6 @@ function AppRoutes() {
         <Route path="/meuPerfilUsuario" element={<MeuPerfilUsuarioPage />}></Route>
         <Route path="/meusAlimentosUsuario" element={<MeusAlimentosUsuarioPage />}></Route>
         <Route path="/sobreNosUsuario" element={<SobreNosUsuarioPage />}></Route>
-
 
       </Routes>
     </>
