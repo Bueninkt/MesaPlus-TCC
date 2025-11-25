@@ -9,7 +9,7 @@ function NavbarOng() {
   const links = [
     { label: 'Home', to: '/homeOng' },         // por ora aponta para a mesma página inicial
     { label: 'Meu Perfil', to: '/meuPerfilOng' },
-    { label: 'Meus Alimentos', to: '/meusAlimentosOng' },
+    { label: 'Meus Pedidos', to: '/meusAlimentosOng' },
     { label: 'Favoritos', to: '/favoritosOng' }
     
   ];

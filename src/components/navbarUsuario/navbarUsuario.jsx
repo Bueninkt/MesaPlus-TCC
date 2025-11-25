@@ -9,7 +9,7 @@ function NavbarUsuario() {
   const links = [
     { label: 'Home', to: '/homeUsuario' },         // por ora aponta para a mesma página inicial
     { label: 'Meu Perfil', to: '/meuPerfilUsuario' },
-    { label: 'Meus Alimentos', to: '/meusAlimentosUsuario' },
+    { label: 'Meus Pedidos', to: '/meusAlimentosUsuario' },
     { label: 'Favoritos', to: '/favoritosUsuario' }
     
   ];
