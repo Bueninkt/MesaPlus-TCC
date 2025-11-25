@@ -1,29 +1,28 @@
 import React from "react";
 
-{/*PagesEmpresa - (Parece que estes já estavam certos) */}
+{/*PagesEmpresa*/}
 import CadastrarAlimentosEmpresaPage from './pagesEmpresa/cadastrarAlimentosEmpresa/cadastrarAlimentosEmpresa.jsx'
 import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpresa.jsx'
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
 
-{/*PagesOng - (CORRIGIDO AQUI: Pastas para minúsculo) */}
-import FavoritosOngPage from './pagesOng/favoritosOng/FavoritosOng.jsx' 
-import HomeOngPage from './pagesOng/homeOng/HomeOng.jsx'
-import MeuPerfilOngPage from './pagesOng/meuPerfilOng/meuPerfilOng.jsx'
-import MeusAlimentosOngPage from './pagesOng/meusAlimentosOng/meusAlimentosOng.jsx'
-import SobreNosOngPage from './pagesOng/sobreNosOng/sobreNosOng.jsx';
+{/*PagesOng - PADRONIZADO PARA MAIÚSCULO */}
+// Certifique-se que as pastas estão renomeadas para: FavoritosOng, HomeOng, etc.
+import FavoritosOngPage from './pagesOng/FavoritosOng/FavoritosOng.jsx'
+import HomeOngPage from './pagesOng/HomeOng/HomeOng.jsx'
+import MeuPerfilOngPage from './pagesOng/MeuPerfilOng/meuPerfilOng.jsx'
+import MeusAlimentosOngPage from './pagesOng/MeusAlimentosOng/meusAlimentosOng.jsx'
+import SobreNosOngPage from './pagesOng/SobreNosOng/sobreNosOng.jsx';
 
-{/*PagesUsuario - (CORRIGIDO AQUI: Pastas para minúsculo) */}
-import FavoritosUsuarioPage from './pagesUsuario/favoritosUsuario/FavoritosUsuario.jsx'
-import HomeUsuarioPage from './pagesUsuario/homeUsuario/HomeUsuario.jsx'
-import MeuPerfilUsuarioPage from './pagesUsuario/meuPerfilUsuario/MeuPerfilUsuario.jsx'
-import MeusAlimentosUsuarioPage from './pagesUsuario/meusAlimentosUsuario/meusAlimentosUsuario.jsx'
+{/*PagesUsuario - PADRONIZADO PARA MAIÚSCULO */}
+import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/FavoritosUsuario.jsx'
+import HomeUsuarioPage from './pagesUsuario/HomeUsuario/HomeUsuario.jsx'
+import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/MeuPerfilUsuario.jsx'
+import MeusAlimentosUsuarioPage from './pagesUsuario/MeusAlimentosUsuario/MeusAlimentosUsuario.jsx'
 import SobreNosUsuarioPage from './pagesUsuario/sobreNosUsuario/sobreNosUsuario.jsx';
 
 {/*PagesRegister */}
 import LoginPage from './pages/Login/Login.jsx';
-// ATENÇÃO: Verifique se a pasta é "Lading" ou "Landing". Geralmente é "Landing".
-// Se a pasta for "Landing", mude abaixo para './pages/Landing/Landing.jsx'
-import LadingPage from './pages/Lading/Landing.jsx' 
+import LadingPage from './pages/Lading/Landing.jsx'
 import HudCadastrosPage from './pages/HudCadastros/HudCadastros.jsx'
 import CadastroPessoaPage from './pages/CadastroPessoa/CadastroPessoa.jsx'
 import CadastroEmpresaPage from './pages/CadastroEmpresa/CadastroEmpresa.jsx'
