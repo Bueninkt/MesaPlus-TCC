@@ -1,24 +1,20 @@
-/* Container principal da paginação */
+
 .paginacao-container {
     position: sticky;
     display: flex;
     justify-content: center;
-    gap: 12px; /* Espaço entre as bolinhas */
+    gap: 12px; 
     width: 100%;
 }
 
-/* Estilo base para TODAS as bolinhas (números e setas) */
+
 .paginacao-btn {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 1rem;
-    
-    /* Formato de "bolinha" */
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* Círculo perfeito */
-    
-    /* Centraliza o conteúdo (número ou seta) */
+    border-radius: 50%; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,51 +23,45 @@
     transition: all 0.2s ease-in-out;
 }
 
-/* --- Estilo das Bolinhas de NÚMERO --- */
-
-/* Padrão (Número não ativo) */
 .paginacao-btn.number {
-    background-color: var(--green-dark-2); /* Fundo escuro */
+    background-color: var(--green-dark-2); 
     color: var(--white);
-    border: 1px solid var(--beige); /* Borda leve na cor bege */
+    border: 1px solid var(--beige); 
 }
 
-/* Hover (Número não ativo) */
+
 .paginacao-btn.number:hover:not(:disabled) {
     background-color: var(--green-light);
     color: var(--green-dark);
     border-color: var(--green-light);
 }
 
-/* Bolinha ATIVA (Página Atual) */
+
 .paginacao-btn.number.active {
     background-color: var(--beige);
     color: var(--green-dark);
     border-color: var(--beige);
-    font-weight: 700; /* Destaque para o número ativo */
+    font-weight: 700; 
 }
 
-/* --- Estilo das SETAS (< >) --- */
-
-/* Padrão (Setas) - Mantém o bege como cor principal */
 .paginacao-btn.arrow {
     background-color: var(--beige);
     color: var(--green-dark);
-    font-size: 1.2rem; /* Setas um pouco maiores */
+    font-size: 1.2rem; 
     border: none;
 }
 
-/* Hover (Setas) */
+
 .paginacao-btn.arrow:hover:not(:disabled) {
     background-color: var(--green-light);
     color: var(--green-dark);
 }
 
-/* Desabilitado (Setas) */
+
 .paginacao-btn.arrow:disabled {
     background-color: var(--green-dark-2);
     color: var(--white);
     opacity: 0.5;
     cursor: not-allowed;
-    border: 1px solid var(--beige); /* Borda igual ao número inativo */
+    border: 1px solid var(--beige); 
 }

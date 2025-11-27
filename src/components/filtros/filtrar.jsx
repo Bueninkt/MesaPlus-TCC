@@ -1,4 +1,4 @@
-// 🔄 Arquivo: Filtrar.jsx (ATUALIZADO E CORRIGIDO)
+
 import React, { useState, useEffect } from 'react';
 import './filtrar.css';
 import seta from '../../assets/icons/seta.png';
@@ -6,19 +6,17 @@ import seta from '../../assets/icons/seta.png';
 function Filtrar({ onFilterChange }) {
     const [secaoAberta, setSecaoAberta] = useState(null);
 
-    // --- Estados das listas ---
     const [listaCategorias, setListaCategorias] = useState([]);
     const [listaEmpresas, setListaEmpresas] = useState([]);
 
-    // --- Estados dos filtros ativos ---
     const [categoriaAtiva, setCategoriaAtiva] = useState(null);
     const [dataVencimento, setDataVencimento] = useState('');
     const [empresaAtivaId, setEmpresaAtivaId] = useState(null);
 
-    // 1. EFEITO PARA CARREGAR DADOS (Categorias E Empresas)
+
     useEffect(() => {
         const buscarDadosIniciais = async () => {
-            // Busca Categorias
+
             try {
                 const response = await fetch('http://localhost:8080/v1/mesa-plus/categoria');
                 if (response.ok) {
@@ -33,7 +31,6 @@ function Filtrar({ onFilterChange }) {
                 console.error('Erro de rede ao buscar categorias:', error);
             }
 
-            // Busca Empresas
             try {
                 const response = await fetch('http://localhost:8080/v1/mesa-plus/empresa');
                 if (response.ok) {
@@ -50,13 +47,10 @@ function Filtrar({ onFilterChange }) {
         };
 
         buscarDadosIniciais();
-    }, []); // Roda só uma vez
+    }, []); 
 
-    // 🔄 2. EFEITO ATUALIZADO (SIMPLIFICADO)
     useEffect(() => {
         if (onFilterChange) {
-            // A lógica nos handlers agora garante que apenas um
-            // destes terá um valor de cada vez.
             onFilterChange({
                 categoriaId: categoriaAtiva,
                 empresaId: empresaAtivaId,
@@ -65,18 +59,16 @@ function Filtrar({ onFilterChange }) {
         }
     }, [categoriaAtiva, dataVencimento, empresaAtivaId, onFilterChange]);
 
-    // Handler para alternar a visibilidade da seção
     const handleToggleSecao = (secao) => {
         setSecaoAberta(secaoAberta === secao ? null : secao);
     };
 
-    // --- Handlers de Categoria (MODIFICADO) ---
     const handleCategoriaChange = (event) => {
         const id = parseInt(event.target.value);
         const novoId = categoriaAtiva === id ? null : id;
         setCategoriaAtiva(novoId);
-        setEmpresaAtivaId(null); // Limpa o filtro de empresa
-        setDataVencimento(''); // ❗️ NOVO: Limpa o filtro de data
+        setEmpresaAtivaId(null); 
+        setDataVencimento(''); 
     };
 
     const handleLimparCategoria = (e) => {
@@ -84,13 +76,12 @@ function Filtrar({ onFilterChange }) {
         setCategoriaAtiva(null);
     };
 
-    // --- Handlers de Empresa (MODIFICADO) ---
     const handleEmpresaChange = (event) => {
         const id = parseInt(event.target.value);
         const novoId = empresaAtivaId === id ? null : id;
         setEmpresaAtivaId(novoId);
-        setCategoriaAtiva(null); // Limpa o filtro de categoria
-        setDataVencimento(''); // ❗️ NOVO: Limpa o filtro de data
+        setCategoriaAtiva(null); 
+        setDataVencimento(''); 
     };
 
     const handleLimparEmpresa = (e) => {
@@ -98,11 +89,10 @@ function Filtrar({ onFilterChange }) {
         setEmpresaAtivaId(null);
     };
 
-    // --- ❗️ 3. Handlers de Data (NOVOS) ---
     const handleDataChange = (e) => {
-        setDataVencimento(e.target.value); // Define a data
-        setCategoriaAtiva(null); // Limpa o filtro de categoria
-        setEmpresaAtivaId(null); // Limpa o filtro de empresa
+        setDataVencimento(e.target.value); 
+        setCategoriaAtiva(null); 
+        setEmpresaAtivaId(null); 
     };
 
     const handleLimparData = (e) => {
@@ -114,7 +104,6 @@ function Filtrar({ onFilterChange }) {
         <main className="filtrar-container">
             <h2 className="filtrar-titulo">Filtrar por:</h2>
 
-            {/* Seção Categoria */}
             <div className="filtro-secao">
                 <button className="filtro-barra" onClick={() => handleToggleSecao('categoria')}>
                     <span>Categoria:</span>
@@ -152,7 +141,6 @@ function Filtrar({ onFilterChange }) {
                 )}
             </div>
 
-            {/* ❗️ Seção Data de Vencimento (MODIFICADA) */}
             <div className="filtro-secao">
                 <button className="filtro-barra" onClick={() => handleToggleSecao('data')}>
                     <span>Data de Validade:</span>
@@ -168,10 +156,8 @@ function Filtrar({ onFilterChange }) {
                             type="date"
                             className="filtro-input-data"
                             value={dataVencimento}
-                            // ❗️ Usa o novo handler
                             onChange={handleDataChange}
                         />
-                        {/* ❗️ NOVO: Botão de limpar para data */}
                         {dataVencimento && (
                             <button onClick={handleLimparData} className="filtro-limpar-btn">
                                 Limpar filtro
@@ -181,7 +167,6 @@ function Filtrar({ onFilterChange }) {
                 )}
             </div>
 
-            {/* Seção Empresas */}
             <div className="filtro-secao">
                 <button className="filtro-barra" onClick={() => handleToggleSecao('empresa')}>
                     <span>Empresas:</span>

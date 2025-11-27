@@ -1,53 +1,49 @@
-/* Container Principal (Baseado no card-container do Alimento) */
+
 .card-empresa-container {
-    position: relative; /* Essencial para o botão de delete absolute */
+    position: relative; 
     display: flex;
     cursor: pointer;
-    gap: 20px; /* Um pouco mais de espaço pois logos podem ser redondos */
+    gap: 20px; 
     
-    /* Cores Globais */
+
     background-color: var(--beige, #fcf8e8); 
     border-radius: 12px;
     padding: 15px;
-    height: 159px; /* Mesma altura do AlimentoCard */
-    
+    height: 159px; 
     width: 100%; 
-    
     min-width: 550px;
-    
     transition: all 0.3s ease;
-    border: 1px solid transparent; /* Prepara para o hover */
+    border: 1px solid transparent; 
 }
 
-/* Efeito Hover */
 .card-empresa-container:hover {
     border-color: var(--green-light, #B9CE5D);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* 1. Área da Imagem */
+
 .empresa-imagem-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 130px; /* Largura fixa para alinhar */
+    width: 130px;
 }
 
 .empresa-imagem-container img {
     width: 110px;
     height: 110px;
-    border-radius: 50%; /* Empresas geralmente ficam melhor com logo redondo */
-    object-fit: cover; /* Garante que não distorça */
+    border-radius: 50%; 
+    object-fit: cover; 
 }
 
-/* 2. Área de Informações */
+
 .empresa-info-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centraliza verticalmente */
+    justify-content: center; 
     gap: 8px;
 }
 
@@ -80,7 +76,6 @@
     font-weight: 600;
 }
 
-/* 3. Botão Delete (Reutilizado a classe, mas definindo localmente para garantir) */
 .card-delete-button {
     position: absolute;
     bottom: 12px;
@@ -88,7 +83,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 8px; /* Área de clique um pouco maior */
+    padding: 8px; 
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -97,7 +92,7 @@
 }
 
 .card-delete-button:hover {
-    background-color: rgba(139, 0, 0, 0.1); /* Vermelho bem clarinho no hover */
+    background-color: rgba(139, 0, 0, 0.1); 
 }
 
 .card-delete-button img {
@@ -105,7 +100,7 @@
     height: 22px;
 }
 
-/* Responsividade básica */
+
 @media (max-width: 480px) {
     .card-empresa-container {
         flex-direction: column;
@@ -119,7 +114,7 @@
     }
     
     .card-delete-button {
-        position: static; /* No mobile, remove o absolute */
+        position: static; 
         margin-top: 10px;
         align-self: flex-end;
     }

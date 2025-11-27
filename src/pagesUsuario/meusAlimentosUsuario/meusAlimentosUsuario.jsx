@@ -3,7 +3,7 @@ import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
 import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
 import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
-import Paginacao from '../../components/PaginacaoCard/Paginacao'; // 🆕 IMPORTADO
+import Paginacao from '../../components/PaginacaoCard/Paginacao'; 
 
 function MeusAlimentosUsuarioPage() {
 
@@ -13,11 +13,9 @@ function MeusAlimentosUsuarioPage() {
     const [modalOpen, setModalOpen] = useState(false);
     const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
 
-    // 🆕 ESTADOS DA PAGINAÇÃO
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 4; // Define 4 itens por página
+    const ITEMS_PER_PAGE = 4; 
 
-    // useEffect para buscar pedidos (sem mudança)
     useEffect(() => {
         const fetchMeusPedidos = async () => {
             try {
@@ -45,7 +43,7 @@ function MeusAlimentosUsuarioPage() {
         fetchMeusPedidos();
     }, []);
 
-    // Funções do Modal (sem mudança)
+    
     const handleCardClick = (alimento) => {
         const alimentoParaModal = {
             id: alimento.id_alimento,
@@ -60,7 +58,7 @@ function MeusAlimentosUsuarioPage() {
         setAlimentoSelecionado(null);
     };
 
-    // 🆕 FUNÇÃO PARA EXCLUIR O PEDIDO (ATUALIZADA)
+ 
     const handleDeletePedido = async (idPedido) => {
         if (!window.confirm("Tem certeza que deseja remover este alimento dos seus pedidos?")) {
             return;
@@ -72,19 +70,19 @@ function MeusAlimentosUsuarioPage() {
             if (response.data && response.data.status_code === 200) {
                 alert("Pedido removido com sucesso!");
 
-                // 2. Atualiza a tela E checa a paginação
+                
                 setMeusPedidos(pedidosAtuais => {
                     const novosPedidos = pedidosAtuais.filter(pedido => pedido.id_pedido !== idPedido);
 
-                    // 🆕 Checagem de paginação após exclusão
+                   
                     const newTotalPages = Math.ceil(novosPedidos.length / ITEMS_PER_PAGE);
                     if (currentPage > newTotalPages && newTotalPages > 0) {
-                        setCurrentPage(newTotalPages); // Volta para a última página válida
+                        setCurrentPage(newTotalPages); 
                     } else if (novosPedidos.length === 0) {
-                        setCurrentPage(1); // Volta para a página 1 se tudo for excluído
+                        setCurrentPage(1); 
                     }
 
-                    return novosPedidos; // Atualiza o estado
+                    return novosPedidos; 
                 });
             } else {
                 throw new Error(response.data.message || "Erro ao excluir.");
@@ -95,14 +93,14 @@ function MeusAlimentosUsuarioPage() {
         }
     };
 
-    // 🆕 LÓGICA PARA CALCULAR ITENS DA PÁGINA ATUAL
+
     const totalPages = Math.ceil(meusPedidos.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    // 🆕 Slice da lista de pedidos para a página atual
+    
     const currentPedidos = meusPedidos.slice(startIndex, endIndex);
 
-    // 🆕 Função de renderização (ATUALIZADA)
+
     const renderContent = () => {
         if (loading) {
             return <div className="feedback-message">Carregando meus alimentos...</div>;
@@ -116,7 +114,7 @@ function MeusAlimentosUsuarioPage() {
 
         return (
             <div className="lista-alimentos-grid">
-                {/* ❗️ Mapeia 'currentPedidos' em vez de 'meusPedidos' */}
+                
                 {currentPedidos.map(pedido => (
                     <AlimentoCard
                         key={pedido.id_pedido}
@@ -129,7 +127,7 @@ function MeusAlimentosUsuarioPage() {
         );
     };
 
-    // Return (JSX)
+    
     return (
         <>
             <NavbarUsuario />
@@ -143,7 +141,7 @@ function MeusAlimentosUsuarioPage() {
                     </section>
                 </main>
 
-                {/* 🆕 ÁREA DE PAGINAÇÃO ADICIONADA */}
+                
                 <footer className="home-usuario-footer" style={{ padding: '20px 0' }}>
                     <Paginacao
                         currentPage={currentPage}
@@ -153,7 +151,7 @@ function MeusAlimentosUsuarioPage() {
                 </footer>
             </div>
 
-            {/* Modal (sem mudança) */}
+            
             {modalOpen && alimentoSelecionado && (
                 <ModalAlimento
                     alimento={alimentoSelecionado}

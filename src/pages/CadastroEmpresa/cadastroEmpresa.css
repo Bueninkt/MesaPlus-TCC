@@ -1,8 +1,4 @@
 
-
-
-
-/* Fundo com imagem */
 .ce {
     position: relative;
     background: var(--green-dark);
@@ -20,7 +16,6 @@
     z-index: 1;
 }
 
-/* Painel */
 .ce__panel {
     width: min(560px, 92vw);
     height: auto;
@@ -49,7 +44,7 @@
     color: #171717;
 }
 
-/* Form */
+
 .ce__form {
     margin-bottom: 0px   ;
 }
@@ -90,7 +85,7 @@
     width: 100%;
 }
 
-/* Toggle senha */
+
 .field--pwd {
     padding-right: 42px;
 }
@@ -128,7 +123,6 @@
     opacity: 1;
 }
 
-/* Botão enviar */
 .btn--submitCe {
     display: flex;
     justify-content: center;
@@ -151,7 +145,7 @@
     transform: translateY(-1px);
 }
 
-/* Status */
+
 .ce__status {
     min-height: 20px;
     text-align: center;
@@ -171,27 +165,25 @@
 .ce__error-message {
   font-family: 'Poppins';
     color: #e74c3c;
-    /* Vermelho para erros */
     font-size: 0.8rem;
-    /* Ajusta a posição da mensagem de erro */
     position: absolute;
     top: 39px;
     left: 2px;
     white-space: nowrap;
 }
 
-/* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */
+
 .fieldCe:has(.cp__error-message) {
   margin-bottom: 24px;
 }
 
 
 input[aria-invalid="true"] {
-  border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
+  border-color: #e74c3c !important; 
   
 }
 
-/* Responsivo */
+
 @media (max-width: 1400px) {
     .ce {
         min-height: 104vh;
@@ -200,7 +192,7 @@ input[aria-invalid="true"] {
     }
 }
 
-/* Responsivo */
+
 @media (max-width: 900px) {
     .ce {
         min-height: 86vh;

@@ -6,8 +6,6 @@ import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 import AlimentoCard from '../AlimentoCard/AlimentoCard';
 import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import favorito from '../../assets/icons/favorito.png';
-
-// Importe o componente ModalAlimento
 import ModalAlimento from '../ModalAlimento/ModalAlimento';
 
 const maskPhone = (v) => {
@@ -39,8 +37,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isFavorited, setIsFavorited] = useState(false);
-
-    // Estado para controlar o Alimento Selecionado (Painel Direito)
     const [selectedAlimento, setSelectedAlimento] = useState(null);
 
     useEffect(() => {
@@ -51,8 +47,7 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                 setAlimentos([]);
                 setCurrentPage(1);
                 setIsFavorited(false);
-                setSelectedAlimento(null); // Reseta seleção ao abrir nova empresa
-
+                setSelectedAlimento(null); 
                 try {
                     const resEmpresa = await fetch(`http://localhost:8080/v1/mesa-plus/empresa/${empresaId}`);
                     if (!resEmpresa.ok) throw new Error("Erro ao carregar empresa.");
@@ -97,7 +92,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
     };
 
     const handleToggleFavorito = async () => {
-        // ... (Lógica de favoritar mantém-se a mesma) ...
         try {
             const userString = localStorage.getItem("user");
             const userType = localStorage.getItem("userType");
@@ -122,7 +116,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
         }
     };
 
-    // Funções de controle do painel lateral
     const handleOpenAlimento = (alimento) => {
         setSelectedAlimento(alimento);
     };
@@ -135,16 +128,14 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
 
     return (
         <div className="modal-overlay-empresa" onClick={onClose}>
-            {/* Adiciona a classe 'expanded' se houver um alimento selecionado */}
+            
             <div 
                 className={`modal-content ${selectedAlimento ? 'expanded' : ''}`} 
                 onClick={(e) => e.stopPropagation()}
             >
-                
-                {/* Container Flexbox para dividir Lado Esquerdo e Direito */}
+         
                 <div className="split-view-container">
 
-                    {/* --- PAINEL ESQUERDO: DETALHES DA EMPRESA --- */}
                     <div className="left-panel-empresa">
                         <button className="btn-close-modal" onClick={onClose}>&times;</button>
 
@@ -213,7 +204,6 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                                                         <AlimentoCard
                                                             key={item.id_alimento}
                                                             alimento={item}
-                                                            // Ao clicar, abre no painel direito
                                                             onCardClick={() => handleOpenAlimento(item)}
                                                             onDeleteClick={null}
                                                         />
@@ -234,18 +224,17 @@ function ModalCarrosselEmpresa({ isOpen, onClose, empresaId, ocultarFavorito = f
                         ) : null}
                     </div>
 
-                    {/* --- PAINEL DIREITO: DETALHES DO ALIMENTO --- */}
                     <div className={`right-panel-alimento ${selectedAlimento ? 'open' : ''}`}>
                         {selectedAlimento && (
                             <ModalAlimento
                                 alimento={selectedAlimento}
                                 onClose={handleCloseAlimento}
-                                inline={true} // IMPORTANTE: Prop para remover o fundo preto
+                                inline={true} 
                             />
                         )}
                     </div>
 
-                </div> {/* Fim do Split View */}
+                </div> 
             </div>
         </div>
     );

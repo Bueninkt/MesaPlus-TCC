@@ -5,13 +5,12 @@ import './navbarEmpresa.css';
 function NavbarEmpresa() {
   const { pathname } = useLocation();
 
-  // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
-  const links = [      // por ora aponta para a mesma página inicial
+  const links = [      
     { label: 'Meu Perfil', to: '/meuPerfilEmpresa' },
     { label: 'Cadastrar Alimentos', to: '/cadastrarAlimentosEmpresa' },
   ];
 
-  // Garante que apenas a primeira ocorrência do caminho fique ativa (caso existam duas com o mesmo "to")
+  
   const firstIndexForPath = links.findIndex(it => it.to === pathname);
 
   return (

@@ -1,4 +1,4 @@
-/* Fundo escuro (Overlay) */
+
 .modal-overlay-empresa {
     position: fixed;
     top: 0;
@@ -14,26 +14,23 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Container do conteúdo */
+
 .modal-content {
     background-color: var(--beige);
     padding: 0;
     border-radius: 15px;
     width: 95%;
-    max-width: 800px; /* Largura padrão quando fechado */
-    max-height: 90vh; /* IMPORTANTE: Limita a altura à tela para permitir scroll interno */
+    max-width: 800px; 
+    max-height: 90vh; 
     display: flex;
     flex-direction: column;
     position: relative;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.3s ease-in-out;
     overflow: hidden; 
-    
-    /* Transição suave quando a largura mudar para o modo expandido */
     transition: max-width 0.4s ease, width 0.4s ease;
 }
 
-/* Botão de Fechar */
 .btn-close-modal {
     position: absolute;
     top: 15px;
@@ -52,7 +49,6 @@
     color: #e93f3f;
 }
 
-/* Cabeçalho Fixo */
 .modal-header-empresa {
     background-color: var(--green-light, #aacc33);
     padding: 2.5rem 1rem 1.5rem 1rem;
@@ -61,7 +57,7 @@
     align-items: center;
     gap: 1rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    flex-shrink: 0; /* Garante que o cabeçalho não encolha */
+    flex-shrink: 0; 
 }
 
 .modal-empresa-foto {
@@ -80,17 +76,16 @@
     text-align: center;
 }
 
-/* Área de Rolagem (Corpo do modal) */
 .modal-scroll-area {
     padding: 2rem;
-    overflow-y: auto; /* Habilita rolagem apenas aqui */
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    flex-grow: 1; /* Ocupa o espaço restante */
+    flex-grow: 1; 
 }
 
-/* Estilização da Scrollbar (Chrome/Safari/Edge) */
+
 .modal-scroll-area::-webkit-scrollbar {
     width: 8px;
 }
@@ -108,23 +103,23 @@
     background-color: #bbb;
 }
 
-/* Seções */
+
 .modal-section {
     display: flex;
     flex-direction: column;
 }
 
-/* Wrapper para o título e o ícone ficarem na mesma linha */
+
 .modal-section-header-wrapper {
     display: flex;
-    justify-content: space-between; /* Título na esq, ícone na dir */
+    justify-content: space-between; 
     align-items: center;
     border-bottom: 2px solid var(--green-light, #aacc33);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
 
-/* Ajuste no título */
+
 .modal-section-title {
     font-size: 1rem;
     color: var(--green-dark, #2e4a22);
@@ -134,7 +129,7 @@
     margin: 0; 
 }
 
-/* Estilo para o botão do ícone favorito */
+
 .btn-favorito {
     background: transparent;
     border: none;
@@ -158,10 +153,10 @@
     transition: all 0.3s ease;
 }
 
-/* Grid de Informações de Contato */
+
 .modal-info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 colunas no desktop */
+    grid-template-columns: 1fr 1fr; 
     gap: 1.5rem;
 }
 
@@ -186,7 +181,7 @@
     word-break: break-word;
 }
 
-/* Lista de Alimentos */
+
 .modal-alimentos-list {
     display: flex;
     flex-direction: column; 
@@ -198,7 +193,7 @@
     width: 100%; 
 }
 
-/* Mensagem de Vazio */
+
 .modal-empty-msg {
     text-align: center;
     color: #999;
@@ -208,13 +203,13 @@
     border-radius: 8px;
 }
 
-/* Ajuste para centralizar a Paginação */
+
 .modal-section .paginacao-container {
     margin-top: auto;
     padding-top: 10px;
 }
 
-/* Animações Básicas */
+
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes heart-burst {
@@ -223,85 +218,71 @@
     100% { transform: scale(1); }
 }
 
-/* ============================================================
-   NOVAS CLASSES PARA O SPLIT VIEW (LAYOUT LADO A LADO)
-   ============================================================ */
 
-/* 1. Container Flex que segura os dois painéis */
 .split-view-container {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Previne scroll duplo */
+    overflow: hidden; 
 }
 
-/* 2. Painel da Esquerda (Empresa) */
+
 .left-panel-empresa {
-    flex: 1; /* Tenta ocupar todo o espaço */
+    flex: 1; 
     display: flex;
     flex-direction: column;
-    min-width: 350px; /* Largura mínima para não quebrar o layout */
+    min-width: 350px; 
     position: relative;
     transition: width 0.3s ease;
     background-color: var(--beige, #fcf8e8);
 }
 
-/* 3. Painel da Direita (Alimento) */
 .right-panel-alimento {
-    width: 0; /* Começa fechado */
+    width: 0; 
     opacity: 0;
-    background-color: #fff; /* Fundo branco para destacar o alimento */
+    background-color: #fff; 
     border-left: 1px solid #e0e0e0;
     overflow: hidden;
-    
-    /* Animação de abertura suave */
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
 }
 
-/* 3.1 Estado Aberto do Painel Direito */
 .right-panel-alimento.open {
-    width: 500px; /* Largura do detalhe do alimento */
+    width: 500px;
     opacity: 1;
 }
 
-/* 4. Modifica o Modal Content Principal quando expandido */
 .modal-content.expanded {
-    max-width: 95vw !important; /* Permite crescer quase a tela toda */
-    width: 1200px !important;   /* Largura ideal para duas colunas */
+    max-width: 95vw !important; 
+    width: 1200px !important;   
 }
 
-/* 5. Estilos Específicos para o ModalAlimento quando Inline */
 
-/* Wrapper interno do painel direito */
 .modal-alimento-wrapper-inline {
     height: 100%;
     width: 100%;
-    overflow-y: auto; /* Scroll fica DENTRO deste painel */
+    overflow-y: auto; 
 }
 
-/* Remove estilos de "card flutuante" do modal interno */
+
 .container-inline {
     box-shadow: none !important;
     border-radius: 0 !important;
     width: 100% !important;
     min-height: 100%;
-    padding: 1.5rem; /* Padding interno */
+    padding: 1.5rem; 
 }
 
-/* Ajuste na animação do svg de favorito se ativo */
+
 .btn-favorito.active svg {
     animation: heart-burst 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* ============================================================
-   RESPONSIVIDADE
-   ============================================================ */
+
 @media (max-width: 900px) {
-    /* No celular/tablet, o split vira coluna (um em cima do outro) */
     .split-view-container {
         flex-direction: column;
-        overflow-y: auto; /* Habilita scroll na página toda */
+        overflow-y: auto; 
     }
 
     .modal-content.expanded {
@@ -312,8 +293,6 @@
 
     .left-panel-empresa {
         min-width: 100%;
-        /* Se expandido, talvez queira esconder ou diminuir a empresa, 
-           mas aqui deixamos rolar */
         flex: none; 
         height: auto;
     }
@@ -327,13 +306,13 @@
     }
 
     .right-panel-alimento.open {
-        height: auto; /* Deixa crescer */
+        height: auto; 
         min-height: 500px;
         overflow: visible;
     }
     
     .modal-scroll-area {
-        overflow: visible; /* Remove scroll interno duplo no mobile */
+        overflow: visible; 
     }
 }
 

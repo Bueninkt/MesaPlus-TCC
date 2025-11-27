@@ -1,6 +1,4 @@
-/* ==========================================
-   ESTRUTURA BASE DO MODAL (Overlay e Container)
-   ========================================== */
+
 .modal-overlay-alimento {
     position: fixed;
     top: 0;
@@ -42,7 +40,6 @@
     z-index: 20;
 }
 
-/* HEADER */
 .modal-header {
     text-align: center;
     border-bottom: 2px solid #E0D1B3;
@@ -80,13 +77,13 @@
     color: white;
 }
 
-/* BODY */
+
 .modal-body {
     display: flex;
     gap: 2rem;
 }
 
-/* COLUNA IMAGEM */
+
 .modal-imagem-col {
     flex: 1;
     display: flex;
@@ -105,7 +102,7 @@
     border: 1px solid #E0D1B3;
 }
 
-/* COLUNA INFO */
+
 .modal-info-col {
     flex: 2;
     display: flex;
@@ -150,12 +147,6 @@
     margin-bottom: 0.5rem;
 }
 
-/* ==========================================
-   ESTILOS DE EDIÇÃO (Inspirados no Cadastro)
-   Adaptados com sufixo -modal para isolamento
-   ========================================== */
-
-/* Fieldset Genérico */
 .form-group-modal {
     border: 2px solid var(--green-dark);
     border-radius: 8px;
@@ -179,7 +170,6 @@
     gap: 5px;
 }
 
-/* Inputs */
 .form-group-modal input[type="text"],
 .form-group-modal input[type="number"],
 .form-group-modal input[type="date"],
@@ -193,14 +183,14 @@
     color: #000;
 }
 
-/* Textarea Específico */
+
 .descricao-modal textarea {
     min-height: 100px;
     resize: none;
     line-height: 1.4;
 }
 
-/* Grid de Edição (Validade, Qtd, Peso, Tipo) */
+
 .modal-form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -208,11 +198,10 @@
     margin-bottom: 15px;
 }
 
-/* Dropzone de Foto (Modal) */
+
 .foto-dropzone-modal {
     width: 100%;
     height: 250px;
-    /* Altura fixa similar à imagem */
     border: 2px dashed var(--green-dark);
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.2);
@@ -242,7 +231,6 @@
     background-size: contain;
 }
 
-/* Dropdowns Customizados (Tipo Peso & Categoria) */
 .custom-select-modal {
     position: relative;
     cursor: pointer;
@@ -296,7 +284,6 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-/* Checkbox Categoria Customizado */
 .checkbox-item-modal {
     display: flex;
     align-items: center;
@@ -343,7 +330,6 @@
     display: block;
 }
 
-/* FOOTER & BOTÕES */
 .modal-footer {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
@@ -405,7 +391,7 @@
     background-color: #c62828;
 }
 
-/* Carrinho (Visualização) */
+
 .carrinho-col {
     display: flex;
     gap: 20px;
@@ -426,7 +412,7 @@
     align-items: center;
     gap: 8px;
     transition: background-color 0.2s;
-    height: 50px; /* Garante alinhamento com os controles de quantidade */
+    height: 50px; 
 }
 
 .add-to-cart-button:hover {
@@ -436,7 +422,7 @@
 .cart-icon {
     width: 20px;
     height: 20px;
-    filter: brightness(0) invert(1); /* Deixa o ícone branco */
+    filter: brightness(0) invert(1); 
 }
 
 .quantity-controls {
@@ -469,12 +455,10 @@
     cursor: not-allowed;
 }
 
-/* Estilo para o span da quantidade */
 .quantity-display {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--green-dark);
-    /* Estilo para parecer um badge (opcional, ajustando com a imagem) */
     background-color: var(--beige-2);
     padding: 10px;
     border-radius: 8px;
@@ -494,7 +478,7 @@
     }
 
     .modal-imagem-col img {
-        max-width: 200px; /* Imagem menor em telas pequenas */
+        max-width: 200px; 
         margin-bottom: 1rem;
     }
     

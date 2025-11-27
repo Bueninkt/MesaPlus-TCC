@@ -20,7 +20,7 @@ box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3)
   align-items: center;
   column-gap: 20px;
 }
-    /* Seu código existente */
+
 .nav__menu {
   list-style: none;
   margin: 0;

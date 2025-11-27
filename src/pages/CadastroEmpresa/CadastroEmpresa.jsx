@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; 
 import "./cadastroEmpresa.css";
-
-// --- Imports de Componentes e Ícones ---
 import navbarRegister from "../../components/navbar/navbarRegister";
 import profile from "../../assets/icons/profile.png";
 import phone from "../../assets/icons/phone.png";
@@ -12,11 +10,10 @@ import eye from "../../assets/icons/eye.png";
 import eyeclosed from "../../assets/icons/eye-closed.png";
 import lockIcon from "../../assets/icons/lock.png";
 import backimage from "../../assets/icons/backimage.png";
-import local from "../../assets/icons/local.png"; // Ícone de endereço
+import local from "../../assets/icons/local.png"; 
 
 const Navbar = navbarRegister;
 
-// --- Lógica de Validação Centralizada ---
 const validateField = (name, value) => {
   switch (name) {
     case "nome":
@@ -59,22 +56,18 @@ const validateField = (name, value) => {
       if (cnpjDigits.length !== 14) return "CNPJ/MEI deve ter 14 dígitos.";
       return "";
 
-    // Validação do Endereço (Alinhado com Controller Node.js)
+
    case "endereco":
       if (!value || value.trim() === "") return "Endereço é obrigatório.";
       
       if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
       
-      // --- NOVA VALIDAÇÃO ---
-      // Regex que verifica se existe pelo menos uma letra (a-z, A-Z) 
-      // ou letras com acentos (\u00C0-\u00FF inclui á, é, ã, ç, etc.)
       const temLetras = /[a-zA-Z\u00C0-\u00FF]/.test(value);
       
       if (!temLetras) {
         return "O endereço deve conter o nome da rua ou bairro.";
       }
 
-      // Sugestão opcional: Adicionar um tamanho mínimo para evitar endereços como "Rua A" muito curtos
       if (value.trim().length < 5) {
         return "O endereço está muito curto.";
       }

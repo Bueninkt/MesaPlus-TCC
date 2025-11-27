@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import setaLeft from "../../assets/icons/setaLeft.png";
 import setaRight from "../../assets/icons/setaRight.png";
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
-
-// 1. Importe o Modal que acabamos de criar
 import ModalCarrosselEmpresa from '../../components/modalCarrosselEmpresa/modalCarrosselEmpresa'; 
 
 import './carrosselEmpresa.css';
@@ -21,10 +19,10 @@ function CarrosselEmpresa() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     
-    // --- NOVOS ESTADOS PARA O MODAL ---
+   
     const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // ----------------------------------
+   
 
     const scrollRef = useRef(null);
 
@@ -71,7 +69,7 @@ function CarrosselEmpresa() {
         }
     };
 
-    // --- NOVAS FUNÇÕES DE HANDLER ---
+    
     const handleCardClick = (id) => {
         setSelectedEmpresaId(id);
         setIsModalOpen(true);
@@ -81,7 +79,7 @@ function CarrosselEmpresa() {
         setIsModalOpen(false);
         setSelectedEmpresaId(null);
     };
-    // --------------------------------
+    
 
     if (loading) return <div className="carrossel-feedback">Carregando empresas...</div>;
     if (error) return <div className="carrossel-feedback">Erro ao carregar empresas: {error}</div>;
@@ -96,12 +94,12 @@ function CarrosselEmpresa() {
 
             <div className="empresas-container" ref={scrollRef}>
                 {empresas.map(empresa => (
-                    // Adicionamos o onClick no item da empresa
+        
                     <div 
                         className="empresa-item" 
                         key={empresa.id}
-                        onClick={() => handleCardClick(empresa.id)} // Ao clicar, abre o modal
-                        style={{ cursor: 'pointer' }} // Adiciona cursor pointer para indicar clique
+                        onClick={() => handleCardClick(empresa.id)} 
+                        style={{ cursor: 'pointer' }} 
                     >
                         <img 
                             src={empresa.foto || userDefaultEmpresa} 
@@ -118,9 +116,6 @@ function CarrosselEmpresa() {
                 <img src={setaRight} alt="Scroll Direita" />
             </button>
 
-            {/* 2. Renderizamos o Modal aqui.
-                Ele é "invisível" até isOpen ser true 
-            */}
             <ModalCarrosselEmpresa 
                 isOpen={isModalOpen} 
                 onClose={handleCloseModal} 

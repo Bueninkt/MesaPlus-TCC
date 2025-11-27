@@ -14,18 +14,11 @@ const NavbarHud = navbarHud
 function HudCadastrosPage() {
   return (
     <>
-
       <NavbarHud />
-
-
-
       <div className="hudcadastros-bg" style={{ backgroundImage: `url(${backimage})` }}></div>
-
-      {/* Cartões */}
       <main className="hud" aria-labelledby="hud-title">
         <div className="container">
           <ul className="hud__cards" role="list">
-            {/* Pessoa */}
             <li className="card">
               <h3 className="card__brand">Mesa+</h3>
               <p className="card__subtitle">Cadastrar Pessoa</p>
@@ -33,15 +26,13 @@ function HudCadastrosPage() {
               <Link to="/cadastroPessoa" className="btn btn--go">Ir para</Link>
             </li>
 
-            {/* Empresa */}
             <li className="card">
               <h3 className="card__brand">Mesa+</h3>
               <p className="card__subtitle">Cadastrar Empresa</p>
               <img className="card__icon" src={houseEat} alt="" aria-hidden="true" />
               <Link to="/cadastroEmpresa" className="btn btn--go">Ir para</Link>
             </li>
-
-            {/* ONGs */}
+            
             <li className="card">
               <h3 className="card__brand">Mesa+</h3>
               <p className="card__subtitle">Cadastrar ONGs</p>

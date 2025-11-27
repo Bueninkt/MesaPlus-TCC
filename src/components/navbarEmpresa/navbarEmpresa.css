@@ -20,7 +20,6 @@
 
 }
 
-    /* Seu código existente */
 .navEmpresa__menu {
   list-style: none;
   margin: 0;
@@ -34,17 +33,12 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  
-  /* --- ESTILOS ADICIONADOS --- */
-
-  /* Para Firefox e navegadores modernos */
   scrollbar-width: thin;
   scrollbar-color: #FFF1D4 #f1f1f100;
 }
 
-/* Para Chrome, Safari, Edge e outros navegadores WebKit */
 .navEmpresa__menu::-webkit-scrollbar {
-  height: 1px; /* Altura da barra de rolagem horizontal */
+  height: 1px; 
 }
 
 .navEmpresa__menu::-webkit-scrollbar-track {
@@ -52,13 +46,13 @@
 }
 
 .navEmpresa__menu::-webkit-scrollbar-thumb {
-  background-color: #B9CE5D; /* Cor principal do seletor */
+  background-color: #B9CE5D; 
   border-radius: 10px;
-  border: 2px solid #f1f1f1; /* Adiciona um pequeno espaçamento */
+  border: 2px solid #f1f1f1; 
 }
 
 .navEmpresa__menu::-webkit-scrollbar-thumb:hover {
-  background-color: #a2b64d; /* Cor do seletor ao passar o mouse */
+  background-color: #a2b64d; 
 }
 
 

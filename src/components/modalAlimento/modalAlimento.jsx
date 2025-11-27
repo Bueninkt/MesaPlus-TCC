@@ -6,7 +6,6 @@ import cart from "../../assets/icons/cart.png";
 import menos from "../../assets/icons/menos.png";
 import mais from "../../assets/icons/mais.png";
 
-// --- CONSTANTES DO AZURE ---
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
@@ -23,7 +22,7 @@ const uploadParaAzure = async (file, idEmpresa) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// --- VALIDAÇÃO ---
+
 const validateField = (name, value) => {
     switch (name) {
         case "nome":
@@ -78,7 +77,6 @@ function ModalAlimento({
     const [error, setError] = useState(null);
     const [quantidadeSelecionada, setQuantidadeSelecionada] = useState(1);
 
-    // --- ESTADOS DE EDIÇÃO ---
     const [isEditing, setIsEditing] = useState(false);
     const [editFormData, setEditFormData] = useState({});
     const [formErrors, setFormErrors] = useState({});
@@ -87,7 +85,7 @@ function ModalAlimento({
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     
-    // --- FETCH INICIAL ---
+
     useEffect(() => {
         const fetchAlimento = async () => {
             const idParaBuscar = alimentoBase?.id || alimentoBase?.id_alimento;
@@ -118,7 +116,6 @@ function ModalAlimento({
     }, [alimentoBase]);
 
 
-    // --- LÓGICA DE VISUALIZAÇÃO ---
     const handleIncrement = () => {
         const qtd = alimentoCompleto?.quantidade || 0;
         if (quantidadeSelecionada < qtd) setQuantidadeSelecionada(p => p + 1);
@@ -132,7 +129,6 @@ function ModalAlimento({
     };
     const handleModalClick = (e) => e.stopPropagation();
 
-    // --- ADD AO CARRINHO ---
     const handleAddToCart = async () => {
          try {
              const userString = localStorage.getItem("user");
@@ -167,7 +163,7 @@ function ModalAlimento({
          }
     };
 
-    // --- PREPARAÇÃO EDIÇÃO ---
+  
     const handleEditClick = () => {
         if (!alimentoCompleto) return;
         
@@ -178,7 +174,7 @@ function ModalAlimento({
             nome: alimentoCompleto.nome,
             quantidade: alimentoCompleto.quantidade,
             peso: alimentoCompleto.peso,
-            id_tipo_peso: idTipo, // Importante: Mantemos o ID aqui para enviar ao backend
+            id_tipo_peso: idTipo, 
             data_de_validade: dataValidade,
             descricao: alimentoCompleto.descricao,
             imagem: alimentoCompleto.imagem
@@ -194,28 +190,24 @@ function ModalAlimento({
         setFormErrors({});
     };
 
-    // --- CONTROLE DE INPUTS COM BLOQUEIOS ---
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         let finalValue = value;
 
-        // 1. Nome: Remove números e limita a 30 chars
         if (name === "nome") {
             finalValue = value.replace(/\d/g, '').slice(0, 30);
         }
 
-        // 2. Quantidade: Apenas números, remove letras/símbolos, max 5 chars
         else if (name === "quantidade") {
             finalValue = value.replace(/[^0-9]/g, '').slice(0, 5);
         }
 
-        // 3. Peso: Limita a 5 caracteres
         else if (name === "peso") {
              if (value.length > 5) return;
              finalValue = value;
         }
 
-        // 4. Descrição: Max 500
         else if (name === "descricao") {
             finalValue = value.slice(0, 500);
         }
@@ -234,7 +226,6 @@ function ModalAlimento({
         }
     };
 
-    // --- SALVAR ---
     const handleSave = async () => {
         const errors = {};
         Object.keys(editFormData).forEach(key => {
@@ -287,7 +278,7 @@ function ModalAlimento({
         }
     };
 
-    // --- RENDER ---
+
     if (loading) {
         if (inline) return <div className="modal-loading-inline">Carregando detalhes...</div>;
         return <div className="modal-overlay-alimento"><div className="modal-loading-feedback">Carregando...</div></div>;
@@ -329,7 +320,6 @@ function ModalAlimento({
 
             <main className="modal-body">
                 
-                {/* COLUNA ESQUERDA (FOTO) */}
                 <div className="modal-imagem-col">
                     {!isEditing ? (
                         <img src={alimentoCompleto.imagem} alt={`Imagem de ${nomeAlimento}`} />
@@ -353,7 +343,6 @@ function ModalAlimento({
                     )}
                 </div>
 
-                {/* COLUNA DIREITA (INFO) */}
                 <div className="modal-info-col">
                     
                     {nomeEmpresa && !isEditing && (
@@ -364,7 +353,6 @@ function ModalAlimento({
                     )}
 
                     {!isEditing ? (
-                        /* VISUALIZAÇÃO */
                         <>
                             <div className="modal-detalhes">
                                 <h3>Detalhes</h3>
@@ -378,9 +366,7 @@ function ModalAlimento({
                             </div>
                         </>
                     ) : (
-                        /* EDIÇÃO */
                         <>
-                            {/* Nome */}
                             <fieldset className="form-group-modal">
                                 <legend>Nome:</legend>
                                 <input 
@@ -393,10 +379,8 @@ function ModalAlimento({
                             </fieldset>
                             {formErrors.nome && <span className="validation-error">{formErrors.nome}</span>}
 
-                            {/* Grid de Inputs Curtos */}
                             <div className="modal-form-grid">
                                 
-                                {/* Validade */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Validade:</legend>
@@ -410,7 +394,6 @@ function ModalAlimento({
                                     {formErrors.data_de_validade && <span className="validation-error">{formErrors.data_de_validade}</span>}
                                 </div>
 
-                                {/* Quantidade */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Quantidade:</legend>
@@ -425,7 +408,6 @@ function ModalAlimento({
                                     {formErrors.quantidade && <span className="validation-error">{formErrors.quantidade}</span>}
                                 </div>
 
-                                {/* Peso */}
                                 <div>
                                     <fieldset className="form-group-modal">
                                         <legend>Peso:</legend>
@@ -439,11 +421,8 @@ function ModalAlimento({
                                     {formErrors.peso && <span className="validation-error">{formErrors.peso}</span>}
                                 </div>
 
-                                {/* CAMPO TIPO REMOVIDO DAQUI */}
-
                             </div>
 
-                            {/* Descrição */}
                             <fieldset className="form-group-modal descricao-modal">
                                 <legend>Descrição:</legend>
                                 <textarea 

@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Estilos e Componentes
 import './MeuPerfilUsuario.css';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
-
-// Assets (Fallback local)
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 import linkExterno from '../../assets/icons/linkExterno.png';
 
-// =========================================================
-// CONFIGURAÇÕES E HELPERS (Azure e Máscaras)
-// =========================================================
 
-// URL DA FOTO PADRÃO (Igual ao sistema da empresa)
 const URL_FOTO_PADRAO = "https://image2url.com/images/1763934555658-3e67f304-f96e-416b-a98f-12ef5a4fbe50.png";
 
 const AZURE_ACCOUNT = 'mesaplustcc';
@@ -37,7 +29,7 @@ const uploadParaAzure = async (file, idUsuario) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// --- Máscaras ---
+
 const maskPhone = (v) => {
     if (!v) return "";
     let n = v.replace(/\D/g, "").slice(0, 11);
@@ -55,9 +47,7 @@ const maskCPF = (v) => {
         .replace(/(-\d{2})\d+?$/, '$1');
 };
 
-// =========================================================
-// LÓGICA DE VALIDAÇÃO
-// =========================================================
+
 const validateField = (name, value) => {
     switch (name) {
         case "nome":
@@ -91,9 +81,6 @@ const validateField = (name, value) => {
     }
 };
 
-// =========================================================
-// COMPONENTE PRINCIPAL
-// =========================================================
 
 function MeuPerfilUsuarioPage() {
     const navigate = useNavigate();
@@ -103,7 +90,7 @@ function MeuPerfilUsuarioPage() {
     const [isEditing, setIsEditing] = useState(false);
     const [saving, setSaving] = useState(false);
 
-    // Estado principal dos campos de texto
+    
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
@@ -112,19 +99,17 @@ function MeuPerfilUsuarioPage() {
         foto: null 
     });
     
-    // Dados originais para o "Cancelar"
+    
     const [originalData, setOriginalData] = useState({});
     const [errors, setErrors] = useState({});
 
-    // --- Controle de Imagem ---
+    
     const [previewFoto, setPreviewFoto] = useState(userDefaultEmpresa);
     const [selectedFile, setSelectedFile] = useState(null);
-    // Flag para saber se o usuário clicou em "Remover"
+    
     const [fotoRemovida, setFotoRemovida] = useState(false);
 
-    // -------------------------------------------------------
-    // 1. Carregar Dados (GET)
-    // -------------------------------------------------------
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -147,13 +132,13 @@ function MeuPerfilUsuarioPage() {
                         email: u.email || '',
                         cpf: maskCPF(u.cpf || ''),
                         telefone: maskPhone(u.telefone || ''),
-                        foto: u.foto // URL que veio do banco
+                        foto: u.foto 
                     };
 
                     setFormData(loadedData);
                     setOriginalData(loadedData);
                     
-                    // Se vier do banco, usa. Se não, usa a URL padrão.
+                    
                     setPreviewFoto(u.foto || URL_FOTO_PADRAO);
                 }
             } catch (error) {
@@ -165,37 +150,27 @@ function MeuPerfilUsuarioPage() {
         fetchData();
     }, [navigate]);
 
-    // -------------------------------------------------------
-    // 2. Handlers
-    // -------------------------------------------------------
     const handleChange = (e) => {
         const { name, value } = e.target;
         let val = value;
-
-        // =========================================================
-        // LIMITES DE CARACTERES
-        // =========================================================
+     
         
-        // Limite para Nome (18 caracteres)
         if (name === 'nome' && val.length > 50) {
             val = val.slice(0, 50);
         }
 
-        // Limite para Email (45 caracteres)
         if (name === 'email' && val.length > 45) {
             val = val.slice(0, 45);
         }
 
-        // =========================================================
-        // MÁSCARAS EXISTENTES
-        // =========================================================
+        
         
         if (name === 'telefone') val = maskPhone(val);
         
-        // Atualiza o estado
+        
         setFormData(prev => ({ ...prev, [name]: val }));
 
-        // Validação em tempo real
+       
         const errorMessage = validateField(name, val);
         setErrors(prev => ({ ...prev, [name]: errorMessage }));
     };
@@ -205,11 +180,11 @@ function MeuPerfilUsuarioPage() {
         if (file) {
             setPreviewFoto(URL.createObjectURL(file));
             setSelectedFile(file);
-            setFotoRemovida(false); // Selecionou nova, desmarca remoção
+            setFotoRemovida(false); 
         }
     };
 
-    // Lógica igual a da Empresa: Seta a visualização para a URL padrão e marca a flag
+    
     const handleRemovePhoto = () => {
         setPreviewFoto(URL_FOTO_PADRAO);
         setSelectedFile(null);
@@ -220,7 +195,7 @@ function MeuPerfilUsuarioPage() {
         setIsEditing(false);
         setFormData(originalData);
         
-        // Restaura a foto original ou a padrão se não tinha nada
+        
         setPreviewFoto(originalData.foto || URL_FOTO_PADRAO);
         
         setSelectedFile(null);
@@ -228,11 +203,9 @@ function MeuPerfilUsuarioPage() {
         setErrors({});
     };
 
-    // -------------------------------------------------------
-    // 3. Atualizar Perfil (PUT)
-    // -------------------------------------------------------
+   
     const handleUpdate = async () => {
-        // Validação
+        
         const validationErrors = {};
         Object.keys(formData).forEach(key => {
             if (key !== 'foto' && key !== 'senha' && key !== 'cpf') {
@@ -252,17 +225,17 @@ function MeuPerfilUsuarioPage() {
         try {
             let urlParaSalvar;
 
-            // --- LÓGICA DE PRIORIDADE DA FOTO ---
+           
             if (selectedFile) {
-                // 1. Upload novo
+               
                 console.log("Ação: Upload de nova foto.");
                 urlParaSalvar = await uploadParaAzure(selectedFile, idUsuario);
             } else if (fotoRemovida) {
-                // 2. Removeu (Salva URL Padrão)
+                
                 console.log("Ação: Resetando para foto padrão.");
                 urlParaSalvar = URL_FOTO_PADRAO;
             } else {
-                // 3. Mantém a original
+                
                 console.log("Ação: Mantendo foto atual.");
                 urlParaSalvar = originalData.foto;
             }
@@ -273,7 +246,7 @@ function MeuPerfilUsuarioPage() {
                 nome: formData.nome,
                 email: formData.email,
                 telefone: telefoneLimpo,
-                foto: urlParaSalvar, // Envia a URL definida acima
+                foto: urlParaSalvar, 
                 senha: "" 
             };
 
@@ -289,17 +262,17 @@ function MeuPerfilUsuarioPage() {
                 alert('Perfil atualizado com sucesso!');
                 setIsEditing(false);
                 
-                // Atualiza estados locais
+                
                 const novosDados = { ...formData, foto: urlParaSalvar };
                 setOriginalData(novosDados);
                 setFormData(novosDados);
                 setPreviewFoto(urlParaSalvar);
 
-                // Limpa flags
+                
                 setSelectedFile(null);
                 setFotoRemovida(false);
 
-                // Atualiza localStorage
+            
                 const userStorage = JSON.parse(localStorage.getItem("user"));
                 localStorage.setItem("user", JSON.stringify({ ...userStorage, ...payload }));
             } else {
@@ -328,7 +301,7 @@ function MeuPerfilUsuarioPage() {
                             src={previewFoto} 
                             alt="Foto de Perfil" 
                             className="foto-perfil-usuario" 
-                            // Fallback caso a URL quebre
+                            
                             onError={(e) => { e.target.onerror = null; e.target.src = userDefaultEmpresa; }}
                         />
                         
@@ -396,7 +369,7 @@ function MeuPerfilUsuarioPage() {
                                 )}
                             </div>
 
-                            {/* CPF - SEMPRE TEXTO (NÃO EDITÁVEL) */}
+                            
                             <div className="input-group">
                                 <label>CPF:</label>
                                 <span className="data-text" style={{ color: isEditing ? '#000000ff' : '#000' }}>
@@ -404,7 +377,7 @@ function MeuPerfilUsuarioPage() {
                                 </span>
                             </div>
 
-                            {/* Telefone */}
+                            
                             <div className="input-group">
                                 <label>Telefone:</label>
                                 {isEditing ? (

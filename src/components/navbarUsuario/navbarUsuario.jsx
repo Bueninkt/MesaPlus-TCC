@@ -1,20 +1,18 @@
-
 import { Link, useLocation } from 'react-router-dom';
 import './navbarUsuario.css';
 
 function NavbarUsuario() {
   const { pathname } = useLocation();
 
-  // Itens do menu (ajuste os caminhos conforme suas rotas quando criar as páginas)
   const links = [
-    { label: 'Home', to: '/homeUsuario' },         // por ora aponta para a mesma página inicial
+    { label: 'Home', to: '/homeUsuario' },        
     { label: 'Meu Perfil', to: '/meuPerfilUsuario' },
     { label: 'Meus Pedidos', to: '/meusAlimentosUsuario' },
     { label: 'Favoritos', to: '/favoritosUsuario' }
     
   ];
 
-  // Garante que apenas a primeira ocorrência do caminho fique ativa (caso existam duas com o mesmo "to")
+
   const firstIndexForPath = links.findIndex(it => it.to === pathname);
 
   return (

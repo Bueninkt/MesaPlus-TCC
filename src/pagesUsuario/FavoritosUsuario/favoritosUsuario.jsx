@@ -3,10 +3,7 @@ import axios from 'axios';
 import NavbarUsuario from '../../components/navbarUsuario/navbarUsuario';
 import EmpresaCard from '../../components/empresaCard/empresaCard'; 
 import Paginacao from '../../components/PaginacaoCard/Paginacao'; 
-
-// 1. Importe o Modal de Empresa
 import ModalCarrosselEmpresa from '../../components/modalCarrosselEmpresa/modalCarrosselEmpresa';
-
 import './favoritosUsuario.css'; 
 
 const ITEMS_PER_PAGE = 6; 
@@ -17,8 +14,6 @@ function FavoritosUsuarioPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-
-    // 2. Novos Estados para controlar o Modal
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedEmpresaId, setSelectedEmpresaId] = useState(null);
 
@@ -57,7 +52,7 @@ function FavoritosUsuarioPage() {
         fetchFavoritos();
     }, []);
 
-    // Cálculos de Paginação
+    
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
     const currentFavoritos = favoritos.slice(indexOfFirstItem, indexOfLastItem);
@@ -67,18 +62,13 @@ function FavoritosUsuarioPage() {
         setCurrentPage(pageNumber);
     };
 
-    // 3. Função para ABRIR o Modal
     const handleCardClick = (empresa) => {
-        // O objeto 'empresa' vindo do favorito tem o campo 'id_empresa'
-        // Mas o objeto vindo de busca normal tem 'id'.
-        // Usamos uma lógica "ou" para garantir.
         const idParaModal = empresa.id_empresa || empresa.id;
         
         setSelectedEmpresaId(idParaModal);
         setModalOpen(true);
     };
 
-    // 4. Função para FECHAR o Modal
     const handleCloseModal = () => {
         setModalOpen(false);
         setSelectedEmpresaId(null);
@@ -127,7 +117,6 @@ function FavoritosUsuarioPage() {
                         <EmpresaCard 
                             key={item.id_favorito} 
                             empresa={item} 
-                            // 5. Passamos a função que abre o modal aqui
                             onCardClick={handleCardClick} 
                             onDeleteClick={() => handleDeleteFavorito(item.id_favorito)} 
                         />
@@ -157,8 +146,6 @@ function FavoritosUsuarioPage() {
                 
             </div>
 
-            {/* 6. Renderização do Modal */}
-                {/* Ele fica "escondido" até modalOpen ser true */}
                 <ModalCarrosselEmpresa 
                     isOpen={modalOpen}
                     onClose={handleCloseModal}

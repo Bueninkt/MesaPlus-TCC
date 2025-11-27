@@ -16,21 +16,13 @@
   z-index: 1;
 }
 
-
-
-/* =========================
-   ÁREA DOS CARTÕES
-   ========================= */
 .hud {
   background: var(--green-dark);
   padding-bottom: 35px;
-  
-  /* respiro inferior da página */
 }
 
 .hud .container {
   margin-top: 12px;
-  /* pequeno espaço após o header */
 }
 
 .hud__cards {
@@ -38,43 +30,33 @@
   margin-top: 1px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  /* três colunas como no print */
   gap: 36px;
-  /* distância entre cartões */
 }
 
-/* ===== CARTÃO ===== */
+
 .card {
   background: var(--beige-2);
   border-radius: 17px;
   box-shadow:
     0 7px 0 rgba(0, 0, 0, .17),
-    /* “borda” de sombra dura */
     0 26px 46px rgba(0, 0, 0, .28);
-  /* sombra suave externa */
   padding: 46px 50px 28px;
-  /* top | lados | bottom */
-  /* altura percebida no print */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-/* “Mesa+” grande no topo do cartão */
 .card__brand {
   margin: 0;
   font-family: 'Alex Brush', cursive;
   font-size: 116px;
   font-weight: 300;
-  /* tamanho travado do print */
   line-height: .88;
   letter-spacing: .6px;
   color: #222;
-  /* preto suave para contraste */
 }
 
-/* subtítulo (Cadastrar Pessoa/Empresa/ONGs) */
 .card__subtitle {
   margin: 18px 0 0;
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
@@ -84,35 +66,30 @@
   letter-spacing: .2px;
 }
 
-/* ícone grande central */
+
 .card__icon {
   width: 220px;
-  /* dimensão visual do print */
   height: auto;
   margin-top: 34px;
   margin-bottom: auto;
-  /* “empurra” o botão ao rodapé */
   display: block;
   filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .06));
 }
 
-/* botão “Ir para” dentro do cartão */
 .btn--go {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 272px;
-  /* largura igual à imagem */
   height: 56px;
   background: var(--green-dark);
   color: var(--white);
   border-radius: 99px;
   font: 700 18px/1 Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   box-shadow:
-    0 3px 0 rgba(0, 0, 0, .20),
-    inset 0 -2px 0 rgba(0, 0, 0, .12);
+  0 3px 0 rgba(0, 0, 0, .20),
+  inset 0 -2px 0 rgba(0, 0, 0, .12);
   margin-top: 42px;
-  /* distância do ícone ao botão */
   text-decoration: none;
   transition: transform .08s ease, filter .12s ease;
 }
@@ -128,12 +105,6 @@
 }
 
 
-
-
-/* =========================
-   RESPONSIVO ( mantém “look”
-   e apenas reajusta respiros )
-   ========================= */
 @media (max-width: 1280px) {
   .hud__cards {
     grid-template-columns: repeat(2, 1fr);

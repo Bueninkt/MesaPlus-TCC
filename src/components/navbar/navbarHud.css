@@ -1,15 +1,12 @@
-/* ============================================= */
-/* ESTILOS GERAIS (DESKTOP)             */
-/* ============================================= */
 
 .container-topoHud {
     display: flex;
-    flex-direction: row; /* Itens em linha por padrão */
+    flex-direction: row; 
     flex-wrap: nowrap;
-    justify-content: space-between; /* Distribui os itens com espaço entre eles */
-    align-items: center; /* Alinha os itens verticalmente ao centro */
+    justify-content: space-between; 
+    align-items: center; 
     height: auto;
-    padding: 15px 60px; /* Padding geral para espaçamento nas laterais */
+    padding: 15px 60px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
@@ -26,13 +23,13 @@
     color: aliceblue;
     font-family: 'Poppins';
     font-size: 45px;
-    margin: 0; /* Remove margens padrão do h1 */
+    margin: 0; 
 }
 
 .botaoHud {
     background: var(--green-light);
     text-align: center;
-    padding: 12px 30px; /* Padding um pouco mais generoso */
+    padding: 12px 30px; 
     max-width: 210px;
     border-radius: 999px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
@@ -44,55 +41,48 @@
     font-size: 22px;
     cursor: pointer;
     display: inline-block;
-    transition: transform 0.4s; /* Transição movida para o estado base */
+    transition: transform 0.4s; 
 }
 
 .botaoHud:hover {
    transform: scale(1.1); 
 }
 
-/* ============================================= */
-/* RESPONSIVIDADE (TABLET)               */
-/* ============================================= */
 @media(max-width: 1024px) {
     .container-topoHud {
-        padding: 15px 30px; /* Diminui o padding lateral em telas menores */
+        padding: 15px 30px; 
     }
 
     .texto-hud h1 {
-        font-size: 32px; /* Diminui um pouco a fonte do título */
+        font-size: 32px; 
     }
 
     .logo_imgHud {
         width: 120px;
-        height: auto; /* Altura automática para manter proporção */
+        height: auto; 
     }
 }
 
 
-/* ============================================= */
-/* RESPONSIVIDADE (MOBILE)              */
-/* ============================================= */
 @media(max-width: 768px) {
     .container-topoHud {
-        flex-direction: column; /* Itens ficam em coluna */
+        flex-direction: column; 
         justify-content: center;
-        padding: 25px 20px; /* Ajusta o padding para o layout vertical */
-        gap: 25px; /* Adiciona um espaço consistente entre os itens */
+        padding: 25px 20px; 
+        gap: 25px;
     }
 
     .texto-hud {
-        /* Garante que o texto fique na ordem correta no layout de coluna */
-        order: -1; /* Coloca o título antes do logo se desejar */
+        order: -1; 
     }
     
     .texto-hud h1 {
         font-size: 28px;
-        text-align: center; /* Centraliza o texto no mobile */
+        text-align: center; 
     }
 
     .logoHud {
-        order: -2; /* Coloca o logo no topo */
+        order: -2; 
     }
 
     .logo_imgHud{
@@ -100,12 +90,12 @@
     }
 
     .botaoHud {
-        width: 100%; /* Botão ocupa a largura máxima disponível */
-        max-width: 300px; /* Mas não passa de 300px */
+        width: 100%; 
+        max-width: 300px; 
         font-size: 20px;
     }
 
     .botaoHud:hover {
-        transform: scale(1.05); /* Efeito de hover mais sutil no mobile */
+        transform: scale(1.05); 
     }
 }

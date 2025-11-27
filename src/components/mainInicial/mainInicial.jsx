@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './mainInicial.css';
 import logo from "../../assets/icons/mesaLogo.png";
-import navbar from '../../components/navbar/navbar';
 import user from "../../assets/icons/user.png";
 import backimage from "../../assets/icons/backimage.png";
 import bag from "../../assets/icons/bag.png";
@@ -13,7 +12,6 @@ import globo from "../../assets/icons/globo.png";
 
 
 
-
 function mainInicial  (params) {
     
       return (
@@ -21,7 +19,6 @@ function mainInicial  (params) {
           
           <div className="sobrenos-bg" style={{ backgroundImage: `url(${backimage})` }} aria-hidden="true"></div>
     
-          {/* Seção "Sobre Nós" (para o link "/#sobre-nos") */}
           <section id="sobre-nos" className="about" aria-labelledby="about-title">
             <main className="sobre">
               <section className="hero" aria-labelledby="hero-title">
@@ -31,10 +28,8 @@ function mainInicial  (params) {
                 </div>
               </section>
     
-              {/* FAIXA DIVISÓRIA (como no print) */}
               <div className="faixa" aria-hidden="true" />
     
-              {/* SOBRE NÓS */}
               <section id="sobre-nos" className="about" aria-labelledby="about-title">
                 <div className="container about__grid">
                   <div className="about__left">
@@ -63,10 +58,9 @@ function mainInicial  (params) {
     
               <div className="problema__grid">
     
-                {/* Card Desperdício */}
                 <article className="problema-card" aria-labelledby="problema-desperdicio-title">
                   
-                  {/* --- NOVO: Ícone Sobreposto --- */}
+                  
                   <div className="problema-card__visual">
                     <img
                       src={lixo}
@@ -75,13 +69,12 @@ function mainInicial  (params) {
                     />
                   </div>
     
-                  {/* --- NOVO: Wrapper de Conteúdo --- */}
                   <div className="problema-card__content">
                     
-                    {/* --- NOVO: Tag de Destaque --- */}
+                    
                     <span className="problema-card__tag">O Desperdício</span>
                     
-                    {/* --- NOVO: Título de Impacto --- */}
+                    
                     <h3 id="problema-desperdicio-title" className="problema-card__title">
                       Alimentos Perfeitamente Bons
                     </h3>
@@ -93,10 +86,8 @@ function mainInicial  (params) {
     
                 </article>
     
-                {/* Card Fome */}
                 <article className="problema-card" aria-labelledby="problema-fome-title">
     
-                  {/* --- NOVO: Ícone Sobreposto --- */}
                   <div className="problema-card__visual">
                     <img
                       src={houseEat}
@@ -105,13 +96,13 @@ function mainInicial  (params) {
                     />
                   </div>
     
-                  {/* --- NOVO: Wrapper de Conteúdo --- */}
+                  
                   <div className="problema-card__content">
     
-                    {/* --- NOVO: Tag de Destaque --- */}
+                    
                     <span className="problema-card__tag">A Fome</span>
     
-                    {/* --- NOVO: Título de Impacto --- */}
+                    
                     <h3 id="problema-fome-title" className="problema-card__title">
                       Insegurança Alimentar
                     </h3>
@@ -126,22 +117,17 @@ function mainInicial  (params) {
             </div>
           </section>
     
-          {/* Seção "Proximos Passos" (para o link "/#proximos-passos") */}
-          {/* 👇 CLASSE CORRIGIDA 👇 */}
           <section id="proximos-passos" className="proximos-passos">
             <div className="container">
     
-              {/* --- Título da Seção --- */}
               <h2 id="passos-title" className="passos__heading">Nossa Visão de Futuro</h2>
               <p className="passos__subheading">
                 Estamos apenas começando. Nossa visão é clara e nossos próximos passos 
                 redefinirão o combate ao desperdício.
               </p>
     
-              {/* --- NOVO: A Timeline de Ascensão --- */}
               <div className="passos__timeline">
     
-                {/* Etapa 01: Alcance e Parcerias */}
                 <article className="passo-item" aria-labelledby="passo-alcance-title">
                   <div className="passo-item__number-wrapper">
                     <span className="passo-item__number">01</span>
@@ -158,7 +144,6 @@ function mainInicial  (params) {
                   </div>
                 </article>
     
-                {/* Etapa 02: Inovação com IA */}
                 <article className="passo-item" aria-labelledby="passo-ia-title">
                   <div className="passo-item__number-wrapper">
                     <span className="passo-item__number">02</span>
@@ -175,7 +160,6 @@ function mainInicial  (params) {
                   </div>
                 </article>
     
-                {/* Etapa 03: Impacto Global */}
                 <article className="passo-item" aria-labelledby="passo-global-title">
                   <div className="passo-item__number-wrapper">
                     <span className="passo-item__number">03</span>
@@ -191,14 +175,11 @@ function mainInicial  (params) {
                     </div>
                   </div>
                 </article>
-    
-              </div> {/* Fim .passos__timeline */}
+              </div> 
             </div>
             
           </section>
     
-          {/* Seção "Beneficios" (para o link "/#beneficios") */} 
-          {/* 👇 CLASSE CORRIGIDA 👇 */}
           <section id="beneficios" className="beneficios">
             <div className="container">
             
@@ -208,7 +189,6 @@ function mainInicial  (params) {
             
             <div className="beneficios__grid">
               
-              {/* Card 1: Empresas */}
               <article className="beneficio-card" aria-labelledby="beneficio-empresas-title">
                 <img src={bag} alt="" className="beneficio-card__icon" />
                 <h3 id="beneficio-empresas-title" className="beneficio-card__title">
@@ -219,7 +199,6 @@ function mainInicial  (params) {
                 </p>
               </article>
     
-              {/* Card 2: ONGs */}
               <article className="beneficio-card" aria-labelledby="beneficio-ongs-title">
                 <img src={houseEat} alt="" className="beneficio-card__icon" />
                 <h3 id="beneficio-ongs-title" className="beneficio-card__title">
@@ -230,7 +209,6 @@ function mainInicial  (params) {
                 </p>
               </article>
               
-              {/* Card 3: Pessoas */}
               <article className="beneficio-card" aria-labelledby="beneficio-pessoas-title">
                 <img src={user} alt="" className="beneficio-card__icon" />
                 <h3 id="beneficio-pessoas-title" className="beneficio-card__title">

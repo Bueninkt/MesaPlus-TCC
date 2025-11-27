@@ -1,9 +1,6 @@
 
-
-/* Header */
 header.lg__header {
   background: var(--green-dark);
-  /* header sem “faixa” clara */
   display: flex;
   align-items: center;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
@@ -30,10 +27,8 @@ header.lg__header .lg__brandmark {
   outline-offset: 2px;
 }
 
-/* Fundo / painel */
 .lg {
   margin-top: 0px;
-  /* alinhado ao header real */
   padding: 0px;
 }
 
@@ -44,7 +39,6 @@ header.lg__header .lg__brandmark {
   background-position: center;
   background-size: cover;
   opacity: .3;
-  /* intensidade sutil como no print */
   pointer-events: none;
   z-index: 1;
 }
@@ -62,7 +56,6 @@ header.lg__header .lg__brandmark {
   text-align: left;
 }
 
-/* Títulos */
 .lg__brand {
   margin: 10px 0 2px 0;
   text-align: center;
@@ -81,7 +74,6 @@ header.lg__header .lg__brandmark {
   color: #161616;
 }
 
-/* Form */
 .lg__form {
   margin-top: 25px;
 }
@@ -91,15 +83,12 @@ header.lg__header .lg__brandmark {
   display: flex;
   align-items: center;
   gap: 8px;
-  /* tom interno do print */
   border: 2px solid rgba(27, 66, 39, .65);
-  /* contorno verde */
   border-radius: 7px;
   padding: 7px 12px;
   height: 41px;
   margin: 14px 0;
 }
-
 
 .field__icon {
   width: 16px;
@@ -124,7 +113,6 @@ header.lg__header .lg__brandmark {
   width: 100%;
 }
 
-/* Toggle senha */
 .field--pwd {
   padding-right: 42px;
 }
@@ -155,7 +143,6 @@ header.lg__header .lg__brandmark {
   opacity: 1;
 }
 
-/* Links auxiliares */
 .lg__forgot,
 .lg__signup {
   display: inline-block;
@@ -170,7 +157,6 @@ header.lg__header .lg__brandmark {
   text-decoration: underline;
 }
 
-/* Select tipo de login */
 .selectField {
   position: relative;
   background: #F9EAD0;
@@ -212,7 +198,7 @@ header.lg__header .lg__brandmark {
   opacity: .95;
 }
 
-/* Botão */
+
 .btnLogin {
   display: inline-flex;
   align-items: center;
@@ -243,7 +229,6 @@ header.lg__header .lg__brandmark {
   transform: translateY(-1px);
 }
 
-/* Status */
 .lg__status {
   min-height: 20px;
   text-align: center;
@@ -278,23 +263,20 @@ header.lg__header .lg__brandmark {
 .lg__error-message {
   font-family: 'Poppins';
     color: #e74c3c;
-    /* Vermelho para erros */
     font-size: 0.8rem;
-    /* Ajusta a posição da mensagem de err */
     position: absolute;
     top: 37px;
     left: 2px;
     white-space: nowrap;
 }
 
-/* Adiciona um espaçamento extra no 'label' quando há um erro para não haver sobreposição */
 .fieldLogin:has(.cp__error-message) {
   margin-bottom: 24px;
 }
 
 
 input[aria-invalid="true"] {
-  border-color: #e74c3c !important; /* Borda vermelha para inputs inválidos */
+  border-color: #e74c3c !important; 
   
 }
 

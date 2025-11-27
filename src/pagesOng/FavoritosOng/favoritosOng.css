@@ -1,11 +1,8 @@
-/* Container da página */
+
 .page-container-ong {
-    /* CORREÇÃO IMPORTANTE: Alterado de 10vh para 100vh */
     min-height: calc(100vh - 80px); 
     background-color: var(--green-dark, #2E4A22);
     padding: 40px 20px;
-    
-    /* Configuração Flex para permitir empurrar o rodapé */
     display: flex;
     flex-direction: column;
 }
@@ -14,8 +11,6 @@
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    
-    /* Faz este container ocupar todo o espaço vertical disponível */
     flex: 1; 
     display: flex;
     flex-direction: column;
@@ -29,32 +24,26 @@
     border-bottom: 2px solid var(--green-light, #B9CE5D);
     padding-bottom: 10px;
     display: inline-block;
-    align-self: flex-start; /* Garante que a linha fique apenas sob o texto */
+    align-self: flex-start;
 }
 
-/* Grid dos Cards */
 .favoritos-grid-ong {
     display: grid;
-    /* Mantivemos o ajuste anterior para cards largos */
     grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-    gap: 30px; /* Ajustado para 30px para ficar mais harmonico */
+    gap: 30px;
     width: 100%;
-    
-    /* Isso garante que o grid não estique infinitamente, mas o conteudo sim */
     margin-bottom: 40px; 
 }
 
-/* Wrapper da Paginação (Adicione essa classe na div que envolve o <Paginacao /> no React) */
 .paginacao-wrapper-ong {
-    margin-top: auto; /* O SEGREDO: Empurra a paginação para o final do container flex */
+    margin-top: auto; 
     padding-top: 20px;
     display: flex;
     justify-content: center;
     width: 100%;
-    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Opcional: linha sutil separando */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
-/* Mensagens de Feedback */
 .feedback-msg {
     color: var(--white, #ffffff);
     font-family: 'Poppins', sans-serif;
@@ -71,34 +60,34 @@
     border: 1px solid #ffcccc;
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
     .titulo-pagina-ong {
         font-size: 2rem;
     }
     
     .favoritos-grid-ong {
-        grid-template-columns: 1fr; /* Uma coluna no mobile */
+        grid-template-columns: 1fr; 
 
     }
     
     .paginacao-wrapper {
-        padding-bottom: 20px; /* Espaço extra no mobile */
+        padding-bottom: 20px; 
     }
 }
 
-/* Responsividade */
+
 @media (max-width: 962px) {
     .titulo-pagina-ong {
         font-size: 2rem;
     }
     
     .favoritos-grid-ong {
-        grid-template-columns: 1fr; /* Uma coluna no mobile */
+        grid-template-columns: 1fr; 
         
     }
     
     .paginacao-wrapper-ong {
-        padding-bottom: 20px; /* Espaço extra no mobile */
+        padding-bottom: 20px; 
     }
 }

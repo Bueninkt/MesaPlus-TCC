@@ -5,7 +5,6 @@ import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 
 function EmpresaCard({ empresa, onCardClick, onDeleteClick }) {
 
-    // Função auxiliar para mascarar o telefone (mesma lógica do modal)
     const maskPhone = (v) => {
         if (!v) return "---";
         let n = v.replace(/\D/g, "").slice(0, 11);
@@ -14,20 +13,18 @@ function EmpresaCard({ empresa, onCardClick, onDeleteClick }) {
         return n;
     };
 
-    // Tratamento de dados:
-    // O backend pode mandar 'nome' (rota get empresa) ou 'nome_empresa' (rota get favoritos)
     const nomeExibicao = empresa.nome || empresa.nome_empresa || "Empresa sem nome";
     
-    // O backend pode mandar 'foto' ou 'foto_empresa'
+
     const fotoExibicao = empresa.foto || empresa.foto_empresa || userDefaultEmpresa;
     
     const emailExibicao = empresa.email || "Email não informado";
     const telefoneExibicao = maskPhone(empresa.telefone);
 
     const handleDelete = (e) => {
-        e.stopPropagation(); // Impede que o clique no lixo abra o modal da empresa
+        e.stopPropagation(); 
         if (onDeleteClick) {
-            // Passa o ID do favorio ou da empresa, dependendo de como sua lista é montada
+
             onDeleteClick(empresa.id_favorito || empresa.id); 
         }
     };
@@ -35,7 +32,6 @@ function EmpresaCard({ empresa, onCardClick, onDeleteClick }) {
     return (
         <div className="card-empresa-container" onClick={() => onCardClick(empresa)}>
             
-            {/* 1. Imagem (Logo) */}
             <div className="empresa-imagem-container">
                 <img 
                     src={fotoExibicao} 
@@ -47,7 +43,7 @@ function EmpresaCard({ empresa, onCardClick, onDeleteClick }) {
                 />
             </div>
 
-            {/* 2. Informações (Centro) */}
+
             <div className="empresa-info-container">
                 <h3>{nomeExibicao}</h3>
                 
@@ -61,7 +57,6 @@ function EmpresaCard({ empresa, onCardClick, onDeleteClick }) {
                 </div>
             </div>
 
-            {/* 3. Botão de Excluir (Direita/Baixo) */}
             {onDeleteClick && (
                 <button className="card-delete-button" onClick={handleDelete} title="Remover dos favoritos">
                     <img src={trash} alt="Remover Favorito" />

@@ -5,15 +5,15 @@ import CadastrarAlimentosEmpresaPage from './pagesEmpresa/cadastrarAlimentosEmpr
 import MeuPerfilEmpresaPage from './pagesEmpresa/meuPerfilEmpresa/meuPerfilEmpresa.jsx'
 import SobreNosEmpresaPage from './pagesEmpresa/sobreNosEmpresa/sobreNosEmpresa.jsx';
 
-{/*PagesOng - PADRONIZADO PARA MAIÚSCULO */}
-// Certifique-se que as pastas estão renomeadas para: FavoritosOng, HomeOng, etc.
+{/*PagesOng*/}
+
 import FavoritosOngPage from './pagesOng/FavoritosOng/FavoritosOng.jsx'
 import HomeOngPage from './pagesOng/HomeOng/HomeOng.jsx'
 import MeuPerfilOngPage from './pagesOng/MeuPerfilOng/meuPerfilOng.jsx'
 import MeusAlimentosOngPage from './pagesOng/MeusAlimentosOng/meusAlimentosOng.jsx'
 import SobreNosOngPage from './pagesOng/SobreNosOng/sobreNosOng.jsx';
 
-{/*PagesUsuario - PADRONIZADO PARA MAIÚSCULO */}
+{/*PagesUsuario*/}
 import FavoritosUsuarioPage from './pagesUsuario/FavoritosUsuario/FavoritosUsuario.jsx'
 import HomeUsuarioPage from './pagesUsuario/HomeUsuario/HomeUsuario.jsx'
 import MeuPerfilUsuarioPage from './pagesUsuario/MeuPerfilUsuario/MeuPerfilUsuario.jsx'
@@ -37,7 +37,7 @@ function AppRoutes() {
   return (
     <>
       <Routes>
-        {/*RouteRegisters */}
+        {/*RouteRegister*/}
         <Route path="/" element={<LadingPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/hudCadastros" element={<HudCadastrosPage />}></Route>

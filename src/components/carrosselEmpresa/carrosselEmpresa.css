@@ -1,56 +1,24 @@
-/* Wrapper principal que segura as setas e o container */
+
 .carrossel-empresa-wrapper {
     position: relative;
-    /* Necessário para posicionar as setas */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Garante que o container interno comece centralizado */
     width: 100%;
-
-    /* MELHORIA: Movemos o padding horizontal para o wrapper.
-       Isso dá espaço para as setas e simplifica o cálculo
-       de largura do container. */
     padding: 0 40px;
     box-sizing: border-box;
 }
 
-/* Container que de fato rola (scroll) */
 .empresas-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    /* Alinha itens no topo */
-
     overflow-x: auto;
-    /* Habilita o scroll horizontal */
     scroll-behavior: smooth;
-    /* Suaviza o scroll via JS */
-
-    /* Espaçamento */
     gap: 65px;
     padding: 10px 0;
-    /* Removemos o padding horizontal daqui */
-
-    /*      * --- MELHORIA DE LAYOUT Nº 1: LARGURA E CENTRALIZAÇÃO ---
-     *      * Cálculo da largura exata para 8 itens:
-     * (8 itens * 100px de largura) = 800px
-     * (7 espaços * 65px de gap)    = 455px
-     * TOTAL: 1255px
-     *
-     * Isso força o container a ter o tamanho EXATO de 8 itens, 
-     * "escondendo" os demais e permitindo a rolagem paginada.
-    */
     max-width: 1255px;
-
-    /*      * --- MELHORIA DE LAYOUT Nº 2: CENTRALIZAÇÃO ---
-     * Se o wrapper (.carrossel-empresa-wrapper) for maior que 1255px,
-     * 'margin: 0 auto' vai centralizar este container horizontalmente.
-     */
     margin: 0 auto;
-
-
-    /* --- Esconde a Barra de Rolagem (sem alteração) --- */
     scrollbar-width: none;
 }
 
@@ -59,7 +27,6 @@
 }
 
 
-/* --- Itens Individuais (Logo + Nome) --- */
 .empresa-item {
     display: flex;
     flex-direction: column;
@@ -67,14 +34,11 @@
     gap: 10px;
     flex-shrink: 0;
     width: 100px;
-
-    /* MELHORIA: Feedback visual */
     transition: transform 0.2s ease;
     cursor: pointer;
-    /* Indica que é clicável */
+   
 }
 
-/* MELHORIA: Efeito de "pop" sutil no item */
 .empresa-item:hover {
     transform: scale(1.05);
 }
@@ -96,20 +60,11 @@
 }
 
 
-/* --- Setas de Navegação --- */
 .carrossel-arrow {
     position: absolute;
     z-index: 10;
-
-    /*      * --- MELHORIA DE POSICIONAMENTO DAS SETAS ---
-     * O container tem 'padding-top: 10px'. O logo tem 'height: 100px'.
-     * O centro vertical do logo está em: 10px + (100px / 2) = 60px.
-     * Posicionamos o topo da seta a 60px do topo do wrapper.
-     */
     top: 60px;
-    /* E usamos transform para centralizar a seta nela mesma */
     transform: translateY(-50%);
-
     background: transparent;
     border: none;
     cursor: pointer;
@@ -118,7 +73,6 @@
     align-items: center;
     justify-content: center;
 
-    /* MELHORIA: Transição suave para o hover */
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 

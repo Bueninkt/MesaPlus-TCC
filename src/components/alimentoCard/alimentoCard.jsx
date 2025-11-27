@@ -1,14 +1,13 @@
 import React from 'react';
 import './alimentoCard.css'; 
 import trash from '../../assets/icons/trash.png'; 
-// 1. Importe a imagem padrão (igual você fez no modal)
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png'; 
 
 function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
 
     const formatarData = (dataISO) => {
         try {
-            if (!dataISO) return "---"; // Proteção contra null
+            if (!dataISO) return "---"; 
             const [dataParte] = dataISO.split('T'); 
             const [ano, mes, dia] = dataParte.split('-');
             return `${dia}/${mes}/${ano.slice(-2)}`; 
@@ -19,16 +18,13 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
     
     const prazoFormatado = formatarData(alimento.data_de_validade);
 
-    // 2. CORREÇÃO AQUI: 
-    // Verifique 'foto', 'logo_url', 'foto_empresa' e 'imagem'. 
-    // O operador ?. (optional chaining) evita erro se 'empresa' for null.
     const nomeEmpresa = alimento.empresa?.nome || alimento.nome_empresa;
     
     const logoEmpresa = 
-        alimento.empresa?.foto ||       // Tenta .foto (usado no Modal)
-        alimento.empresa?.logo_url ||   // Tenta .logo_url
-        alimento.foto_empresa ||        // Tenta foto_empresa (flat)
-        userDefaultEmpresa;             // Se nada existir, usa o padrão
+        alimento.empresa?.foto ||       
+        alimento.empresa?.logo_url ||   
+        alimento.foto_empresa ||        
+        userDefaultEmpresa;             
 
 
     const handleDelete = (e) => {
@@ -53,10 +49,8 @@ function AlimentoCard({ alimento, onCardClick, onDeleteClick }) {
                         <img 
                             src={logoEmpresa}
                             alt={`Logo ${nomeEmpresa}`} 
-                            // 3. MELHORIA NO ONERROR:
-                            // Em vez de 'display: none' (que faz sumir), coloca a imagem padrão
                             onError={(e) => { 
-                                e.target.onerror = null; // Previne loop infinit
+                                e.target.onerror = null; 
                                 e.target.src = userDefaultEmpresa; 
                             }}
                         />

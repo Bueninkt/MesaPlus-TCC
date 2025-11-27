@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Componentes e Estilos
 import './MeuPerfilEmpresa.css';
 import NavbarEmpresa from '../../components/navbarEmpresa/navbarEmpresa';
 import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
 import Paginacao from '../../components/PaginacaoCard/Paginacao';
 import ModalAlimento from '../../components/ModalAlimento/ModalAlimento';
-
-// Assets
 import userDefaultEmpresa from '../../assets/icons/userDefaultEmpresa.png';
 
-// =========================================================
-// CONFIGURAÇÕES
-// =========================================================
 
 const URL_FOTO_PADRAO = "https://image2url.com/images/1763934555658-3e67f304-f96e-416b-a98f-12ef5a4fbe50.png";
-
-// AZURE CONFIG
 const AZURE_ACCOUNT = 'mesaplustcc';
 const AZURE_CONTAINER = 'fotos';
 const SAS_TOKEN = 'sp=racwdl&st=2025-10-23T12:41:46Z&se=2025-12-16T13:00:00Z&sv=2024-11-04&sr=c&sig=MzeTfPe%2Bns1vJJvi%2BazLsTIPL1YDBP2z7tDTlctlfyI%3D';
@@ -40,9 +31,6 @@ const uploadParaAzure = async (file, idEmpresa) => {
     return `https://${AZURE_ACCOUNT}.blob.core.windows.net/${AZURE_CONTAINER}/${blobName}`;
 };
 
-// =========================================================
-// MÁSCARAS E VALIDAÇÕES
-// =========================================================
 
 const maskPhone = (v) => {
     if (!v) return "";
@@ -92,22 +80,17 @@ const validateField = (name, value) => {
       if (phoneDigits.length < 10) return "Telefone deve ter 10 ou 11 dígitos.";
       return "";
 
-    // Validação do Endereço (Alinhado com Controller Node.js)
    case "endereco":
       if (!value || value.trim() === "") return "Endereço é obrigatório.";
       
       if (value.length > 150) return "O endereço deve ter no máximo 150 caracteres.";
       
-      // --- NOVA VALIDAÇÃO ---
-      // Regex que verifica se existe pelo menos uma letra (a-z, A-Z) 
-      // ou letras com acentos (\u00C0-\u00FF inclui á, é, ã, ç, etc.)
       const temLetras = /[a-zA-Z\u00C0-\u00FF]/.test(value);
       
       if (!temLetras) {
         return "O endereço deve conter o nome da rua ou bairro.";
       }
 
-      // Sugestão opcional: Adicionar um tamanho mínimo para evitar endereços como "Rua A" muito curtos
       if (value.trim().length < 5) {
         return "O endereço está muito curto.";
       }
@@ -118,9 +101,6 @@ const validateField = (name, value) => {
       return "";
   }
 };
-// =========================================================
-// SUB-COMPONENTE: CAMPO DE PERFIL
-// =========================================================
 
 const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text", error, disabled = false }) => {
     return (
@@ -157,14 +137,10 @@ const PerfilCampo = ({ label, valor, isEditing, onChange, name, type = "text", e
     );
 };
 
-// =========================================================
-// COMPONENTE PRINCIPAL
-// =========================================================
 
 function MeuPerfilEmpresaPage() {
     const navigate = useNavigate();
 
-    // --- Estados do Perfil ---
     const [formData, setFormData] = useState({
         nome: "",
         email: "",
@@ -173,36 +149,28 @@ function MeuPerfilEmpresaPage() {
         cnpj: "",
         endereco: ""
     });
+
     const [originalData, setOriginalData] = useState({});
     const [originalPasswordHash, setOriginalPasswordHash] = useState("");
     const [idEmpresa, setIdEmpresa] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
-    // Inicia com a imagem padrão local ou vazia
     const [profileImage, setProfileImage] = useState(userDefaultEmpresa);
     const [errors, setErrors] = useState({});
 
-    // --- Estados de Controle de Imagem ---
     const [selectedFile, setSelectedFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // --- NOVO ESTADO: Controle de Remoção/Reset ---
     const [fotoRemovida, setFotoRemovida] = useState(false);
-
-    // --- Estados para Alimentos ---
     const [meusAlimentos, setMeusAlimentos] = useState([]);
     const [loadingAlimentos, setLoadingAlimentos] = useState(false);
     const [alimentoSelecionado, setAlimentoSelecionado] = useState(null);
 
-    // --- Estados da Paginação ---
+   
     const [currentPage, setCurrentPage] = useState(1);
     
-    // ALTERAÇÃO: Aumentado para 6 para ficar visualmente melhor no grid (2 linhas de 3)
+    
     const ITEMS_PER_PAGE = 2; 
-
-    // -------------------------------------------------------
-    // EFEITOS (USE EFFECT) - CARREGAMENTO
-    // -------------------------------------------------------
 
     useEffect(() => {
         const fetchEmpresaData = async () => {
@@ -273,16 +241,10 @@ function MeuPerfilEmpresaPage() {
         fetchAlimentos();
     }, [idEmpresa]);
 
-    // -------------------------------------------------------
-    // HANDLERS
-    // -------------------------------------------------------
-    
-    // Cálculos da Paginação
     const totalPages = Math.ceil(meusAlimentos.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     
-    // Esta variável contém APENAS os itens da página atual
     const currentAlimentos = meusAlimentos.slice(startIndex, endIndex);
 
     const handleImageChange = (event) => {
@@ -310,10 +272,9 @@ function MeuPerfilEmpresaPage() {
 
                 if (response.ok) {
                     alert("Alimento excluído com sucesso!");
-                    // Remove da lista local para atualizar a tela sem reload
                     setMeusAlimentos(prev => prev.filter(item => (item.id_alimento || item.id) !== idAlimento));
                     
-                    // Se a página ficar vazia após excluir, volta uma página
+                
                     if (currentAlimentos.length === 1 && currentPage > 1) {
                          setCurrentPage(prev => prev - 1);
                     }
@@ -332,16 +293,11 @@ function MeuPerfilEmpresaPage() {
         const { name, value } = event.target;
         let maskedValue = value;
 
-        // =========================================================
-        // LIMITES DE CARACTERES (NOVA LÓGICA)
-        // =========================================================
         
-        // Limite para Nome (18 caracteres)
         if (name === "nome" && value.length > 18) {
             maskedValue = value.slice(0, 18);
         }
         
-        // Limite para Email (45 caracteres)
         if (name === "email" && value.length > 45) {
             maskedValue = value.slice(0, 45);
         }
@@ -349,7 +305,6 @@ function MeuPerfilEmpresaPage() {
         if (name === "telefone") maskedValue = maskPhone(value);
         else if (name === "cnpj") maskedValue = maskCNPJ(value);
 
-        // Atualiza o estado e valida
         setFormData(prevData => ({ ...prevData, [name]: maskedValue }));
         setErrors(prevErrors => ({ ...prevErrors, [name]: validateField(name, maskedValue) }));
     };
@@ -579,7 +534,7 @@ function MeuPerfilEmpresaPage() {
                             disabled={true}
                         />
 
-                        {/* Botões de Ação */}
+                
                         <div className="perfil-botoes">
                             {!isEditing ? (
                                 <button className="btn-editar" onClick={handleEditClick}>
@@ -603,7 +558,6 @@ function MeuPerfilEmpresaPage() {
                     </div>
                 </div>
 
-                {/* SEÇÃO MEUS ALIMENTOS */}
                 <div className="meus-alimentos-wrapper-empresa">
                     <h2 className="titulo-secao">Meus Alimentos Cadastrados</h2>
                     <div className="linha-divisoria"></div>
@@ -613,7 +567,7 @@ function MeuPerfilEmpresaPage() {
                     ) : (
                         <div className="alimentos-grid">
                             {currentAlimentos.length > 0 ? (
-                                // AQUI ESTAVA O SEGREDO: Usar currentAlimentos.map
+            
                                 currentAlimentos.map((item) => (
                                     <AlimentoCard
                                         key={item.id_alimento || item.id}

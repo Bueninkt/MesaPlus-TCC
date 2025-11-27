@@ -2,7 +2,7 @@
   import { Link, useNavigate } from "react-router-dom";
   import "./login.css";
 
-  // --- Imports de Ícones e Imagens ---
+
   import logo from "../../assets/icons/mesaLogo.png";
   import emailIcon from "../../assets/icons/email.png";
   import eye from "../../assets/icons/eye.png";
@@ -43,7 +43,7 @@
           return "O final do domínio deve ter pelo menos 2 letras (ex: .com, .br).";
         }
 
-        // Erro genérico se nenhuma das condições específicas for atendida.
+       
         return "Formato de email inválido.";
 
       case "senha":
@@ -64,7 +64,7 @@
 
   function LoginPage() {
     const [form, setForm] = useState({ email: "", senha: "", tipo: "" });
-    const [errors, setErrors] = useState({}); // ⬅️ Estado para os erros
+    const [errors, setErrors] = useState({}); 
     const [showPwd, setShowPwd] = useState(false);
     const [status, setStatus] = useState({ type: "", msg: "", loading: false });
     const navigate = useNavigate();
@@ -72,7 +72,6 @@
     const onChange = (e) => {
       const { name, value } = e.target;
       setForm((s) => ({ ...s, [name]: value }));
-      // Validação em tempo real
       const errorMessage = validateField(name, value);
       setErrors(prev => ({ ...prev, [name]: errorMessage }));
     };
@@ -91,7 +90,7 @@
 
       setErrors(formErrors);
 
-      // 2. Se houver erros, interrompe a submissão
+  
       if (Object.keys(formErrors).length > 0) {
         return;
       }
@@ -112,21 +111,17 @@
           })
         });
 
-        // --- INÍCIO DA MODIFICAÇÃO ---
+   
         if (!res.ok) {
-          // Verifica se o status da resposta é 404 (Não Encontrado) ou 401 (Não Autorizado),
-          // que são comumente usados para credenciais inválidas.
+         
           if (res.status === 404 || res.status === 401) {
             // Lança um erro com a mensagem amigável e fixa.
             throw new Error("Email ou senha ou tipo incorretos.");
           } 
-          
-          // Para qualquer outro tipo de erro (ex: 500 Internal Server Error),
-          // mantém o comportamento original de tentar extrair a mensagem da API.
           const msg = await res.text().catch(() => "");
           throw new Error(msg || "Falha no login. Tente novamente mais tarde.");
         }
-        // --- FIM DA MODIFICAÇÃO ---
+       
 
         const data = await res.json();
         // ... dentro do try ...
@@ -138,8 +133,6 @@
             msg: "Login Realizado",
             loading: false
           });
-
-          // --- INÍCIO DO AGENTE DE REDIRECIONAMENTO ---
 
           // 1. Define uma rota padrão caso algo dê errado.
           let destinationPath = '/login'; 
@@ -167,15 +160,14 @@
           // 3. Executa a navegação para a rota decidida.
           setTimeout(() => {
             navigate(destinationPath, { replace: true });
-          }, 2470); // Mantém o mesmo tempo de espera para a mensagem de sucesso ser lida.
+          }, 2470); 
 
         } else {
-          // Se a resposta for OK (status 200) mas a API indicar falha no corpo do JSON.
+       
           setStatus({ type: "error", msg: data.message || "Falha no login.", loading: false });
         }
       } catch (err) {
-        // Este bloco 'catch' agora receberá a mensagem personalizada ou a da API,
-        // e a exibirá para o usuário.
+        
         setStatus({ type: "error", msg: err.message || "Erro ao conectar.", loading: false });
       }
     }

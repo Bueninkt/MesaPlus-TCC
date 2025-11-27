@@ -2,8 +2,6 @@
     --container: min(1765px, 100vw); 
 }
 
-
-/* === BASE DA PÁGINA === */
 .sobre {
   background: var(--green-dark);
   color: var(--white);
@@ -14,7 +12,6 @@
   width: var(--container);
   margin-inline: auto;
   padding-inline: 20px;
-  /* alinha exatamente com a navbar */
 }
 
 .sobrenos-bg{
@@ -24,17 +21,13 @@
       background-position: center;
       background-size: cover;
       opacity: .1;
-      /* intensidade sutil como no print */
       pointer-events: none;
       z-index: 1;
 }
 
 .hero .container {
-  /* espaço vertical igual ao print (grande respiro) */
   padding-top: 96px;
-  /* distância da navbar até “Mesa+” */
   padding-bottom: 78px;
-  /* distância até a faixa */
 }
 
 .brand-title {
@@ -42,17 +35,14 @@
   font-family: 'Alex Brush', cursive;
   font-size: 132px;
   font-weight: 500;
-  /* tamanho travado como no print */
   line-height: 0.9;
   letter-spacing: 0.5px;
   color: var(--beige-2);
-  /* levemente bege como na imagem */
   text-rendering: optimizeLegibility;
 }
 
 .brand-subtitle {
   margin: 10px 0 0;
-  /* espaço entre o título e o subtítulo */
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 28px;
   font-weight: 600;
@@ -60,30 +50,23 @@
   color: #fff6e3ef;
 }
 
-/* =========================
-    FAIXA DIVISÓRIA (linha)
-    ========================= */
+
 .faixa {
   width: 100%;
   height: 3px;
-  /* espessura vista no print */
   background: var(--green-dark-2);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.20);
-  /* leve relevo como na captura */
 }
 
 .about .container {
   padding-top: 75px;
-  /* distância da faixa até o título “SOBRE NÓS:” */
 }
 
 .about__grid {
   display: grid;
   grid-template-columns: 1fr 380px;
-  /* texto à esquerda / logo à direita */
   align-items: start;
   column-gap: 129px;
-  /* espaço entre texto e logo (print) */
 }
 
 
@@ -91,7 +74,6 @@
   margin: 0;
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 38px;
-  /* “SOBRE NÓS:” robusto como no print */
   font-weight: 800;
   letter-spacing: 0.8px;
   color: #f1ebde;
@@ -100,9 +82,7 @@
 
 .about__text {
   margin-top: 10px;
-  /* distância do título ao parágrafo */
   max-width: 980px;
-  /* largura de leitura confortável */
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 23px;
   line-height: 1.79;
@@ -114,13 +94,11 @@
   width: 300px;
   margin-top: -28px;
   padding: 20px;
-  /* proporção do logo vista na captura */
   height: 300px;
   display: block;
-  /* brilho/sombra sob o brasão */
   image-rendering: auto;
   border-radius: 220px;
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
 }
 
 .about__logo:hover {
@@ -143,17 +121,11 @@
   font-size: 16px;
 }
 
-/* =========================
-    AJUSTES RESPONSIVOS
-    (sem alterar tipografia principal,
-    apenas respiros para não quebrar)
-    ========================= */
 @media (max-width: 1200px) {
   .brand-title {
     font-size: 120px;
   }
 
-  /* leve ajuste para caber melhor */
   .brand-subtitle {
     font-size: 26px;
   }
@@ -182,28 +154,25 @@
   .about__grid {
     grid-template-columns: 1fr;
     row-gap: 40px;
-    /* Adiciona uma margem inferior para separar a seção 'Sobre Nós' do rodapé */
     padding-bottom: 40px; 
   }
 
-  /* 🎯 MELHORIA: Centraliza o conteúdo da direita (o logo) */
+  
   .about__right {
-    justify-self: center; /* Centraliza a coluna completa (onde está o logo) */
-    text-align: center; /* Garante que o conteúdo interno também esteja centrado, se for o caso */
+    justify-self: center; 
+    text-align: center; 
   }
 
-  /* O tamanho do logo estava bom, sem alteração significativa aqui. */
+  
   .about__logo {
     width: 240px;
-    height: 240px; /* Mantém a proporção circular */
-    margin-top: 0; /* Remove a margem negativa que só funcionava no layout de duas colunas */
-    margin-inline: auto; /* Garante que, se for `display: block`, ele também centralize */
+    height: 240px; 
+    margin-top: 0; 
+    margin-inline: auto; 
   }
 }
 
 @media (max-width: 560px) {
-
-  /* Ajustes de tipografia e respiro permanecem ótimos */
   .brand-title {
     font-size: 96px;
   }
@@ -222,23 +191,17 @@
     line-height: 1.7;
   }
 
-  /* 🎯 CORREÇÃO: Centraliza o logo de forma robusta */
   .about__logo{
-    /* Removido: width: auto; position: relative; left: 20%; */
-    /* Usar um tamanho máximo para que ele não fique muito grande */
     max-width: 200px; 
     height: 200px;
-    
-    /* Centralização robusta no fluxo normal do documento */
     margin-top: 18px;
     margin-inline: auto; 
     display: block; 
   }
   
-  /* Garante que o título do rodapé também não quebre */
   .rodape p {
       font-size: 14px;
-      padding-inline: 10px; /* Previne que o texto toque as bordas da tela */
+      padding-inline: 10px; 
       text-align: center;
   }
 
@@ -249,11 +212,10 @@
   background: var(--green-dark);
   color: var(--white);
   padding: 96px 0;
-  overflow: visible; /* Necessário para o ícone sobreposto */
+  overflow: visible; 
 }
 
 .problema__heading {
-  /* Estilo do título centralizado mantido */
   margin: 0 0 72px 0;
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 38px;
@@ -266,19 +228,17 @@
 .problema__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px; /* Mais espaço entre os cards */
+  gap: 64px; 
   align-items: stretch;
 }
 
 .problema-card {
-  position: relative; /* FUNDAMENTAL para a sobreposição */
+  position: relative; 
   background: var(--beige);
   border-radius: 12px;
   padding: 32px;
-  padding-top: 80px; /* Abre espaço para o ícone sobreposto */
+  padding-top: 80px; 
   text-align: left;
-  
-  /* Sombra profissional para o card claro */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, 
               rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   
@@ -291,37 +251,28 @@
               rgba(0, 0, 0, 0.1) 0px 10px 10px -5px;
 }
 
-/* --- NOVO: O Círculo do Ícone Sobreposto --- */
 .problema-card__visual {
   position: absolute;
-  top: -45px; /* Puxa o ícone para cima, metade para fora */
-  left: 32px; /* Alinha com o padding do card */
-  
+  top: -45px; 
+  left: 32px; 
   width: 90px;
   height: 90px;
   background: var(--green-dark-2);
   border-radius: 50%;
-  
-  /* Borda na cor do card para um efeito de "recorte" */
   border: 5px solid var(--beige); 
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* Sombra para o ícone "flutuar" */
   box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
-  
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .problema-card:hover .problema-card__visual {
-  /* Efeito de hover divertido no ícone */
   transform: rotate(-10deg) scale(1.1);
-  background: var(--green-light); /* Muda a cor do círculo no hover */
+  background: var(--green-light); 
 }
 
-/* O ícone dentro do círculo */
+
 .problema-card__icon {
   width: 45px;
   height: 45px;
@@ -331,33 +282,30 @@
 }
 
 .problema-card:hover .problema-card__icon {
-  /* No hover, o ícone fica verde escuro para contrastar com o novo fundo */
   filter: invert(13%) sepia(26%) saturate(2204%) hue-rotate(102deg) brightness(97%) contrast(101%);
 }
 
-
-/* --- NOVO: Conteúdo de Texto --- */
 .problema-card__content {
   display: flex;
   flex-direction: column;
 }
 
-/* --- NOVO: A Tag de Destaque --- */
+
 .problema-card__tag {
   display: inline-block;
-  align-self: flex-start; /* Garante que a tag fique à esquerda */
-  background: var(--green-light); /* Ponto de cor vibrante */
+  align-self: flex-start; 
+  background: var(--green-light); 
   color: var(--green-dark-2);
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 700;
   padding: 4px 12px;
-  border-radius: 20px; /* Formato de pílula */
+  border-radius: 20px; 
   text-transform: uppercase;
   margin-bottom: 20px;
 }
 
-/* --- NOVO: Título de Impacto --- */
+
 .problema-card__title {
   font-family: 'Poppins', sans-serif;
   font-size: 28px;
@@ -372,15 +320,13 @@
   font-size: 18px;
   line-height: 1.7;
   color: var(--green-dark); 
-  opacity: 0.9; /* Deixa o texto de parágrafo mais suave */
+  opacity: 0.9; 
 }
 
-
-/* === RESPONSIVIDADE (DESIGN ELABORADO) === */
 @media (max-width: 980px) {
   .problema__grid {
-    grid-template-columns: 1fr; /* Coluna única */
-    gap: 80px; /* Mais espaço vertical, já que o ícone flutua */
+    grid-template-columns: 1fr; 
+    gap: 80px; 
     max-width: 600px; 
     margin-inline: auto; 
   }
@@ -402,10 +348,10 @@
 
   .problema-card {
     padding: 24px;
-    padding-top: 70px; /* Ajusta o espaço para o ícone */
+    padding-top: 70px; 
   }
 
-  /* Ajusta o ícone para telas menores */
+  
   .problema-card__visual {
     top: -35px;
     left: 24px;
@@ -433,29 +379,21 @@
   }
 }
 
-/* =========================
-    SOLUÇÃO
-   ========================= */
-
-/* =========================
-    PRÓXIMOS PASSOS (DESIGN DE ASCENSÃO)
-   ========================= */
-
 .proximos-passos {
-  background: var(--beige); /* Fundo claro! */
+  background: var(--beige); 
   color: var(--green-dark);
   padding: 96px 0;
-  overflow: hidden; /* Garante que os elementos não vazem */
+  overflow: hidden; 
 }
 
-/* Títulos com cor escura para o fundo claro */
+
 .passos__heading {
   margin: 0 0 16px 0;
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 38px;
   font-weight: 800;
   letter-spacing: 0.8px;
-  color: var(--green-dark-2); /* Cor escura */
+  color: var(--green-dark-2); 
   text-transform: uppercase;
   text-align: center;
 }
@@ -464,29 +402,29 @@
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 20px;
   line-height: 1.7;
-  color: var(--green-dark); /* Cor escura */
+  color: var(--green-dark); 
   opacity: 0.9;
   text-align: center;
   max-width: 750px;
   margin: 0 auto 80px auto;
 }
 
-/* O container da timeline */
+
 .passos__timeline {
   display: flex;
   flex-direction: column;
-  gap: 40px; /* Espaço entre os "degraus" */
+  gap: 40px; 
   position: relative;
-  max-width: 900px; /* Limita a largura da timeline */
+  max-width: 900px; 
   margin: 0 auto;
 }
 
-/* Linha pontilhada no fundo (o conector vertical) */
+
 .passos__timeline::before {
   content: '';
   position: absolute;
   top: 30px;
-  left: 58px; /* Alinha com o centro dos números */
+  left: 58px; 
   bottom: 30px;
   width: 4px;
   background-image: linear-gradient(
@@ -494,49 +432,48 @@
     rgba(255, 255, 255, 0) 0%
   );
   background-position: left;
-  background-size: 4px 15px; /* Cria o efeito "pontilhado" */
+  background-size: 4px 15px; 
   background-repeat: repeat-y;
   opacity: 0.5;
   z-index: 1;
 }
 
 
-/* Cada item da timeline */
+
 .passo-item {
   display: grid;
-  /* Colunas: [Número] [Conteúdo] */
   grid-template-columns: 120px 1fr;
   align-items: center;
   gap: 32px;
   position: relative;
-  z-index: 2; /* Fica na frente da linha pontilhada */
+  z-index: 2; 
 }
 
-/* Círculo do número */
+
 .passo-item__number-wrapper {
   width: 80px;
   height: 80px;
-  background: var(--green-dark-2); /* Fundo escuro */
-  border: 6px solid var(--beige); /* Borda na cor do fundo (efeito de "recorte") */
+  background: var(--green-dark-2); 
+  border: 6px solid var(--beige); 
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: rgba(27, 66, 39, 0.1) 0px 4px 16px, 
               rgba(27, 66, 39, 0.1) 0px 8px 24px;
-  justify-self: center; /* Centraliza o círculo na sua coluna */
+  justify-self: center; 
 }
 
 .passo-item__number {
   font-family: 'Poppins', sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: var(--green-light); /* Cor de destaque */
+  color: var(--green-light); 
 }
 
-/* Conteúdo do item (ícone + texto) */
+
 .passo-item__content {
-  background: var(--white); /* Card branco sobre fundo bege */
+  background: var(--white); 
   border-radius: 12px;
   padding: 24px 32px;
   display: flex;
@@ -556,8 +493,7 @@
 .passo-item__icon {
   width: 50px;
   height: 50px;
-  flex-shrink: 0; /* Impede que o ícone encolha */
-  /* Filtro para deixar o ícone verde-escuro */
+  flex-shrink: 0; 
   filter: invert(13%) sepia(26%) saturate(2204%) hue-rotate(102deg) brightness(97%) contrast(101%);
 }
 
@@ -592,21 +528,20 @@
 }
 
 
-/* === RESPONSIVIDADE (DESIGN DE ASCENSÃO) === */
+
 
 @media (max-width: 980px) {
-  /* Alinha os números à esquerda no tablet/mobile */
   .passos__timeline {
     max-width: 100%;
     margin: 0;
   }
 
   .passos__timeline::before {
-    left: 40px; /* Ajusta a posição da linha */
+    left: 40px; 
   }
 
   .passo-item {
-    grid-template-columns: 80px 1fr; /* Coluna do número menor */
+    grid-template-columns: 80px 1fr; 
     gap: 20px;
   }
 
@@ -631,11 +566,11 @@
   }
 
   .passos__timeline::before {
-    left: 30px; /* Ajusta a linha para telas pequenas */
+    left: 30px; 
   }
   
   .passo-item {
-    grid-template-columns: 60px 1fr; /* Coluna do número ainda menor */
+    grid-template-columns: 60px 1fr; 
     gap: 16px;
   }
 
@@ -648,7 +583,7 @@
     font-size: 16px;
   }
 
-  /* Empilha o ícone e o texto no card */
+ 
   .passo-item__content {
     flex-direction: column;
     align-items: flex-start;
@@ -674,9 +609,7 @@
     font-size: 16px;
   }
 }
-/* =========================
-    BENEFÍCIOS
-   ========================= */
+
 
 .beneficios {
   background: var(--green-dark);
@@ -685,7 +618,6 @@
 }
 
 .beneficios__heading {
-  /* Reutiliza o estilo .problema__heading (que é baseado no .about__heading) */
   margin: 0 0 72px 0;
   font-family: Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 38px;
@@ -699,7 +631,7 @@
 .beneficios__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 48px; /* Espaço entre os cards */
+  gap: 48px; 
 }
 
 .beneficio-card {
@@ -707,16 +639,12 @@
   padding: 40px 32px;
   border-radius: 12px;
   text-align: center;
-  
-  /* Sombra profissional e marcante */
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-  
-  /* Transição suave para o hover */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .beneficio-card:hover {
-  transform: scale(1.03) translateY(-8px); /* Efeito de "levantar" */
+  transform: scale(1.03) translateY(-8px); 
   cursor: default;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 20px 35px, rgba(0, 0, 0, 0.3) 0px 15px 15px;
 }
@@ -725,7 +653,6 @@
   width: 72px;
   height: 72px;
   margin-bottom: 24px;
-  /* Colore os ícones de branco/bege */
   filter: invert(93%) sepia(18%) saturate(543%) hue-rotate(334deg) brightness(107%) contrast(102%);
 }
 
@@ -743,10 +670,9 @@
   font-size: 18px;
   line-height: 1.6;
   color: var(--white);
-  opacity: 0.9; /* Texto levemente mais suave */
+  opacity: 0.9; 
 }
 
-/* === RESPONSIVIDADE (BENEFÍCIOS) === */
 @media (max-width: 1200px) {
   .beneficios__grid {
     gap: 32px;
@@ -761,10 +687,10 @@
 
 @media (max-width: 980px) {
   .beneficios__grid {
-    grid-template-columns: 1fr; /* Coluna única */
+    grid-template-columns: 1fr; 
     gap: 40px;
-    max-width: 600px; /* Limita a largura dos cards */
-    margin-inline: auto; /* Centraliza o bloco de cards */
+    max-width: 600px; 
+    margin-inline: auto; 
   }
   
   .beneficios__heading {

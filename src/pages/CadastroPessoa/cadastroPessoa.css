@@ -6,12 +6,10 @@
     background-position: center;
     background-size: cover;
     opacity: .3;
-    /* intensidade sutil como no print */
     pointer-events: none;
     z-index: 1;
 }
 
-/* Painel central */
 .cp__panel {
     margin: 0 auto;
     width: min(560px, 92vw);
@@ -29,7 +27,6 @@
     font-family: 'Alex Brush', cursive;
     font-weight: 400;
     font-size: 84px;
-    /* proporção do print */
     line-height: 1;
     color: #0d0d0d;
 }
@@ -42,7 +39,7 @@
     color: #171717;
 }
 
-/* Form */
+
 .cp__form {
     margin-top: 36px;
 }

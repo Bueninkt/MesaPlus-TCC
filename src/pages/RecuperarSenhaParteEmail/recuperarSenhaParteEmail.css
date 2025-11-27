@@ -1,17 +1,17 @@
-/* Estilo do container principal */
+
 .container-Recuperar {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centraliza o conteúdo verticalmente */
-  align-items: center;    /* Centraliza o conteúdo horizontalmente */
+  justify-content: center; 
+  align-items: center;   
   width: min(580px, 92vw);
-  height: auto; /* Use min-height para permitir que o conteúdo cresça se necessário */
-  margin: 20px auto; /* Adiciona um pouco de margem vertical */
+  height: auto; 
+  margin: 20px auto; 
   padding: 24px 26px;
   background: var(--beige);
   border-radius: 12px;
   box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-  text-align: center; /* Garante que todo o texto dentro seja centralizado por padrão */
+  text-align: center; 
   box-sizing: border-box;
 }
 
@@ -29,7 +29,7 @@
   margin-top: 14px;
 }
 
-/* Imagem de fundo */
+
 .imagemFundo {
   position: fixed;
   inset: 0;
@@ -38,42 +38,41 @@
   background-size: cover;
   opacity: .3;
   pointer-events: none;
-  z-index: -1; /* Coloca a imagem atrás de todo o conteúdo */
+  z-index: -1; 
 }
 
-/* Título "Mesa+" */
 .container-Recuperar .h1 {
   font-family: "Alex Brush", cursive;
   font-weight: 500;
-  font-size: clamp(60px, 15vw, 99px); /* Fonte responsiva */
+  font-size: clamp(60px, 15vw, 99px); 
   margin: 0;
   line-height: 1;
 }
 
-/* Parágrafo "Recuperação Senha" */
+
 .container-Recuperar p {
   font-family: 'Poppins', sans-serif;
   font-size: 20px;
-  margin: 8px 0 24px 0; /* Espaçamento ajustado */
+  margin: 8px 0 24px 0; 
 }
 
-/* Estilos do formulário para agrupar os inputs */
+
 .container-Recuperar form {
     width: 100%;
-    max-width: 450px; /* Limita a largura do formulário */
+    max-width: 450px; 
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Rótulo do campo de e-mail */
+
 .container-Recuperar label {
   display: flex;
   align-items: center;
   gap: 8px;
   width: 100%;
   height: 43px;
-  margin-bottom: 1px; /* Espaço abaixo do campo de email */
+  margin-bottom: 1px; 
   padding: 7px;
   background: var(--beige);
   border: 2px solid rgba(27, 66, 39, .65);
@@ -84,7 +83,7 @@
 .container-Recuperar .iconeEmail {
   width: 24px;
   height: auto;
-  flex-shrink: 0; /* Impede que o ícone seja espremido */
+  flex-shrink: 0; 
 }
 
 .container-Recuperar input {
@@ -97,7 +96,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Container do seletor de tipo */
+
 .tipo-container {
   position: relative;
   width: 100%;
@@ -127,16 +126,16 @@
   cursor: pointer;
 }
 
-/* Subtítulo "Código enviado pelo e-mail" */
+
 .container-Recuperar h2 {
   font-family: 'Poppins', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #000000a8;
-  margin: 10px 0; /* Espaçamento mais consistente */
+  margin: 10px 0; 
 }
 
-/* Botão de Enviar */
+
 .btnRecuperar {
   display: inline-flex;
   align-items: center;
@@ -152,7 +151,7 @@
   text-decoration: none;
   cursor: pointer;
   transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
-  margin-top: 10px; /* Espaço acima do botão */
+  margin-top: 10px; 
 }
 
 
@@ -170,21 +169,20 @@
   animation: fadeIn 0.4s ease-in-out;
 }
 
-/* --- Modificador de ERRO para a API --- */
+
 .api-status-message--error {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
 }
 
-/* --- Modificador de SUCESSO para a API --- */
 .api-status-message--success {
   color: #3c763d;
   background-color: #dff0d8;
   border-color: #d6e9c6;
 }
 
-/* Animação suave de entrada */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
