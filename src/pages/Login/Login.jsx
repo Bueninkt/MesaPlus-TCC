@@ -1,8 +1,6 @@
   import React, { useState } from "react";
   import { Link, useNavigate } from "react-router-dom";
   import "./login.css";
-
-
   import logo from "../../assets/icons/mesaLogo.png";
   import emailIcon from "../../assets/icons/email.png";
   import eye from "../../assets/icons/eye.png";
@@ -11,7 +9,7 @@
   import seta from "../../assets/icons/seta.png";
   import backimage from "../../assets/icons/backimage.png";
 
-  // --- Lógica de Validação Centralizada ---
+  // --- Lógica de Validação Centralizada --
   const validateField = (name, value) => {
     switch (name) {
       case "email":
