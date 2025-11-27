@@ -9,7 +9,7 @@
   import seta from "../../assets/icons/seta.png";
   import backimage from "../../assets/icons/backimage.png";
 
-  // --- Lógica de Validação Centralizada --
+  // -- Lógica de Validação Centralizada --
   const validateField = (name, value) => {
     switch (name) {
       case "email":
