@@ -1,17 +1,47 @@
-# React + Vite
+# MesaPlus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Somos um projeto que conecta estabelecimentos, pessoas e instituições de caridade com o intuito de disponibilizar alimento para você, combatendo o desperdício e a fome!
 
-Currently, two official plugins are available:
+https://github.com/user-attachments/assets/1322a328-9304-4f1b-a6af-282f2f4b35e0
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+### 🔧 Requisitos Para Execução:
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Instalando o Framework
+```
+npm create vite@latest
+```
 
-## Expanding the ESLint configuration
+Instalando Modulos
+```
+npm install 
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-#
+Instalando React-router-dom
+```
+npm install react-router
+```
+
+Instalando Axios
+```
+npm install axios
+```
+
+## ⚙️ Executando:
+```
+npm run dev
+```
+
+## 🛠️ Tecnologias:
+
+Mencione as ferramentas que você usou para criar seu projeto
+
+* React
+* Axios
+* Npm
+* JavaScript
+
+## ✒️ Autor
+* **Developer Front-End** [Matheus Bueno](https://github.com/Bueninkt)
+
+
