@@ -1,7 +1,7 @@
 // 🔄 Arquivo: HomeUsuarioPage.jsx (Atualizado com formatação de data no Frontend)
 import React, { useState, useEffect, useCallback } from 'react';
 
-// Importação dos componentes
+//Importação dos componentes
 import NavbarUsuario from "../../components/navbarUsuario/navbarUsuario";
 import Filtrar from "../../components/filtros/filtrar";
 import AlimentoCard from '../../components/AlimentoCard/AlimentoCard';
