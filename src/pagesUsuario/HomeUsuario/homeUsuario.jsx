@@ -55,7 +55,7 @@ function HomeUsuarioPage() {
             } else if (categoriaID) {
                 url = `http://localhost:8080/v1/mesa-plus/filtroCat/${categoriaID}`;
             } else if (dataFormatadaParaAPI) { 
-                url = `hhttp://localhost:8080/v1/mesa-plus/filtroData?data=${dataFormatadaParaAPI}`;
+                url = `http://localhost:8080/v1/mesa-plus/filtroData?data=${dataFormatadaParaAPI}`;
             } else {
                 url = 'http://localhost:8080/v1/mesa-plus/alimentos';
             }
